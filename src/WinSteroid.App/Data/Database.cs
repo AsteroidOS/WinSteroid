@@ -26,6 +26,12 @@ namespace WinSteroid.App.Data
             return this.SQLiteDbContext.InsertAsync(notification);
         }
 
+        public async Task<bool> ExistsNotificationWithId(string id)
+        {
+            var count = await this.SQLiteDbContext.Table<Models.Notification>().Where(n => n.Id == id).CountAsync();
+            return count == 1;
+        }
+
         public async Task MarkNotificationsAsNotifiedAsync(string[] ids)
         {
             var notifications = await this.SQLiteDbContext.Table<Models.Notification>().Where(n => ids.Any(id => n.Id == id)).ToListAsync();

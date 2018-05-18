@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroid.App", "src\WinSteroid.App\WinSteroid.App.csproj", "{6702E5B9-93D4-4900-9601-6A978F63AEE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroid.Services", "src\WinSteroid.Services\WinSteroid.Services.csproj", "{74F0D134-272C-4994-96E3-8C34911A2CC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,22 @@ Global
 		{6702E5B9-93D4-4900-9601-6A978F63AEE3}.Release|x86.ActiveCfg = Release|x86
 		{6702E5B9-93D4-4900-9601-6A978F63AEE3}.Release|x86.Build.0 = Release|x86
 		{6702E5B9-93D4-4900-9601-6A978F63AEE3}.Release|x86.Deploy.0 = Release|x86
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|ARM.ActiveCfg = Debug|ARM
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|ARM.Build.0 = Debug|ARM
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|x64.ActiveCfg = Debug|x64
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|x64.Build.0 = Debug|x64
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|x86.ActiveCfg = Debug|x86
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Debug|x86.Build.0 = Debug|x86
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|ARM.ActiveCfg = Release|ARM
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|ARM.Build.0 = Release|ARM
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|x64.ActiveCfg = Release|x64
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|x64.Build.0 = Release|x64
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|x86.ActiveCfg = Release|x86
+		{74F0D134-272C-4994-96E3-8C34911A2CC4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

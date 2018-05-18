@@ -7,11 +7,11 @@ using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Models;
 
-namespace WinSteroid.App.Services
+namespace WinSteroid.App.Helpers
 {
-    public class AsteroidService
+    public static class AsteroidHelper
     {
-        public async Task CheckExistingServicesAndCharacteristics(BluetoothLEDevice bluetoothDevice)
+        public static async Task CheckExistingServicesAndCharacteristics(BluetoothLEDevice bluetoothDevice)
         {
             var servicesResult = await bluetoothDevice.GetGattServicesAsync();
             if (servicesResult.Status == GattCommunicationStatus.Success)
@@ -51,7 +51,7 @@ namespace WinSteroid.App.Services
             }
         }
 
-        public string CreateInsertNotificationCommandXml(string packageName, string id, string applicationName, string applicationIcon, string summary, string body, VibrationLevel vibrationLevel = VibrationLevel.None)
+        public static string CreateInsertNotificationCommandXml(string packageName, string id, string applicationName, string applicationIcon, string summary, string body, VibrationLevel vibrationLevel = VibrationLevel.None)
         {
             var stringBuilder = new StringBuilder();
 
@@ -68,7 +68,7 @@ namespace WinSteroid.App.Services
             return stringBuilder.ToString();
         }
 
-        public string CreateRemoveNotificationCommandXml(string id)
+        public static string CreateRemoveNotificationCommandXml(string id)
         {
             var stringBuilder = new StringBuilder();
 

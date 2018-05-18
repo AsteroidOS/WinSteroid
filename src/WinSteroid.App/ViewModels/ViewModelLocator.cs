@@ -14,10 +14,11 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<MainPageViewModel>();
 
             SimpleIoc.Default.Register<INavigationService>(InitializeNavigationService);
+            SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<Data.Database>(createInstanceImmediately: true);
-            SimpleIoc.Default.Register<Services.AsteroidService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
+            SimpleIoc.Default.Register<Services.NotificationsService>();
         }
 
         private INavigationService InitializeNavigationService()

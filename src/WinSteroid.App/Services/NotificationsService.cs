@@ -4,17 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
+using WinSteroid.App.Data;
 
 namespace WinSteroid.App.Services
 {
     public class NotificationsService
     {
-        private static UserNotificationListener UserNotificationListener
+        private readonly Database Database;
+        private readonly UserNotificationListener UserNotificationListener;
+
+        public NotificationsService(Database database)
         {
-            get { return UserNotificationListener.Current; }
+            this.Database = database ?? throw new ArgumentNullException(nameof(database));
+            this.UserNotificationListener = UserNotificationListener.Current;
         }
 
-        public static async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             var status = await UserNotificationListener.RequestAccessAsync();
             switch (status)
@@ -31,11 +36,22 @@ namespace WinSteroid.App.Services
             }
         }
 
-        public static async Task<IEnumerable<UserNotification>> RetriveNotificationsAsync()
+        public async Task<IEnumerable<UserNotification>> RetriveNotificationsAsync()
         {
             var userNotifications = await UserNotificationListener.GetNotificationsAsync(NotificationKinds.Toast);
 
-            return userNotifications.ToArray();
+            var newNotifications = new List<UserNotification>();
+
+            foreach (var userNotification in userNotifications)
+            {
+                var existsNotification = await this.Database.ExistsNotificationWithId(userNotification.Id.ToString());
+                if (existsNotification) continue;
+
+                await this.Database.InsertNotificationAsync(userNotification);
+                newNotifications.Add(userNotification);
+            }
+
+            return newNotifications;
         }
     }
 }

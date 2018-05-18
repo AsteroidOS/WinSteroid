@@ -7,14 +7,20 @@
             switch (percentage)
             {
                 case var p when percentage > (int)BatteryLevel.Discrete:
-                    return BatteryLevel.Good;
+                    {
+                        return BatteryLevel.Good;
+                    }
                 case var p when percentage <= (int)BatteryLevel.Discrete && percentage > (int)BatteryLevel.Bad:
-                    return BatteryLevel.Discrete;
+                    {
+                        return BatteryLevel.Discrete;
+                    }
                 case var p when percentage <= (int)BatteryLevel.Bad && percentage > (int)BatteryLevel.Critic:
-                    return BatteryLevel.Critic;
-                default:
-                    return BatteryLevel.Dead;
+                    {
+                        return BatteryLevel.Bad;
+                    }
             }
+
+            return BatteryLevel.Critic;
         }
     }
 }

@@ -8,6 +8,7 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
+using WinSteroid.App.Helpers;
 using WinSteroid.App.Models;
 
 namespace WinSteroid.App.Services
@@ -16,14 +17,12 @@ namespace WinSteroid.App.Services
     {
         private DeviceWatcher Watcher;
         private BluetoothLEDevice BluetoothDevice;
-
-        private readonly AsteroidService AsteroidService;
+        
         private readonly string[] RequestedProperties = new[] { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" };
         public readonly List<DeviceInformation> Devices;
 
-        public DeviceService(AsteroidService asteroidService)
+        public DeviceService()
         {
-            this.AsteroidService = asteroidService ?? throw new ArgumentNullException(nameof(asteroidService));
             this.Devices = new List<DeviceInformation>();
         }
 
@@ -32,7 +31,7 @@ namespace WinSteroid.App.Services
             this.Devices.Clear();
 
             this.Watcher = DeviceInformation.CreateWatcher(
-                BluetoothLEDevice.GetDeviceSelectorFromPairingState(pairingState: false), 
+                BluetoothLEDevice.GetDeviceSelectorFromPairingState(pairingState: true), 
                 this.RequestedProperties, 
                 DeviceInformationKind.AssociationEndpoint);
             
@@ -78,13 +77,11 @@ namespace WinSteroid.App.Services
         
         public async Task<bool> ConnectAsync(string deviceId)
         {
+            if (string.IsNullOrWhiteSpace(deviceId)) return false;
+
             try
             {
                 this.BluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
-#if DEBUG
-                await this.AsteroidService.CheckExistingServicesAndCharacteristics(this.BluetoothDevice);
-#endif
-
             }
             catch
             {
@@ -92,7 +89,36 @@ namespace WinSteroid.App.Services
                 return false;
             }
 
-            return true;
+            return this.BluetoothDevice != null;
+        }
+
+        public async Task<PairingResult> PairAsync(string deviceId)
+        {
+            var device = this.Devices.SingleOrDefault(d => d.Id == deviceId);
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
+
+            if (device.Pairing.IsPaired)
+            {
+                SettingsHelper.SetValue("lastSavedDeviceId", deviceId);
+                return PairingResult.Success;
+            }
+
+            if (!device.Pairing.CanPair)
+            {
+                return new PairingResult("The selected device cannot be paired");
+            }
+
+            var pairingResult = await device.Pairing.PairAsync();
+            if (pairingResult.Status == DevicePairingResultStatus.Paired || pairingResult.Status == DevicePairingResultStatus.AlreadyPaired)
+            {
+                SettingsHelper.SetValue("LastSavedDeviceId", deviceId);
+                return PairingResult.Success;
+            }
+
+            return new PairingResult("Pairing operation denied or failed");
         }
 
         public void Disconnect()
@@ -104,8 +130,20 @@ namespace WinSteroid.App.Services
             }
         }
 
-        private async Task<GattCharacteristic> GetGattCharacteristicAsync(Guid characteristicUuid)
+        public async Task<GattCharacteristic> GetGattCharacteristicAsync(Guid characteristicUuid)
         {
+            if (this.BluetoothDevice == null)
+            {
+                var lastSavedDeviceId = SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
+                await this.ConnectAsync(lastSavedDeviceId);
+            }
+
+            if (this.BluetoothDevice == null) //Again
+            {
+                //ERRROR
+                throw new Exception();
+            }
+
             var service = Asteroid.Services.FirstOrDefault(s => s.Characteristics.Any(c => c.Uuid == characteristicUuid));
             if (service == null)
             {
@@ -113,14 +151,14 @@ namespace WinSteroid.App.Services
                 throw new Exception();
             }
 
-            var serviceResult = await this.BluetoothDevice.GetGattServicesForUuidAsync(Asteroid.MediaService.Uuid);
+            var serviceResult = await this.BluetoothDevice.GetGattServicesForUuidAsync(service.Uuid);
             if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0)
             {
                 //ERROR
                 throw new Exception();
             }
 
-            var characteristicResult = await serviceResult.Services[0].GetCharacteristicsForUuidAsync(Asteroid.CommandCharacteristicUuid);
+            var characteristicResult = await serviceResult.Services[0].GetCharacteristicsForUuidAsync(characteristicUuid);
             if (characteristicResult.Status != GattCommunicationStatus.Success || characteristicResult.Characteristics.Count == 0)
             {
                 //ERROR
@@ -171,8 +209,10 @@ namespace WinSteroid.App.Services
 
             using (var reader = DataReader.FromBuffer(valueResult.Value))
             {
-                var @byte = reader.ReadByte();
-                return @byte;
+                var bytes = new byte[reader.UnconsumedBufferLength];
+                reader.ReadBytes(bytes);
+
+                return Convert.ToUInt16(bytes[0]);
             }
         }
 
@@ -185,7 +225,7 @@ namespace WinSteroid.App.Services
 
         public Task<bool> InsertNotificationAsync(UserNotification userNotification)
         {
-            var xmlNotification = this.AsteroidService.CreateInsertNotificationCommandXml(
+            var xmlNotification = AsteroidHelper.CreateInsertNotificationCommandXml(
                 packageName: userNotification.AppInfo.PackageFamilyName,
                 id: userNotification.Id.ToString(),
                 applicationName: userNotification.AppInfo.DisplayInfo.DisplayName,
@@ -200,7 +240,7 @@ namespace WinSteroid.App.Services
 
         public Task<bool> RemoveNotificationAsync(string notificationId)
         {
-            var xmlNotification = this.AsteroidService.CreateRemoveNotificationCommandXml(notificationId);
+            var xmlNotification = AsteroidHelper.CreateRemoveNotificationCommandXml(notificationId);
 
             var utf8Bytes = Encoding.UTF8.GetBytes(xmlNotification);
 

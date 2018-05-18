@@ -1,9 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
+using WinSteroid.App.Helpers;
 using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
@@ -11,21 +13,45 @@ namespace WinSteroid.App.ViewModels
     public class WelcomePageViewModel : ViewModelBase
     {
         private readonly DeviceService DeviceService;
+        private readonly INavigationService NavigationService;
+        private readonly IDialogService DialogService;
         private readonly DispatcherTimer DispatcherTimer;
 
-        public WelcomePageViewModel(DeviceService deviceService)
+        public WelcomePageViewModel(DeviceService deviceService, INavigationService navigationService, IDialogService dialogService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             this.Devices = new ObservableCollection<Device>();
             this.DispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
             this.DispatcherTimer.Tick += OnDispatcherTimerTick;
+
+            this.DiscoverPairedDevice();
         }
+
+        private const ushort MaxTicksCount = 6;
+        private ushort TickCount = 0;
+        private string LastSavedDeviceId;
 
         private bool _isBusy;
         public bool IsBusy
         {
             get { return _isBusy; }
             set { Set(nameof(IsBusy), ref _isBusy, value); }
+        }
+
+        private string _busyMessage;
+        public string BusyMessage
+        {
+            get { return _busyMessage; }
+            set { Set(nameof(BusyMessage), ref _busyMessage, value); }
+        }
+
+        private bool _isPairedSearch;
+        public bool IsPairedSearch
+        {
+            get { return _isPairedSearch; }
+            set { Set(nameof(IsPairedSearch), ref _isPairedSearch, value); }
         }
 
         private bool _isSearching;
@@ -76,9 +102,19 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
+        private void DiscoverPairedDevice()
+        {
+            this.LastSavedDeviceId = SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
+            if (string.IsNullOrWhiteSpace(this.LastSavedDeviceId)) return;
+
+            this.IsPairedSearch = true;
+            this.StartSearch();
+        }
+
         private void StartSearch()
         {
             this.IsBusy = true;
+            this.BusyMessage = "Searching";
             this.IsSearching = true;
             this.DeviceService.StartSearch();
             this.DispatcherTimer.Start();
@@ -103,6 +139,7 @@ namespace WinSteroid.App.ViewModels
             this.DeviceService.StopSearch();
             this.DispatcherTimer.Stop();
             this.IsBusy = false;
+            this.BusyMessage = string.Empty;
             this.IsSearching = false;
         }
 
@@ -122,17 +159,54 @@ namespace WinSteroid.App.ViewModels
 
         private async void Pair()
         {
-            if (this.SelectedDevice == null) return;
+            this.IsBusy = true;
+            this.BusyMessage = "Pairing";
 
-            var paired = await this.DeviceService.ConnectAsync(this.SelectedDevice.Id);
-            System.Diagnostics.Debug.WriteLine("Paired with " + this.SelectedDevice.Id);
+            if (string.IsNullOrWhiteSpace(this.LastSavedDeviceId) && this.SelectedDevice != null)
+            {
+                this.LastSavedDeviceId = this.SelectedDevice.Id;
+            }
+
+            var connected = await this.DeviceService.ConnectAsync(this.LastSavedDeviceId);
+            if (!connected)
+            {
+                this.IsBusy = false;
+                this.BusyMessage = string.Empty;
+                await this.DialogService.ShowMessage("I cannot connect to selected Bluetooth device", "Error");
+                return;
+            }
+
+            var pairingResult = await this.DeviceService.PairAsync(this.LastSavedDeviceId);
+            if (!pairingResult.IsSuccess)
+            {
+                this.IsBusy = false;
+                this.BusyMessage = string.Empty;
+                await this.DialogService.ShowMessage("Paired operation failed", "Error");
+                return;
+            }
+
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Main));
         }
 
         private void OnDispatcherTimerTick(object sender, object e)
         {
-            if (!this.DeviceService.IsSearching())
+            if (this.IsPairedSearch && this.DeviceService.Devices.Any(d => d.Id == LastSavedDeviceId))
             {
                 this.StopSearch();
+                this.TickCount = 0;
+                this.IsPairedSearch = false;
+                this.Pair();
+                return;
+            }
+
+            if (!this.DeviceService.IsSearching() || TickCount == MaxTicksCount)
+            {
+                this.StopSearch();
+                this.TickCount = 0;
+            }
+            else
+            {
+                this.TickCount++;
             }
 
             if (this.DeviceService.Devices.Count == 0) return;

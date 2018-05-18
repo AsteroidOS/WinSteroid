@@ -11,9 +11,20 @@
     <Grid Padding="56">
         <StackPanel VerticalAlignment="Center" 
                     HorizontalAlignment="Stretch">
+            <StackPanel Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ProgressRing Width="80" 
+                              Height="80" 
+                              Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                              IsActive="{Binding IsBusy}" />
+                <TextBlock Text="Searching" 
+                           TextAlignment="Center" 
+                           Style="{ThemeResource BodyTextBlockStyle}" />
+            </StackPanel>
+            
             <ListView ItemsSource="{Binding Devices, Mode=OneWay}"
-                      SelectedItem="{Binding  SelectedDevice, Mode=TwoWay}"
-                      SelectionMode="Single">
+                      SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
+                      SelectionMode="Single"
+                      Visibility="{Binding IsPairedSearch, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -21,29 +32,58 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" Style="{ThemeResource TitleTextBlockStyle}" />
-                            <TextBlock Text="{Binding Id}" Style="{ThemeResource CaptionTextBlockStyle}" />
-                        </StackPanel>
+                        <Grid Padding="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            
+                            <FontIcon Grid.Column="0"
+                                      Grid.Row="0"
+                                      Grid.RowSpan="2"
+                                      FontSize="36"
+                                      Glyph="" />
+                            
+                            <TextBlock Grid.Column="1" 
+                                       Grid.Row="0" 
+                                       Text="{Binding Name}" 
+                                       Style="{ThemeResource TitleTextBlockStyle}" />
+                            
+                            <TextBlock Grid.Column="1" 
+                                       Grid.Row="1" 
+                                       Text="{Binding Id}" 
+                                       Style="{ThemeResource CaptionTextBlockStyle}" />
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Content="Search devices" 
-                    HorizontalAlignment="Stretch"
-                    Margin="0,12"
-                    IsEnabled="{Binding IsSearching, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
-                    Visibility="{Binding IsSearching, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                    Command="{Binding StartSearchCommand}" />
-            <Button Content="Stop search" 
-                    HorizontalAlignment="Stretch"
-                    IsEnabled="{Binding IsSearching}"
-                    Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding StopSearchCommand}" />
-            <Button Content="Pair selected device" 
-                    HorizontalAlignment="Stretch"
-                    Margin="0,12"
-                    IsEnabled="{Binding PairButtonEnabled, Mode=OneWay}"
-                    Command="{Binding PairCommand}" />
+
+            <StackPanel Visibility="{Binding IsPairedSearch, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}">
+                <Button Content="Search devices" 
+                        HorizontalAlignment="Stretch"
+                        Margin="0,12,0,0"
+                        IsEnabled="{Binding IsSearching, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                        Visibility="{Binding IsSearching, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                        Command="{Binding StartSearchCommand}" />
+
+                <Button Content="Stop search" 
+                        HorizontalAlignment="Stretch"
+                        Margin="0,12,0,0"
+                        IsEnabled="{Binding IsSearching}"
+                        Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding StopSearchCommand}" />
+
+                <Button Content="Pair selected device" 
+                        HorizontalAlignment="Stretch"
+                        Margin="0,12,0,0"
+                        IsEnabled="{Binding PairButtonEnabled, Mode=OneWay}"
+                        Command="{Binding PairCommand}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>
