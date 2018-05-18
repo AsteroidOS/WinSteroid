@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="WinSteroid.App.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
+                       Foreground="{Binding BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                       Style="{ThemeResource HeaderTextBlockStyle}" />
+            <Button Command="{Binding UpdateBatteryStatusCommand}" Content="Refresh" />
+        </StackPanel>
+    </Grid>
+</Page>

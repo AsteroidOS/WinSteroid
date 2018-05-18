@@ -1,0 +1,15 @@
+﻿<Application
+    x:Class="WinSteroid.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:WinSteroid.App.Converters"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels">
+    <Application.Resources>
+        <viewmodels:ViewModelLocator x:Key="Locator" />
+        <converters:BatteryLevelToBrushConverter x:Key="BatteryLevelToBrushConverter" />
+        <converters:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
+        <converters:BooleanToOppositeVisibilityConverter x:Key="BooleanToOppositeVisibilityConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
+    </Application.Resources>
+</Application>
