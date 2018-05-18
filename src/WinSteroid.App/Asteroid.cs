@@ -65,6 +65,7 @@ namespace WinSteroid.App
         //Notifications UUIDs
         public static Guid NotificationServiceUuid = Guid.Parse("00009071-0000-0000-0000-00A57E401D05");
         public static Guid NotificationUpdateCharacteristicUuid = Guid.Parse("00009001-0000-0000-0000-00A57E401D05");
+        public static Guid NotificationFeedbackCharacteristicUuid = Guid.Parse("00009002-0000-0000-0000-00A57E401D05");
 
         private static BLEService _notificationService;
         public static BLEService NotificationService
@@ -75,7 +76,8 @@ namespace WinSteroid.App
                 {
                     var characteristics = new[]
                     {
-                        new BLECharacteristic(nameof(NotificationUpdateCharacteristicUuid), NotificationUpdateCharacteristicUuid)
+                        new BLECharacteristic(nameof(NotificationUpdateCharacteristicUuid), NotificationUpdateCharacteristicUuid),
+                        new BLECharacteristic(nameof(NotificationFeedbackCharacteristicUuid), NotificationFeedbackCharacteristicUuid)
                     };
 
                     _notificationService = new BLEService(nameof(NotificationServiceUuid), NotificationServiceUuid, characteristics);
