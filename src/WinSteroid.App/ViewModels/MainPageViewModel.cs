@@ -27,6 +27,7 @@ namespace WinSteroid.App.ViewModels
             
             this.InitializeBatteryLevelHandlers();
             this.InitializeNotificationsHandlers();
+            this.InitializeActiveNotificationHandlers();
         }
 
         private ushort _batteryPercentage;
@@ -76,6 +77,13 @@ namespace WinSteroid.App.ViewModels
             }
 
             await this.DialogService.ShowMessage("I cannot be able to finish battery status handlers registration!", "Error");
+        }
+
+        private async void InitializeActiveNotificationHandlers()
+        {
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
+
+            this.BackgroundService.RegisterActiveNotificationTask(characteristic);
         }
 
         private async void InitializeNotificationsHandlers()

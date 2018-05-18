@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.UI.Notifications;
 
 namespace WinSteroid.Services.Helpers
 {
@@ -10,7 +7,23 @@ namespace WinSteroid.Services.Helpers
     {
         public static void Send(string title, string message)
         {
+            var toastVisual = new ToastVisual
+            {
+                BindingGeneric = new ToastBindingGeneric
+                {
+                    Children =
+                    {
+                        new AdaptiveText { Text = title },
+                        new AdaptiveText { Text = message }
+                    }
+                }
+            };
 
+            var toastContent = new ToastContent { Visual = toastVisual };
+
+            var toastNotification = new ToastNotification(toastContent.GetXml());
+
+            ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
         }
     }
 }

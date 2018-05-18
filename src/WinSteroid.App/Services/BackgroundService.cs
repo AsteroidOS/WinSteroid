@@ -11,6 +11,10 @@ namespace WinSteroid.App.Services
     {
         private const string BatteryLevelTaskName = nameof(BatteryLevelBackgroundTask);
         private const string BatteryLevelTaskEntryPoint = nameof(WinSteroid) + "." + nameof(Services) + "." + nameof(BatteryLevelBackgroundTask);
+
+        private const string ActiveNotificationTaskName = nameof(BatteryLevelBackgroundTask);
+        private const string ActiveNotificationTaskEntryPoint = nameof(WinSteroid) + "." + nameof(Services) + "." + nameof(BatteryLevelBackgroundTask);
+
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
         public void RegisterBatteryLevelTask(GattCharacteristic characteristic)
@@ -21,6 +25,19 @@ namespace WinSteroid.App.Services
             {
                 Name = BatteryLevelTaskName,
                 TaskEntryPoint = BatteryLevelTaskEntryPoint
+            };
+            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
+            builder.Register();
+        }
+
+        public void RegisterActiveNotificationTask(GattCharacteristic characteristic)
+        {
+            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return;
+
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = ActiveNotificationTaskName,
+                TaskEntryPoint = ActiveNotificationTaskEntryPoint
             };
             builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
             builder.Register();
