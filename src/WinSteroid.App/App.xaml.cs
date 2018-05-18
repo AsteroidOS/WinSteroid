@@ -66,6 +66,17 @@ namespace WinSteroid.App
                 {
                     await deviceService.InsertNotificationAsync(userNotification);
                 }
+
+                var currentIds = userNotifications.Select(n => n.Id.ToString()).ToArray();
+                var removedNotificationIds = await notificationService.GetRemovedNotificationsIdsAsync(currentIds);
+                if (removedNotificationIds.Count > 0)
+                {
+                    foreach (var id in removedNotificationIds)
+                    {
+                        await notificationService.RemoveNotificationAsync(id);
+                        await deviceService.RemoveNotificationAsync(id);
+                    }
+                }
             }
 
             backgroundTaskDeferral.Complete();

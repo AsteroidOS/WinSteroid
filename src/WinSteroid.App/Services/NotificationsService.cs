@@ -44,14 +44,27 @@ namespace WinSteroid.App.Services
 
             foreach (var userNotification in userNotifications)
             {
-                var existsNotification = await this.Database.ExistsNotificationWithId(userNotification.Id.ToString());
-                if (existsNotification) continue;
+                var existsNotification = await this.Database.RetrieveNotificationWithId(userNotification.Id.ToString());
+                if (existsNotification != null && existsNotification.Notified) continue; 
 
-                await this.Database.InsertNotificationAsync(userNotification);
+                await this.Database.InsertNotificationAsync(userNotification, notified: true);
                 newNotifications.Add(userNotification);
             }
 
             return newNotifications;
+        }
+
+        public async Task<IList<string>> GetRemovedNotificationsIdsAsync(IEnumerable<string> currentIds)
+        {
+            var notifications = await this.Database.RetrieveAllNotifications();
+            if (!notifications.Any()) return new string[0];
+
+            return notifications.Where(n => currentIds.All(id => id != n.Id)).Select(n => n.Id).ToArray();
+        }
+
+        public Task RemoveNotificationAsync(string id)
+        {
+            return this.Database.RemoveNotificationAsync(id);
         }
     }
 }

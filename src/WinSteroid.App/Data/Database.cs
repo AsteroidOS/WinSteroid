@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,17 +20,21 @@ namespace WinSteroid.App.Data
             this.SQLiteDbContext.CreateTableAsync<Models.Notification>();
         }
 
-        public Task<int> InsertNotificationAsync(UserNotification userNotification)
+        public Task<int> InsertNotificationAsync(UserNotification userNotification, bool notified)
         {
-            var notification = userNotification.AsNotification();
+            var notification = userNotification.AsNotification(notified);
 
             return this.SQLiteDbContext.InsertAsync(notification);
         }
 
-        public async Task<bool> ExistsNotificationWithId(string id)
+        public Task<Models.Notification> RetrieveNotificationWithId(string id)
         {
-            var count = await this.SQLiteDbContext.Table<Models.Notification>().Where(n => n.Id == id).CountAsync();
-            return count == 1;
+            return this.SQLiteDbContext.Table<Models.Notification>().Where(n => n.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Task<List<Models.Notification>> RetrieveAllNotifications()
+        {
+            return this.SQLiteDbContext.Table<Models.Notification>().ToListAsync();
         }
 
         public async Task MarkNotificationsAsNotifiedAsync(string[] ids)
@@ -43,6 +48,14 @@ namespace WinSteroid.App.Data
             }
 
             await this.SQLiteDbContext.UpdateAllAsync(notifications);
+        }
+
+        public async Task RemoveNotificationAsync(string id)
+        {
+            var item = await this.SQLiteDbContext.Table<Models.Notification>().Where(n => n.Id == id).FirstOrDefaultAsync();
+            if (item == null) return;
+
+            await this.SQLiteDbContext.DeleteAsync(item);
         }
     }
 }

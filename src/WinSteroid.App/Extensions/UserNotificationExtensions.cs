@@ -5,7 +5,7 @@ namespace Windows.UI.Notifications
 {
     public static class UserNotificationExtensions
     {
-        public static WinSteroid.App.Data.Models.Notification AsNotification(this UserNotification userNotification)
+        public static WinSteroid.App.Data.Models.Notification AsNotification(this UserNotification userNotification, bool notified)
         {
             if (userNotification == null)
             {
@@ -16,7 +16,8 @@ namespace Windows.UI.Notifications
             {
                 Id = userNotification.Id.ToString(),
                 CreatedAt = userNotification.CreationTime.UtcDateTime,
-                AppId = userNotification.AppInfo.Id
+                AppId = userNotification.AppInfo.Id,
+                Notified = notified
             };
         }
 
