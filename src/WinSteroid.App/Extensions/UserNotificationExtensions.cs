@@ -5,22 +5,6 @@ namespace Windows.UI.Notifications
 {
     public static class UserNotificationExtensions
     {
-        public static WinSteroid.App.Data.Models.Notification AsNotification(this UserNotification userNotification, bool notified)
-        {
-            if (userNotification == null)
-            {
-                throw new ArgumentNullException(nameof(userNotification));
-            }
-
-            return new WinSteroid.App.Data.Models.Notification
-            {
-                Id = userNotification.Id.ToString(),
-                CreatedAt = userNotification.CreationTime.UtcDateTime,
-                AppId = userNotification.AppInfo.Id,
-                Notified = notified
-            };
-        }
-
         public static string GetBody(this UserNotification userNotification)
         {
             if (userNotification == null)

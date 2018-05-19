@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -54,28 +53,17 @@ namespace WinSteroid.App
         {
             var backgroundTaskDeferral = args.TaskInstance.GetDeferral();
 
-            var notificationService = new NotificationsService(new Data.Database());
+            var notificationService = new NotificationsService();
             var deviceService = new DeviceService();
 
             if (string.Equals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName, StringComparison.OrdinalIgnoreCase))
             {
                 var userNotifications = await notificationService.RetriveNotificationsAsync();
-                if (!userNotifications.Any()) return;
+                if (userNotifications.Count == 0) return;
 
                 foreach (var userNotification in userNotifications)
                 {
                     await deviceService.InsertNotificationAsync(userNotification);
-                }
-
-                var currentIds = userNotifications.Select(n => n.Id.ToString()).ToArray();
-                var removedNotificationIds = await notificationService.GetRemovedNotificationsIdsAsync(currentIds);
-                if (removedNotificationIds.Count > 0)
-                {
-                    foreach (var id in removedNotificationIds)
-                    {
-                        await notificationService.RemoveNotificationAsync(id);
-                        await deviceService.RemoveNotificationAsync(id);
-                    }
                 }
             }
 

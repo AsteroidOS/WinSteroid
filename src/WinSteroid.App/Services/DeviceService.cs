@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
+using Windows.UI.Xaml;
 using WinSteroid.App.Helpers;
 using WinSteroid.App.Models;
 
@@ -15,73 +15,27 @@ namespace WinSteroid.App.Services
 {
     public class DeviceService
     {
-        private DeviceWatcher Watcher;
-        private BluetoothLEDevice BluetoothDevice;
+        private BluetoothLEDevice BluetoothDevice = null;
+        public DeviceInformation Current = null;
         
-        private readonly string[] RequestedProperties = new[] { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" };
-        public readonly List<DeviceInformation> Devices;
+        public string GetLastSavedDeviceId() => SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
 
-        public DeviceService()
+        public string GetLastSavedDeviceName() => SettingsHelper.GetValue("lastSavedDeviceName", string.Empty);
+
+        public void UpdateLastSavedDeviceInfo()
         {
-            this.Devices = new List<DeviceInformation>();
+            SettingsHelper.SetValue("lastSavedDeviceId", this.Current?.Id ?? string.Empty);
+            SettingsHelper.SetValue("lastSavedDeviceName", this.Current?.Name ?? string.Empty);
         }
 
-        public void StartSearch()
-        {
-            this.Devices.Clear();
-
-            this.Watcher = DeviceInformation.CreateWatcher(
-                BluetoothLEDevice.GetDeviceSelectorFromPairingState(pairingState: true), 
-                this.RequestedProperties, 
-                DeviceInformationKind.AssociationEndpoint);
-            
-            this.Watcher.Updated += OnDeviceUpdated;
-            this.Watcher.Added += OnDeviceAdded;
-            this.Watcher.Removed += OnDeviceRemoved;
-
-            this.Watcher.Start();
-        }
-
-        public void StopSearch()
-        {
-            if (this.Watcher.Status != DeviceWatcherStatus.Started) return;
-
-            this.Watcher.Stop();
-        }
-
-        public bool IsSearching() => this.Watcher.Status == DeviceWatcherStatus.Started;
-
-        private void OnDeviceAdded(DeviceWatcher sender, DeviceInformation device)
-        {
-            if (string.IsNullOrWhiteSpace(device?.Name)) return;
-
-            if (this.Devices.Any(d => d.Id == device.Id)) return;
-
-            this.Devices.Add(device);
-        }
-
-        private void OnDeviceUpdated(DeviceWatcher sender, DeviceInformationUpdate updatedDevice)
-        {
-            var device = this.Devices.FirstOrDefault(d => d.Id == updatedDevice.Id);
-            if (device == null) return;
-
-            device.Update(updatedDevice);
-        }
-
-        private void OnDeviceRemoved(DeviceWatcher sender, DeviceInformationUpdate removedDevice)
-        {
-            if (this.Devices.All(d => d.Id != removedDevice.Id)) return;
-
-            this.Devices.Where(d => d.Id != removedDevice.Id).ToList();
-        }
-        
         public async Task<bool> ConnectAsync(string deviceId)
         {
-            if (string.IsNullOrWhiteSpace(deviceId)) return false;
-
             try
             {
                 this.BluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
+                if (this.BluetoothDevice == null) return false;
+
+                this.Current = BluetoothDevice.DeviceInformation;
             }
             catch
             {
@@ -89,32 +43,26 @@ namespace WinSteroid.App.Services
                 return false;
             }
 
-            return this.BluetoothDevice != null;
+            return this.BluetoothDevice != null && this.Current != null;
         }
 
-        public async Task<PairingResult> PairAsync(string deviceId)
+        public async Task<PairingResult> PairAsync()
         {
-            var device = this.Devices.SingleOrDefault(d => d.Id == deviceId);
-            if (device == null)
+            if (this.Current.Pairing.IsPaired)
             {
-                throw new ArgumentNullException(nameof(device));
-            }
-
-            if (device.Pairing.IsPaired)
-            {
-                SettingsHelper.SetValue("lastSavedDeviceId", deviceId);
+                this.UpdateLastSavedDeviceInfo();
                 return PairingResult.Success;
             }
 
-            if (!device.Pairing.CanPair)
+            if (!this.Current.Pairing.CanPair)
             {
                 return new PairingResult("The selected device cannot be paired");
             }
 
-            var pairingResult = await device.Pairing.PairAsync();
+            var pairingResult = await this.Current.Pairing.PairAsync();
             if (pairingResult.Status == DevicePairingResultStatus.Paired || pairingResult.Status == DevicePairingResultStatus.AlreadyPaired)
             {
-                SettingsHelper.SetValue("LastSavedDeviceId", deviceId);
+                this.UpdateLastSavedDeviceInfo();
                 return PairingResult.Success;
             }
 
@@ -127,6 +75,12 @@ namespace WinSteroid.App.Services
             {
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
+            }
+
+            if (this.Current != null)
+            {
+                this.Current = null;
+                this.UpdateLastSavedDeviceInfo();
             }
         }
 
@@ -245,6 +199,22 @@ namespace WinSteroid.App.Services
             var utf8Bytes = Encoding.UTF8.GetBytes(xmlNotification);
 
             return this.WriteByteArrayToCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid, utf8Bytes);
+        }
+
+        public async Task<bool> PickSingleDeviceAsync(FrameworkElement element)
+        {
+            var devicePicker = new DevicePicker();
+            devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(false));
+            devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(true));
+
+            var rect = element.GetPickerRect();
+
+            var device = await devicePicker.PickSingleDeviceAsync(rect);
+            if (device == null) return false;
+
+            this.Current = device;
+
+            return true;
         }
     }
 }

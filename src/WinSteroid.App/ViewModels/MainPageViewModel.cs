@@ -26,8 +26,8 @@ namespace WinSteroid.App.ViewModels
             this.ProgressEventHandler = new BackgroundTaskProgressEventHandler(OnProgress);
             
             this.InitializeBatteryLevelHandlers();
-            this.InitializeNotificationsHandlers();
-            this.InitializeActiveNotificationHandlers();
+            this.InitializeUserNotificationsHandlers();
+            //this.InitializeActiveNotificationHandlers();
         }
 
         private ushort _batteryPercentage;
@@ -67,7 +67,12 @@ namespace WinSteroid.App.ViewModels
         {
             var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.BatteryLevelCharacteristicUuid);
 
-            this.BackgroundService.RegisterBatteryLevelTask(characteristic);
+            var result = await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
+            if (!result)
+            {
+                await this.DialogService.ShowMessage("I cannot be able to finish battery status handlers registration!", "Error");
+                return;
+            }
 
             var registrationCompleted = this.BackgroundService.TryToRegisterBatteryLevelBackgroundTaskProgressHandler(this.ProgressEventHandler);
             if (registrationCompleted)
@@ -79,14 +84,19 @@ namespace WinSteroid.App.ViewModels
             await this.DialogService.ShowMessage("I cannot be able to finish battery status handlers registration!", "Error");
         }
 
-        private async void InitializeActiveNotificationHandlers()
-        {
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
+        //private async void InitializeActiveNotificationHandlers()
+        //{
+        //    var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
 
-            this.BackgroundService.RegisterActiveNotificationTask(characteristic);
-        }
+        //    var result = await this.BackgroundService.RegisterActiveNotificationTask(characteristic);
+        //    if (!result)
+        //    {
+        //        await this.DialogService.ShowMessage("I cannot be able to finish active notification handlers registration!", "Error");
+        //        return;
+        //    }
+        //}
 
-        private async void InitializeNotificationsHandlers()
+        private async void InitializeUserNotificationsHandlers()
         {
             this.BackgroundService.RegisterUserNotificationTask();
 

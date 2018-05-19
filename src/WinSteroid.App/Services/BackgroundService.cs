@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
@@ -17,9 +18,14 @@ namespace WinSteroid.App.Services
 
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
-        public void RegisterBatteryLevelTask(GattCharacteristic characteristic)
+        public async Task<bool> RegisterBatteryLevelTask(GattCharacteristic characteristic)
         {
-            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return;
+            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return true;
+
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            if (backgroundAccessStatus == BackgroundAccessStatus.DeniedByUser
+                || backgroundAccessStatus == BackgroundAccessStatus.DeniedBySystemPolicy
+                || backgroundAccessStatus == BackgroundAccessStatus.Unspecified) return false;
 
             var builder = new BackgroundTaskBuilder
             {
@@ -28,20 +34,33 @@ namespace WinSteroid.App.Services
             };
             builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
             builder.Register();
+
+            return true;
         }
 
-        public void RegisterActiveNotificationTask(GattCharacteristic characteristic)
-        {
-            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return;
+        //public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
+        //{
+        //    if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
 
-            var builder = new BackgroundTaskBuilder
-            {
-                Name = ActiveNotificationTaskName,
-                TaskEntryPoint = ActiveNotificationTaskEntryPoint
-            };
-            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-            builder.Register();
-        }
+        //    var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+        //    if (backgroundAccessStatus == BackgroundAccessStatus.DeniedByUser
+        //        || backgroundAccessStatus == BackgroundAccessStatus.DeniedBySystemPolicy
+        //        || backgroundAccessStatus == BackgroundAccessStatus.Unspecified) return false;
+
+        //    var builder = new BackgroundTaskBuilder
+        //    {
+        //        Name = ActiveNotificationTaskName,
+        //        TaskEntryPoint = ActiveNotificationTaskEntryPoint
+        //    };
+
+        //    var trigger = new GattCharacteristicNotificationTrigger(characteristic);
+        //    trigger.Characteristic.ValueChanged += OnActiveNotificationTriggerCharacteristicValueChanged;
+
+        //    builder.SetTrigger(trigger);
+        //    builder.Register();
+
+        //    return true;
+        //}
 
         public void RegisterUserNotificationTask()
         {

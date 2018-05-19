@@ -2,10 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Windows.UI.Xaml;
-using WinSteroid.App.Helpers;
 using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
@@ -15,23 +12,22 @@ namespace WinSteroid.App.ViewModels
         private readonly DeviceService DeviceService;
         private readonly INavigationService NavigationService;
         private readonly IDialogService DialogService;
-        private readonly DispatcherTimer DispatcherTimer;
 
         public WelcomePageViewModel(DeviceService deviceService, INavigationService navigationService, IDialogService dialogService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-            this.Devices = new ObservableCollection<Device>();
-            this.DispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
-            this.DispatcherTimer.Tick += OnDispatcherTimerTick;
 
-            this.DiscoverPairedDevice();
+            var deviceId = deviceService.GetLastSavedDeviceId();
+            if (!string.IsNullOrWhiteSpace(deviceId))
+            {
+                this.DeviceId = deviceId;
+                this.Pair();
+            }
         }
 
         private const ushort MaxTicksCount = 6;
-        private ushort TickCount = 0;
-        private string LastSavedDeviceId;
 
         private bool _isBusy;
         public bool IsBusy
@@ -47,45 +43,18 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(BusyMessage), ref _busyMessage, value); }
         }
 
-        private bool _isPairedSearch;
-        public bool IsPairedSearch
+        private string _deviceId;
+        public string DeviceId
         {
-            get { return _isPairedSearch; }
-            set { Set(nameof(IsPairedSearch), ref _isPairedSearch, value); }
+            get { return _deviceId; }
+            set { Set(nameof(DeviceId), ref _deviceId, value); }
         }
 
-        private bool _isSearching;
-        public bool IsSearching
+        private string _deviceName;
+        public string DeviceName
         {
-            get { return _isSearching; }
-            set { Set(nameof(IsSearching), ref _isSearching, value); }
-        }
-
-        private bool _pairButtonEnabled;
-        public bool PairButtonEnabled
-        {
-            get { return _pairButtonEnabled; }
-            set { Set(nameof(PairButtonEnabled), ref _pairButtonEnabled, value); }
-        }
-
-        private ObservableCollection<Device> _devices;
-        public ObservableCollection<Device> Devices
-        {
-            get { return _devices; }
-            set { Set(nameof(Devices), ref _devices, value); }
-        }
-
-        private Device _selectedDevice;
-        public Device SelectedDevice
-        {
-            get { return _selectedDevice; }
-            set
-            {
-                if (!Set(nameof(SelectedDevice), ref _selectedDevice, value)) return;
-
-                this.PairButtonEnabled = _selectedDevice != null && this.Devices.Any(d => d.Id == _selectedDevice.Id);
-                this.RaisePropertyChanged(nameof(PairButtonEnabled));
-            }
+            get { return _deviceName; }
+            set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
         private RelayCommand _startSearchCommand;
@@ -102,47 +71,25 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private void DiscoverPairedDevice()
+        private async void StartSearch()
         {
-            this.LastSavedDeviceId = SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
-            if (string.IsNullOrWhiteSpace(this.LastSavedDeviceId)) return;
-
-            this.IsPairedSearch = true;
-            this.StartSearch();
-        }
-
-        private void StartSearch()
-        {
-            this.IsBusy = true;
-            this.BusyMessage = "Searching";
-            this.IsSearching = true;
-            this.DeviceService.StartSearch();
-            this.DispatcherTimer.Start();
-        }
-
-        private RelayCommand _stopSearchCommand;
-        public RelayCommand StopSearchCommand
-        {
-            get
+            if (!string.IsNullOrWhiteSpace(this.DeviceId))
             {
-                if (_stopSearchCommand == null)
-                {
-                    _stopSearchCommand = new RelayCommand(StopSearch);
-                }
-
-                return _stopSearchCommand;
+                this.Pair();
+                return;
             }
-        }
 
-        private void StopSearch()
-        {
-            this.DeviceService.StopSearch();
-            this.DispatcherTimer.Stop();
-            this.IsBusy = false;
-            this.BusyMessage = string.Empty;
-            this.IsSearching = false;
-        }
+            var element = (FrameworkElement)Views.WelcomePage.Current;
 
+            var result = await this.DeviceService.PickSingleDeviceAsync(element);
+            if (!result) return;
+
+            this.DeviceId = this.DeviceService.Current.Id;
+            this.DeviceName = this.DeviceService.Current.Name;
+
+            this.Pair();
+        }
+        
         private RelayCommand _pairCommand;
         public RelayCommand PairCommand
         {
@@ -150,11 +97,16 @@ namespace WinSteroid.App.ViewModels
             {
                 if (_pairCommand == null)
                 {
-                    _pairCommand = new RelayCommand(Pair);
+                    _pairCommand = new RelayCommand(Pair, CanPair);
                 }
 
                 return _pairCommand;
             }
+        }
+
+        public bool CanPair()
+        {
+            return !string.IsNullOrWhiteSpace(this.DeviceId) || this.DeviceService.Current != null;
         }
 
         private async void Pair()
@@ -162,12 +114,13 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = true;
             this.BusyMessage = "Pairing";
 
-            if (string.IsNullOrWhiteSpace(this.LastSavedDeviceId) && this.SelectedDevice != null)
+            if (string.IsNullOrWhiteSpace(this.DeviceId) && this.DeviceService.Current != null)
             {
-                this.LastSavedDeviceId = this.SelectedDevice.Id;
+                this.DeviceId = this.DeviceService.Current.Id;
+                this.DeviceName = this.DeviceService.Current.Name;
             }
 
-            var connected = await this.DeviceService.ConnectAsync(this.LastSavedDeviceId);
+            var connected = await this.DeviceService.ConnectAsync(this.DeviceId);
             if (!connected)
             {
                 this.IsBusy = false;
@@ -176,7 +129,7 @@ namespace WinSteroid.App.ViewModels
                 return;
             }
 
-            var pairingResult = await this.DeviceService.PairAsync(this.LastSavedDeviceId);
+            var pairingResult = await this.DeviceService.PairAsync();
             if (!pairingResult.IsSuccess)
             {
                 this.IsBusy = false;
@@ -186,48 +139,6 @@ namespace WinSteroid.App.ViewModels
             }
 
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Main));
-        }
-
-        private void OnDispatcherTimerTick(object sender, object e)
-        {
-            if (this.IsPairedSearch && this.DeviceService.Devices.Any(d => d.Id == LastSavedDeviceId))
-            {
-                this.StopSearch();
-                this.TickCount = 0;
-                this.IsPairedSearch = false;
-                this.Pair();
-                return;
-            }
-
-            if (!this.DeviceService.IsSearching() || TickCount == MaxTicksCount)
-            {
-                this.StopSearch();
-                this.TickCount = 0;
-            }
-            else
-            {
-                this.TickCount++;
-            }
-
-            if (this.DeviceService.Devices.Count == 0) return;
-
-            foreach (var device in this.DeviceService.Devices)
-            {
-                if (this.Devices.Any(d => d.Id == device.Id)) continue;
-
-                this.Devices.Add(new Device
-                {
-                    Id = device.Id,
-                    Name = device.Name
-                });
-            }
-        }
-
-        public class Device
-        {
-            public string Id { get; set; }
-
-            public string Name { get; set; }
         }
     }
 }

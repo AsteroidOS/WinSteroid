@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight.Ioc;
+﻿using CommonServiceLocator;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using Microsoft.Practices.ServiceLocation;
 
 namespace WinSteroid.App.ViewModels
 {
@@ -15,7 +15,6 @@ namespace WinSteroid.App.ViewModels
 
             SimpleIoc.Default.Register<INavigationService>(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
-            SimpleIoc.Default.Register<Data.Database>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
             SimpleIoc.Default.Register<Services.NotificationsService>();

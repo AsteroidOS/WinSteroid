@@ -25,11 +25,11 @@
                                             Outline="Gray"
                                             Width="240"
                                             Height="240"
-                                            Value="{Binding BatteryPercentage}"
-                                            Foreground="{Binding BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                                            Value="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay}"
+                                            Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
 
-                <TextBlock Text="{Binding BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
-                           Foreground="{Binding BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                <TextBlock Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
+                           Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
                            Style="{ThemeResource HeaderTextBlockStyle}"
                            FontSize="80"
                            FontWeight="Normal"
@@ -40,7 +40,7 @@
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Command="{Binding UpdateBatteryStatusCommand}"
+                <AppBarButton Command="{x:Bind ViewModel.UpdateBatteryStatusCommand}"
                               Label="Refresh">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Refresh" />
