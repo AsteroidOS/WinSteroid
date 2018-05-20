@@ -27,6 +27,7 @@ namespace WinSteroid.App.ViewModels
             
             this.InitializeBatteryLevelHandlers();
             this.InitializeUserNotificationsHandlers();
+            this.DeviceService.RegisterToScreenshotContentService();
             //this.InitializeActiveNotificationHandlers();
         }
 
@@ -55,6 +56,20 @@ namespace WinSteroid.App.ViewModels
                 }
 
                 return _updateBatteryStatusCommand;
+            }
+        }
+
+        private RelayCommand _takeScreenshotCommand;
+        public RelayCommand TakeScreenshotCommand
+        {
+            get
+            {
+                if (_takeScreenshotCommand == null)
+                {
+                    _takeScreenshotCommand = new RelayCommand(this.DeviceService.TakeScreenshotAsync);
+                }
+
+                return _takeScreenshotCommand;
             }
         }
 

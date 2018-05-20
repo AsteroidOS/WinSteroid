@@ -38,6 +38,7 @@
   </Applications>
   <Capabilities>
     <uap3:Capability Name="userNotificationListener" />
+    <uap:Capability Name="picturesLibrary" />
     <DeviceCapability Name="bluetooth" />
   </Capabilities>
 </Package>

@@ -46,6 +46,12 @@
                         <SymbolIcon Symbol="Refresh" />
                     </AppBarButton.Icon>
                 </AppBarButton>
+                <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand}" 
+                              Label="Take screenshot">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Caption" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Grid>

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -215,6 +219,96 @@ namespace WinSteroid.App.Services
             this.Current = device;
 
             return true;
+        }
+
+        public async void RegisterToScreenshotContentService()
+        {
+            var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
+            if (characteristic != null)
+            {
+                var indicateResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                if (indicateResult == GattCommunicationStatus.Success)
+                {
+                    characteristic.ValueChanged += OnScreenshotContentCharacteristicValueChanged;
+                }
+            }
+        }
+
+        private int? TotalSize = null;
+        private byte[] TotalData = null;
+        private int? Progress = null;
+
+        private static int ConvertBytesToInt32(byte[] bytes)
+        {
+            int result = 0;
+            for (int i = 3; i >= 0; i--)
+            {
+                result <<= 8;
+                result |= (bytes[i] & 0xFF);
+            }
+            return result;
+        }
+
+        private async void OnScreenshotContentCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            var dataReader = DataReader.FromBuffer(args.CharacteristicValue);
+
+            var bytes = new byte[dataReader.UnconsumedBufferLength];
+
+            dataReader.ReadBytes(bytes);
+
+            if (!this.TotalSize.HasValue)
+            {
+                var size = ConvertBytesToInt32(bytes); //BitConverter.ToInt32(bytes, 0);
+                this.TotalData = new byte[size];
+                this.TotalSize = size;
+                this.Progress = 0;
+                return;
+            }
+
+            if (bytes.Length + this.Progress.Value <= this.TotalData.Length)
+            {
+                Array.Copy(bytes, 0, this.TotalData, this.Progress.Value, bytes.Length);
+            }
+
+            this.Progress += bytes.Length;
+            Debug.WriteLine("Progress: " + this.Progress.Value + "; Total size: " + this.TotalSize.Value);
+            if ((this.Progress.Value) < this.TotalSize.Value / 10)
+            {
+                return;
+            }
+
+            byte[] decodedBytes = null;
+
+            using (var stream = new MemoryStream(this.TotalData))
+            {
+                var decoder = await BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
+                var provider = await decoder.GetPixelDataAsync();
+                decodedBytes = provider.DetachPixelData();
+            }
+
+            //MANAGE
+            var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("screenshot.jpg", CreationCollisionOption.GenerateUniqueName);
+
+            await FileIO.WriteBytesAsync(storageFile, decodedBytes); //this.TotalData);
+
+            Debug.WriteLine("Screenshot acquired! File: " + storageFile.Path);
+
+            this.Progress = null;
+            this.TotalSize = null;
+            this.TotalData = null;
+        }
+
+        public async void TakeScreenshotAsync()
+        {
+            var bytes = new byte[] { 0x0 };
+
+            var result = await this.WriteByteArrayToCharacteristicAsync(Asteroid.ScreenshotRequestCharacteristicUuid, bytes);
+            if (!result)
+            {
+                //ERROR
+                throw new Exception();
+            }
         }
     }
 }
