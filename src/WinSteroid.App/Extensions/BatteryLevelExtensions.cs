@@ -2,7 +2,7 @@
 {
     public static class BatteryLevelExtensions
     {
-        public static BatteryLevel Parse(ushort percentage)
+        public static BatteryLevel Parse(int percentage)
         {
             switch (percentage)
             {

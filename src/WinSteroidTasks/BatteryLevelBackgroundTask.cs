@@ -1,10 +1,8 @@
-﻿using System;
-using Windows.ApplicationModel.Background;
+﻿using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.Background;
-using Windows.Storage.Streams;
-using WinSteroid.Services.Helpers;
+using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.Services
+namespace WinSteroidTasks
 {
     public sealed class BatteryLevelBackgroundTask : IBackgroundTask
     {
@@ -19,18 +17,9 @@ namespace WinSteroid.Services
 
             var details = (GattCharacteristicNotificationTriggerDetails)BackgroundTaskInstance.TriggerDetails;
 
-            byte[] receivedData = null;
-
-            using (var dataReader = DataReader.FromBuffer(details.Value))
+            var percentage = BatteryHelper.GetPercentage(details.Value);
+            if (percentage > 0)
             {
-                receivedData = new byte[dataReader.UnconsumedBufferLength];
-                dataReader.ReadBytes(receivedData);
-            }
-
-            if (receivedData?.Length > 0)
-            {
-                var percentage = Convert.ToUInt16(receivedData[0]);
-                this.BackgroundTaskInstance.Progress = percentage;
                 TilesHelper.UpdateBatteryTile(percentage);
             }
             else

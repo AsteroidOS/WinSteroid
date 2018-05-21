@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
+using Windows.Foundation;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -14,6 +15,7 @@ using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using WinSteroid.App.Helpers;
 using WinSteroid.App.Models;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.Services
 {
@@ -21,7 +23,9 @@ namespace WinSteroid.App.Services
     {
         private BluetoothLEDevice BluetoothDevice = null;
         public DeviceInformation Current = null;
-        
+        public int BatteryLevel { get; set; }
+        public bool IsDeviceConnected { get; set; }
+
         public string GetLastSavedDeviceId() => SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
 
         public string GetLastSavedDeviceName() => SettingsHelper.GetValue("lastSavedDeviceName", string.Empty);
@@ -39,6 +43,7 @@ namespace WinSteroid.App.Services
                 this.BluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
                 if (this.BluetoothDevice == null) return false;
 
+                this.BluetoothDevice.ConnectionStatusChanged += OnConnectionStatusChanged;
                 this.Current = BluetoothDevice.DeviceInformation;
             }
             catch
@@ -48,6 +53,11 @@ namespace WinSteroid.App.Services
             }
 
             return this.BluetoothDevice != null && this.Current != null;
+        }
+
+        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        {
+            this.IsDeviceConnected = sender.ConnectionStatus == BluetoothConnectionStatus.Connected;
         }
 
         public async Task<PairingResult> PairAsync()
@@ -77,6 +87,7 @@ namespace WinSteroid.App.Services
         {
             if (this.BluetoothDevice != null)
             {
+                this.BluetoothDevice.ConnectionStatusChanged -= OnConnectionStatusChanged;
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
             }
@@ -152,26 +163,39 @@ namespace WinSteroid.App.Services
             return writeOperationResult == GattCommunicationStatus.Success;
         }
 
-        public async Task<ushort> GetBatteryPercentageAsync()
+        public async Task<bool> RegisterBatteryPercentageNotification(TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs> batteryLevelCharacteristicValueChangedHandler)
+        {
+            if (batteryLevelCharacteristicValueChangedHandler == null)
+            {
+                throw new ArgumentNullException(nameof(batteryLevelCharacteristicValueChangedHandler));
+            }
+
+            var characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+
+            var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            if (notifyResult == GattCommunicationStatus.Success)
+            {
+                characteristic.ValueChanged += batteryLevelCharacteristicValueChangedHandler;
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<int> GetBatteryPercentageAsync()
         {
             if (this.BluetoothDevice == null) return 0;
 
-            var characteristic = await this.GetGattCharacteristicAsync(Asteroid.BatteryLevelCharacteristicUuid);
-
-            var valueResult = await characteristic.ReadValueAsync();
+            var characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+            
+            var valueResult = await characteristic.ReadValueAsync(BluetoothCacheMode.Uncached);
             if (valueResult.Status != GattCommunicationStatus.Success)
             {
                 //ERROR
                 throw new Exception();
             }
 
-            using (var reader = DataReader.FromBuffer(valueResult.Value))
-            {
-                var bytes = new byte[reader.UnconsumedBufferLength];
-                reader.ReadBytes(bytes);
-
-                return Convert.ToUInt16(bytes[0]);
-            }
+            return BatteryHelper.GetPercentage(valueResult.Value);
         }
 
         public Task<bool> SendMediaCommandAsync(MediaCommandType mediaCommand)
@@ -221,17 +245,20 @@ namespace WinSteroid.App.Services
             return true;
         }
 
-        public async void RegisterToScreenshotContentService()
+        public async Task<bool> RegisterToScreenshotContentService()
         {
             var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
             if (characteristic != null)
             {
-                var indicateResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                if (indicateResult == GattCommunicationStatus.Success)
+                var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                if (notifyResult == GattCommunicationStatus.Success)
                 {
                     characteristic.ValueChanged += OnScreenshotContentCharacteristicValueChanged;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private int? TotalSize = null;

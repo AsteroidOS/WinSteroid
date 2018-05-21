@@ -1,8 +1,6 @@
-﻿using System;
-using Windows.Storage;
-using Windows.UI.Popups;
+﻿using Windows.Storage;
 
-namespace WinSteroid.App.Helpers
+namespace WinSteroid.Common.Helpers
 {
     public static class SettingsHelper
     {
@@ -21,14 +19,7 @@ namespace WinSteroid.App.Helpers
         {
             if (!ApplicationData.Current.LocalSettings.Values.ContainsKey(key))
             {
-                try
-                {
-                    ApplicationData.Current.LocalSettings.Values.Add(key, value);
-                }
-                catch (Exception exception)
-                {
-                    new MessageDialog(exception.Message, exception.GetType().Name).ShowAsync();
-                }
+                ApplicationData.Current.LocalSettings.Values.Add(key, value);
             }
             else
             {

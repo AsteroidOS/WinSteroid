@@ -52,7 +52,25 @@
                         <SymbolIcon Symbol="Caption" />
                     </AppBarButton.Icon>
                 </AppBarButton>
+                <AppBarButton Command="{x:Bind ViewModel.PinBatteryTileCommand, Mode=OneWay}" 
+                              Visibility="{x:Bind ViewModel.BatteryTilePinned, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                              Label="Pin battery tile">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Pin" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Command="{x:Bind ViewModel.UnpinBatteryTileCommand, Mode=OneWay}" 
+                              Visibility="{x:Bind ViewModel.BatteryTilePinned, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Label="Unpin battery tile">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="UnPin" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
             </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Unregister tasks"
+                              Command="{x:Bind ViewModel.UnregisterTasksCommand, Mode=OneWay}" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

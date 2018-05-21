@@ -3,9 +3,9 @@ using System.Text;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.Background;
 using Windows.Storage.Streams;
-using WinSteroid.Services.Helpers;
+using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.Services
+namespace WinSteroidTasks
 {
     public sealed class ActiveNotificationBackgroundTask : IBackgroundTask
     {
@@ -20,17 +20,13 @@ namespace WinSteroid.Services
 
             var details = (GattCharacteristicNotificationTriggerDetails)BackgroundTaskInstance.TriggerDetails;
 
-            byte[] receivedData = null;
+            var bytes = new byte[details.Value.Length];
 
-            using (var dataReader = DataReader.FromBuffer(details.Value))
-            {
-                receivedData = new byte[dataReader.UnconsumedBufferLength];
-                dataReader.ReadBytes(receivedData);
-            }
+            DataReader.FromBuffer(details.Value).ReadBytes(bytes);
 
-            if (receivedData?.Length > 0)
+            if (bytes?.Length > 0)
             {
-                var @string = Encoding.UTF8.GetString(receivedData);
+                var @string = Encoding.UTF8.GetString(bytes);
                 ToastsHelper.Send("Test action", @string);
             }
 

@@ -3,9 +3,11 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using System;
-using Windows.ApplicationModel.Background;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using WinSteroid.App.Helpers;
 using WinSteroid.App.Models;
 using WinSteroid.App.Services;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
 {
@@ -15,7 +17,6 @@ namespace WinSteroid.App.ViewModels
         private readonly BackgroundService BackgroundService;
         private readonly NotificationsService NotificationsService;
         private readonly IDialogService DialogService;
-        private readonly BackgroundTaskProgressEventHandler ProgressEventHandler;
 
         public MainPageViewModel(DeviceService deviceService, BackgroundService backgroundService, NotificationsService notificationsService, IDialogService dialogService)
         {
@@ -23,16 +24,17 @@ namespace WinSteroid.App.ViewModels
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
             this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-            this.ProgressEventHandler = new BackgroundTaskProgressEventHandler(OnProgress);
-            
+
+            this.BatteryTilePinned = TilesHelper.BatteryTileExists();
+
             this.InitializeBatteryLevelHandlers();
             this.InitializeUserNotificationsHandlers();
-            this.DeviceService.RegisterToScreenshotContentService();
             //this.InitializeActiveNotificationHandlers();
+            this.InizializeScreenshotContentHandlers();
         }
 
-        private ushort _batteryPercentage;
-        public ushort BatteryPercentage
+        private int _batteryPercentage;
+        public int BatteryPercentage
         {
             get { return _batteryPercentage; }
             set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
@@ -73,30 +75,86 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private async void OnProgress(BackgroundTaskRegistration sender, BackgroundTaskProgressEventArgs args)
+        private bool _batteryTilePinned;
+        public bool BatteryTilePinned
         {
-            await DispatcherHelper.RunAsync(UpdateBatteryStatus);
+            get { return _batteryTilePinned; }
+            set { Set(nameof(BatteryTilePinned), ref _batteryTilePinned, value); }
+        }
+
+        private RelayCommand _pinBatteryTileCommand;
+        public RelayCommand PinBatteryTileCommand
+        {
+            get
+            {
+                if (_pinBatteryTileCommand == null)
+                {
+                    _pinBatteryTileCommand = new RelayCommand(PinBatteryTile);
+                }
+
+                return _pinBatteryTileCommand;
+            }
+        }
+
+        private async void PinBatteryTile()
+        {
+            var deviceId = this.DeviceService.Current.Id;
+            var deviceName = this.DeviceService.Current.Name;
+            var result = await TilesHelper.PinBatteryTileAsync(deviceId, deviceName);
+            if (result)
+            {
+                this.BatteryTilePinned = true;
+                TilesHelper.UpdateBatteryTile(this.BatteryPercentage);
+            }
+        }
+
+        private RelayCommand _unpinBatteryTileCommand;
+        public RelayCommand UnpinBatteryTileCommand
+        {
+            get
+            {
+                if (_unpinBatteryTileCommand == null)
+                {
+                    _unpinBatteryTileCommand = new RelayCommand(UnpinBatteryTile);
+                }
+
+                return _unpinBatteryTileCommand;
+            }
+        }
+
+        private async void UnpinBatteryTile()
+        {
+            var result = await TilesHelper.UnpinBatteryTileAsync();
+            if (result)
+            {
+                this.BatteryTilePinned = false;
+            }
+        }
+
+        private RelayCommand _unregisterTasksCommand;
+        public RelayCommand UnregisterTasksCommand
+        {
+            get
+            {
+                if (_unregisterTasksCommand == null)
+                {
+                    _unregisterTasksCommand = new RelayCommand(this.BackgroundService.UnregisterAllTasks);
+                }
+
+                return _unregisterTasksCommand;
+            }
         }
 
         private async void InitializeBatteryLevelHandlers()
         {
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.BatteryLevelCharacteristicUuid);
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
 
-            var result = await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
-            if (!result)
-            {
-                await this.DialogService.ShowMessage("I cannot be able to finish battery status handlers registration!", "Error");
-                return;
-            }
+            await this.DeviceService.RegisterBatteryPercentageNotification(OnBatteryLevelCharacteristicValueChanged);
 
-            var registrationCompleted = this.BackgroundService.TryToRegisterBatteryLevelBackgroundTaskProgressHandler(this.ProgressEventHandler);
-            if (registrationCompleted)
-            {
-                this.UpdateBatteryStatus();
-                return;
-            }
+            await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
 
-            await this.DialogService.ShowMessage("I cannot be able to finish battery status handlers registration!", "Error");
+            this.UpdateBatteryStatus();
         }
 
         //private async void InitializeActiveNotificationHandlers()
@@ -107,12 +165,22 @@ namespace WinSteroid.App.ViewModels
         //    if (!result)
         //    {
         //        await this.DialogService.ShowMessage("I cannot be able to finish active notification handlers registration!", "Error");
-        //        return;
         //    }
         //}
 
+        private async void InizializeScreenshotContentHandlers()
+        {
+            var result = await this.DeviceService.RegisterToScreenshotContentService();
+            if (!result)
+            {
+                await this.DialogService.ShowMessage("I cannot be able to finish screenshot content handlers registration!", "Error");
+            }
+        }
+
         private async void InitializeUserNotificationsHandlers()
         {
+            if (!ApiHelper.CheckIfSystemSupportNotificationListener()) return;
+
             this.BackgroundService.RegisterUserNotificationTask();
 
             await this.NotificationsService.RetriveNotificationsAsync();
@@ -124,6 +192,17 @@ namespace WinSteroid.App.ViewModels
 
             this.BatteryPercentage = batteryPercentage;
             this.BatteryLevel = BatteryLevelExtensions.Parse(batteryPercentage);
+        }
+
+        private async void OnBatteryLevelCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            await DispatcherHelper.RunAsync(() =>
+            {
+                var batteryPercentage = BatteryHelper.GetPercentage(args.CharacteristicValue);
+
+                this.BatteryPercentage = batteryPercentage;
+                this.BatteryLevel = BatteryLevelExtensions.Parse(batteryPercentage);
+            });
         }
     }
 }

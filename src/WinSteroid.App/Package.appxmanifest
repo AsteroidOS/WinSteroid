@@ -21,13 +21,13 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroid.Services.BatteryLevelBackgroundTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroidTasks.BatteryLevelBackgroundTask">
           <BackgroundTasks>
             <Task Type="deviceConnectionChange" />
             <Task Type="bluetooth" />
           </BackgroundTasks>
         </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroid.Services.ActiveNotificationBackgroundTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroidTasks.ActiveNotificationBackgroundTask">
           <BackgroundTasks>
             <Task Type="deviceConnectionChange" />
             <Task Type="bluetooth" />

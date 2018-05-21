@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -36,6 +38,8 @@ namespace WinSteroid.App
 
                 Window.Current.Activate();
             }
+
+            GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
         }
         
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
@@ -56,15 +60,41 @@ namespace WinSteroid.App
             var notificationService = new NotificationsService();
             var deviceService = new DeviceService();
 
-            if (string.Equals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName, StringComparison.OrdinalIgnoreCase))
+            if (StringExtensions.OrdinalIgnoreCaseEquals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName))
             {
-                var userNotifications = await notificationService.RetriveNotificationsAsync();
-                if (userNotifications.Count == 0) return;
+                var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
+                if (userNotifications.Length == 0)
+                {
+                    notificationService.SaveLastNotificationIds(new string[0]);
+                    return;
+                }
+
+                var lastNotificationIds = notificationService.GetLastNotificationIds();
+                if (lastNotificationIds.Count > 0)
+                {
+                    var removedNotificationIds = lastNotificationIds
+                        .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
+                        .ToArray();
+
+                    if (removedNotificationIds?.Length > 0)
+                    {
+                        foreach (var notificationId in removedNotificationIds)
+                        {
+                            await deviceService.RemoveNotificationAsync(notificationId);
+                        }
+                    }
+
+                    userNotifications = userNotifications
+                        .Where(notification => lastNotificationIds.All(id => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
+                        .ToArray();
+                }
 
                 foreach (var userNotification in userNotifications)
                 {
                     await deviceService.InsertNotificationAsync(userNotification);
                 }
+
+                notificationService.SaveLastNotificationIds(userNotifications);
             }
 
             backgroundTaskDeferral.Complete();

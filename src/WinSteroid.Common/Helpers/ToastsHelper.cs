@@ -1,7 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
 
-namespace WinSteroid.Services.Helpers
+namespace WinSteroid.Common.Helpers
 {
     public static class ToastsHelper
     {

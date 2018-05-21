@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Models;
 
 namespace WinSteroid.App
@@ -9,8 +10,8 @@ namespace WinSteroid.App
         public static Guid AdvertisementUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
 
         //Battery UUIDs
-        public static Guid BatteryServiceUuid = Guid.Parse("0000180F-0000-1000-8000-00805f9b34fb");
-        public static Guid BatteryLevelCharacteristicUuid = Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb");
+        //public static Guid BatteryServiceUuid = Guid.Parse("0000180F-0000-1000-8000-00805f9b34fb");
+        //public static Guid BatteryLevelCharacteristicUuid = Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb");
 
         private static BLEService _batteryService;
         public static BLEService BatteryService
@@ -21,10 +22,10 @@ namespace WinSteroid.App
                 {
                     var characteristics = new[]
                     {
-                        new BLECharacteristic(nameof(BatteryLevelCharacteristicUuid), BatteryLevelCharacteristicUuid)
+                        new BLECharacteristic(nameof(GattCharacteristicUuids.BatteryLevel), GattCharacteristicUuids.BatteryLevel)
                     };
 
-                    _batteryService = new BLEService(nameof(BatteryServiceUuid), BatteryServiceUuid, characteristics);
+                    _batteryService = new BLEService(nameof(GattServiceUuids.Battery), GattServiceUuids.Battery, characteristics);
                 }
 
                 return _batteryService;
