@@ -124,6 +124,7 @@
     <Compile Include="Models\BLEService.cs" />
     <Compile Include="Models\ApplicationPreference.cs" />
     <Compile Include="Models\MediaCommandType.cs" />
+    <Compile Include="Models\MediaInfo.cs" />
     <Compile Include="Models\PairingResult.cs" />
     <Compile Include="Models\VibrationLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
