@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using WinSteroid.App.Models;
+using WinSteroid.Common.Models;
 
-namespace WinSteroid.App.Helpers
+namespace WinSteroid.Common.Helpers
 {
     public static class AsteroidHelper
     {
@@ -62,7 +62,7 @@ namespace WinSteroid.App.Helpers
             stringBuilder.AppendNode("ai", applicationIcon);
             stringBuilder.AppendNode("su", summary);
             stringBuilder.AppendNode("bo", body);
-            stringBuilder.AppendNode("vb", vibrationLevel.GetDisplayName());
+            stringBuilder.AppendNode("vb", vibrationLevel.GetRealValue());
             stringBuilder.Append("</insert>");
 
             return stringBuilder.ToString();

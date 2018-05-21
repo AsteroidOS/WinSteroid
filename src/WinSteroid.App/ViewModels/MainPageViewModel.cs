@@ -5,9 +5,9 @@ using GalaSoft.MvvmLight.Views;
 using System;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Helpers;
-using WinSteroid.App.Models;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels
 {
@@ -16,17 +16,22 @@ namespace WinSteroid.App.ViewModels
         private readonly DeviceService DeviceService;
         private readonly BackgroundService BackgroundService;
         private readonly NotificationsService NotificationsService;
+        private readonly INavigationService NavigationService;
         private readonly IDialogService DialogService;
 
-        public MainPageViewModel(DeviceService deviceService, BackgroundService backgroundService, NotificationsService notificationsService, IDialogService dialogService)
+        public MainPageViewModel(
+            DeviceService deviceService, 
+            BackgroundService backgroundService, 
+            NotificationsService notificationsService, 
+            INavigationService navigationService,
+            IDialogService dialogService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
             this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-
-            this.BatteryTilePinned = TilesHelper.BatteryTileExists();
-
+            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            
             this.InitializeBatteryLevelHandlers();
             this.InitializeUserNotificationsHandlers();
             //this.InitializeActiveNotificationHandlers();
@@ -75,74 +80,23 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private bool _batteryTilePinned;
-        public bool BatteryTilePinned
-        {
-            get { return _batteryTilePinned; }
-            set { Set(nameof(BatteryTilePinned), ref _batteryTilePinned, value); }
-        }
-
-        private RelayCommand _pinBatteryTileCommand;
-        public RelayCommand PinBatteryTileCommand
+        private RelayCommand _settingsCommand;
+        public RelayCommand SettingsCommand
         {
             get
             {
-                if (_pinBatteryTileCommand == null)
+                if (_settingsCommand == null)
                 {
-                    _pinBatteryTileCommand = new RelayCommand(PinBatteryTile);
+                    _settingsCommand = new RelayCommand(GoToSettings);
                 }
 
-                return _pinBatteryTileCommand;
+                return _settingsCommand;
             }
         }
 
-        private async void PinBatteryTile()
+        private void GoToSettings()
         {
-            var deviceId = this.DeviceService.Current.Id;
-            var deviceName = this.DeviceService.Current.Name;
-            var result = await TilesHelper.PinBatteryTileAsync(deviceId, deviceName);
-            if (result)
-            {
-                this.BatteryTilePinned = true;
-                TilesHelper.UpdateBatteryTile(this.BatteryPercentage);
-            }
-        }
-
-        private RelayCommand _unpinBatteryTileCommand;
-        public RelayCommand UnpinBatteryTileCommand
-        {
-            get
-            {
-                if (_unpinBatteryTileCommand == null)
-                {
-                    _unpinBatteryTileCommand = new RelayCommand(UnpinBatteryTile);
-                }
-
-                return _unpinBatteryTileCommand;
-            }
-        }
-
-        private async void UnpinBatteryTile()
-        {
-            var result = await TilesHelper.UnpinBatteryTileAsync();
-            if (result)
-            {
-                this.BatteryTilePinned = false;
-            }
-        }
-
-        private RelayCommand _unregisterTasksCommand;
-        public RelayCommand UnregisterTasksCommand
-        {
-            get
-            {
-                if (_unregisterTasksCommand == null)
-                {
-                    _unregisterTasksCommand = new RelayCommand(this.BackgroundService.UnregisterAllTasks);
-                }
-
-                return _unregisterTasksCommand;
-            }
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Settings));
         }
 
         private async void InitializeBatteryLevelHandlers()
@@ -191,7 +145,7 @@ namespace WinSteroid.App.ViewModels
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
 
             this.BatteryPercentage = batteryPercentage;
-            this.BatteryLevel = BatteryLevelExtensions.Parse(batteryPercentage);
+            this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
         }
 
         private async void OnBatteryLevelCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
@@ -201,7 +155,7 @@ namespace WinSteroid.App.ViewModels
                 var batteryPercentage = BatteryHelper.GetPercentage(args.CharacteristicValue);
 
                 this.BatteryPercentage = batteryPercentage;
-                this.BatteryLevel = BatteryLevelExtensions.Parse(batteryPercentage);
+                this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
             });
         }
     }

@@ -3,7 +3,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using WinSteroid.App.Models;
+using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Converters
 {

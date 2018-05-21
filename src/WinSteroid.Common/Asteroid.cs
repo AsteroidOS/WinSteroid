@@ -1,18 +1,14 @@
 ﻿using System;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using WinSteroid.App.Models;
+using WinSteroid.Common.Models;
 
-namespace WinSteroid.App
+namespace WinSteroid.Common
 {
     public static class Asteroid
     {
         //Advertisement UUIDs
         public static Guid AdvertisementUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
-
-        //Battery UUIDs
-        //public static Guid BatteryServiceUuid = Guid.Parse("0000180F-0000-1000-8000-00805f9b34fb");
-        //public static Guid BatteryLevelCharacteristicUuid = Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb");
-
+        
         private static BLEService _batteryService;
         public static BLEService BatteryService
         {

@@ -1,0 +1,36 @@
+﻿<ContentDialog
+    x:Class="WinSteroid.App.Controls.CustomIconDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels"
+    mc:Ignorable="d"
+    Title="CHANGE ICON"
+    PrimaryButtonText="Save"
+    SecondaryButtonText="Cancel">
+
+    <Grid>
+        <ComboBox HorizontalAlignment="Stretch" 
+                  ItemsSource="{x:Bind Icons, Mode=OneWay}"
+                  SelectedItem="{x:Bind SelectedIcon, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:IconViewModel">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <FontIcon Glyph="{x:Bind Icon, Converter={StaticResource IoniconsConverter}}" 
+                                  FontFamily="{StaticResource IoniconsFont}" />
+
+                        <TextBlock Grid.Column="1" 
+                                   TextAlignment="Left" 
+                                   Text="{x:Bind Name}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </Grid>
+</ContentDialog>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WinSteroid.App.Models
+namespace WinSteroid.Common.Models
 {
     public class BLEService
     {

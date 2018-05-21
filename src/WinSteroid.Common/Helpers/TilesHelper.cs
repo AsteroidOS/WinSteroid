@@ -17,10 +17,14 @@ namespace WinSteroid.Common.Helpers
 
             var batteryTile = new SecondaryTile(
                 tileId: BatteryTileId,
-                displayName: devicename + "'s battery charge",
+                displayName: nameof(WinSteroid),
                 arguments: "deviceId=" + System.Net.WebUtility.UrlEncode(deviceId),
                 square150x150Logo: new Uri("ms-appx:///Assets/Square150x150Logo.png"),
                 desiredSize: TileSize.Default);
+
+            batteryTile.VisualElements.Wide310x150Logo = new Uri("ms-appx:///Assets/Wide310x150Logo.png");
+            batteryTile.VisualElements.Square310x310Logo = new Uri("ms-appx:///Assets/Square310x310Logo.png");
+            batteryTile.VisualElements.Square44x44Logo = new Uri("ms-appx:///Assets/Square44x44Logo.png");
 
             return batteryTile.RequestCreateAsync();
         }
@@ -48,28 +52,10 @@ namespace WinSteroid.Common.Helpers
 
             var tileVisual = new TileVisual
             {
-                DisplayName = nameof(WinSteroid),
-                TileMedium = new TileBinding
-                {
-                    Content = new TileBindingContentAdaptive
-                    {
-                        Children =
-                        {
-                            new AdaptiveText
-                            {
-                                Text = percentage + "%",
-                                HintStyle = AdaptiveTextStyle.Header,
-                                HintAlign = AdaptiveTextAlign.Center
-                            },
-                            new AdaptiveText
-                            {
-                                Text = deviceName,
-                                HintStyle = AdaptiveTextStyle.Base,
-                                HintAlign = AdaptiveTextAlign.Left
-                            }
-                        }
-                    }
-                }
+                Branding = TileBranding.NameAndLogo,
+                TileMedium = CreateMediumTileBinding(percentage ?? 0, deviceName),
+                TileWide = CreateWideTileBinding(percentage ?? 0, deviceName),
+                TileLarge = CreateLargeTileBinding(percentage ?? 0, deviceName)
             };
 
             var tileContent = new TileContent
@@ -80,6 +66,124 @@ namespace WinSteroid.Common.Helpers
             var tileNotification = new TileNotification(tileContent.GetXml());
 
             TileUpdateManager.CreateTileUpdaterForSecondaryTile(BatteryTileId).Update(tileNotification);
+        }
+
+        private static TileBinding CreateMediumTileBinding(int percentage, string deviceName)
+        {
+            return new TileBinding
+            {
+                Content = new TileBindingContentAdaptive
+                {
+                    TextStacking = TileTextStacking.Center,
+                    Children =
+                        {
+                            new AdaptiveText
+                            {
+                                Text = percentage > 99 ? percentage.ToString() : percentage + "%",
+                                HintStyle = AdaptiveTextStyle.Header,
+                                HintAlign = AdaptiveTextAlign.Center
+                            },
+                            new AdaptiveText
+                            {
+                                Text = deviceName,
+                                HintStyle = AdaptiveTextStyle.SubtitleSubtle,
+                                HintAlign = AdaptiveTextAlign.Center
+                            }
+                        }
+                }
+            };
+        }
+
+        private static TileBinding CreateWideTileBinding(int percentage, string deviceName)
+        {
+            return new TileBinding
+            {
+                Content = new TileBindingContentAdaptive
+                {
+                    Children =
+                    {
+                        new AdaptiveGroup
+                        {
+                            Children =
+                            {
+                                new AdaptiveSubgroup
+                                {
+                                    HintWeight = 50,
+                                    Children =
+                                    {
+                                        new AdaptiveText
+                                        {
+                                            Text = percentage + "%",
+                                            HintStyle = AdaptiveTextStyle.Header,
+                                            HintAlign = AdaptiveTextAlign.Left
+                                        }
+                                    }
+                                },
+                                new AdaptiveSubgroup
+                                {
+                                    HintTextStacking = AdaptiveSubgroupTextStacking.Top,
+                                    Children =
+                                    {
+                                        new AdaptiveText
+                                        {
+                                            Text = deviceName,
+                                            HintStyle = AdaptiveTextStyle.Title,
+                                            HintAlign = AdaptiveTextAlign.Right
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        private static TileBinding CreateLargeTileBinding(int percentage, string deviceName)
+        {
+            return new TileBinding
+            {
+                Content = new TileBindingContentAdaptive
+                {
+                    TextStacking = TileTextStacking.Center,
+                    Children =
+                    {
+                        new AdaptiveGroup
+                        {
+                            Children =
+                            {
+                                new AdaptiveSubgroup
+                                {
+                                    HintWeight = 1
+                                },
+                                new AdaptiveSubgroup
+                                {
+                                    HintWeight = 2,
+                                    Children =
+                                    {
+                                        new AdaptiveText
+                                        {
+                                            Text = percentage + "%",
+                                            HintStyle = AdaptiveTextStyle.Header,
+                                            HintAlign = AdaptiveTextAlign.Center
+                                        }
+                                    }
+                                },
+                                new AdaptiveSubgroup
+                                {
+                                    HintWeight = 1
+                                }
+                            }
+                        },
+                        new AdaptiveText
+                        {
+                            Text = deviceName,
+                            HintStyle = AdaptiveTextStyle.SubtitleSubtle,
+                            HintAlign = AdaptiveTextAlign.Center
+                        }
+                    }
+                }
+            };
         }
     }
 }

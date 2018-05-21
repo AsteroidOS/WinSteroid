@@ -1,4 +1,4 @@
-﻿namespace WinSteroid.App.Models
+﻿namespace WinSteroid.Common.Models
 {
     public enum MediaCommandType
     {

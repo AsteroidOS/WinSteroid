@@ -6,7 +6,7 @@ namespace System
 {
     public static class EnumExtensions
     {
-        public static string GetDisplayName(this Enum source)
+        public static string GetRealValue(this Enum source)
         {
             if (source == null)
             {

@@ -12,6 +12,8 @@ namespace WinSteroid.App.ViewModels
 
             SimpleIoc.Default.Register<WelcomePageViewModel>();
             SimpleIoc.Default.Register<MainPageViewModel>();
+            SimpleIoc.Default.Register<SettingsPageViewModel>();
+            SimpleIoc.Default.Register<IconsPageViewModel>();
 
             SimpleIoc.Default.Register<INavigationService>(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
@@ -26,6 +28,8 @@ namespace WinSteroid.App.ViewModels
 
             navigationService.Configure(nameof(Welcome), typeof(Views.WelcomePage));
             navigationService.Configure(nameof(Main), typeof(Views.MainPage));
+            navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
+            navigationService.Configure(nameof(Icons), typeof(Views.IconsPage));
 
             return navigationService;
         }
@@ -38,6 +42,16 @@ namespace WinSteroid.App.ViewModels
         public static MainPageViewModel Main
         {
             get { return ServiceLocator.Current.GetInstance<MainPageViewModel>(); }
+        }
+
+        public static SettingsPageViewModel Settings
+        {
+            get { return ServiceLocator.Current.GetInstance<SettingsPageViewModel>(); }
+        }
+
+        public static IconsPageViewModel Icons
+        {
+            get { return ServiceLocator.Current.GetInstance<IconsPageViewModel>(); }
         }
     }
 }

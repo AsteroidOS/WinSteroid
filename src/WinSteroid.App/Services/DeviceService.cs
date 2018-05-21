@@ -13,9 +13,9 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
-using WinSteroid.App.Helpers;
-using WinSteroid.App.Models;
+using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Services
 {
@@ -207,13 +207,17 @@ namespace WinSteroid.App.Services
 
         public Task<bool> InsertNotificationAsync(UserNotification userNotification)
         {
+            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(userNotification.AppInfo.Id);
+            if (application != null && application.Muted) return Task.FromResult(true);
+
             var xmlNotification = AsteroidHelper.CreateInsertNotificationCommandXml(
                 packageName: userNotification.AppInfo.PackageFamilyName,
                 id: userNotification.Id.ToString(),
                 applicationName: userNotification.AppInfo.DisplayInfo.DisplayName,
-                applicationIcon: "ios-alert", //TODO
+                applicationIcon: (application?.Icon ?? ApplicationsHelper.GetDefaultApplicationIcon()).GetRealValue(),
                 summary: userNotification.GetTitle(),
-                body: userNotification.GetBody());
+                body: userNotification.GetBody(),
+                vibrationLevel: application?.Vibration ?? VibrationLevel.None);
 
             var utf8Bytes = Encoding.UTF8.GetBytes(xmlNotification);
 

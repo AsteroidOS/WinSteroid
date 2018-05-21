@@ -1,0 +1,70 @@
+﻿<Page
+    x:Class="WinSteroid.App.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding Settings, Source={StaticResource Locator}}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="" 
+                    Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                    Padding="16,8"
+                    Style="{ThemeResource NavigationBackButtonNormalStyle}" />
+
+            <TextBlock Grid.Column="1" 
+                       Text="Icons preferences"
+                       VerticalAlignment="Center"
+                       Style="{ThemeResource BaseTextBlockStyle}" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Padding="12,8">
+                <TextBlock Text="Notifications"
+                           Style="{ThemeResource BaseTextBlockStyle}" />
+                
+                <ToggleSwitch Header="Show system notifications on AsteroidOS" 
+                              OffContent="No"
+                              OnContent="Yes"
+                              IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
+
+                <Button Content="Set icons preferences"
+                        Command="{x:Bind ViewModel.IconsCommand, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
+
+                <TextBlock Text="Battery"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="0,24,0,0" />
+                
+                <ToggleSwitch Header="Use Live Tile to show current device battery level" 
+                              OffContent="No"
+                              OnContent="Yes"
+                              IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
+
+                <TextBlock Text="DEBUG"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Foreground="Red"
+                           Margin="0,24,0,0" />
+
+                <Button Content="Export icons data" 
+                        Command="{x:Bind ViewModel.ExportApplicationsFileCommand}" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

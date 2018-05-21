@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WinSteroid.App.Models
+namespace WinSteroid.Common.Models
 {
     public enum VibrationLevel
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WinSteroid.App.Models
+namespace WinSteroid.Common.Models
 {
     public class BLECharacteristic
     {

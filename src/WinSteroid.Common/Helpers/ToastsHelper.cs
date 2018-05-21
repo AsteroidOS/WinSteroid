@@ -19,7 +19,10 @@ namespace WinSteroid.Common.Helpers
                 }
             };
 
-            var toastContent = new ToastContent { Visual = toastVisual };
+            var toastContent = new ToastContent
+            {
+                Visual = toastVisual
+            };
 
             var toastNotification = new ToastNotification(toastContent.GetXml());
 

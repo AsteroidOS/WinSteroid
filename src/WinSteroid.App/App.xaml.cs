@@ -7,6 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App
 {
@@ -18,8 +19,13 @@ namespace WinSteroid.App
             this.Suspending += OnSuspending;
         }
         
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            if (!ApplicationsHelper.Initialized())
+            {
+                await ApplicationsHelper.InitializeAsync();
+            }
+
             if (!(Window.Current.Content is Frame rootFrame))
             {
                 rootFrame = new Frame();
@@ -60,6 +66,11 @@ namespace WinSteroid.App
             var notificationService = new NotificationsService();
             var deviceService = new DeviceService();
 
+            if (!ApplicationsHelper.Initialized())
+            {
+                await ApplicationsHelper.InitializeAsync();
+            }
+
             if (StringExtensions.OrdinalIgnoreCaseEquals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName))
             {
                 var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
@@ -95,6 +106,9 @@ namespace WinSteroid.App
                 }
 
                 notificationService.SaveLastNotificationIds(userNotifications);
+
+                //LOG APPS FOR ICONS MANAGEMENT
+                await ApplicationsHelper.UpsertFoundApplicationsAsync(userNotifications);
             }
 
             backgroundTaskDeferral.Complete();

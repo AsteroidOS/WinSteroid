@@ -25,30 +25,34 @@ namespace WinSteroid.App.Services
             var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
             if (!canExecuteBackgroundTasks) return false;
 
-            var builder = new BackgroundTaskBuilder();
-            builder.Name = BatteryLevelTaskName;
-            builder.TaskEntryPoint = BatteryLevelTaskEntryPoint;
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = BatteryLevelTaskName,
+                TaskEntryPoint = BatteryLevelTaskEntryPoint
+            };
             builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
             var result = builder.Register();
 
             return result != null;
         }
 
-        //public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
-        //{
-        //    if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
+        public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
+        {
+            if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
 
-        //    var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
-        //    if (!canExecuteBackgroundTasks) return false;
+            var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
+            if (!canExecuteBackgroundTasks) return false;
 
-        //    var builder = new BackgroundTaskBuilder();
-        //    builder.Name = ActiveNotificationTaskName;
-        //    builder.TaskEntryPoint = ActiveNotificationTaskEntryPoint;
-        //    builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-        //    var result = builder.Register();
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = ActiveNotificationTaskName,
+                TaskEntryPoint = ActiveNotificationTaskEntryPoint
+            };
+            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
+            var result = builder.Register();
 
-        //    return result != null;
-        //}
+            return result != null;
+        }
 
         public void RegisterUserNotificationTask()
         {
@@ -88,7 +92,7 @@ namespace WinSteroid.App.Services
             }
         }
 
-        private static bool IsBackgroundTaskRegistered(string taskName)
+        public bool IsBackgroundTaskRegistered(string taskName)
         {
             return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
         }
