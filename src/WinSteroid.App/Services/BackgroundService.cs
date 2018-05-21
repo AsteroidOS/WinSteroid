@@ -45,9 +45,9 @@ namespace WinSteroid.App.Services
         //    builder.Name = ActiveNotificationTaskName;
         //    builder.TaskEntryPoint = ActiveNotificationTaskEntryPoint;
         //    builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-        //    builder.Register();
+        //    var result = builder.Register();
 
-        //    return true;
+        //    return result != null;
         //}
 
         public void RegisterUserNotificationTask()
