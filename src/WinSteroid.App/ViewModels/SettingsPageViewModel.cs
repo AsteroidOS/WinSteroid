@@ -1,26 +1,44 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
+using System.Threading.Tasks;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
 {
-    public class SettingsPageViewModel : ViewModelBase
+    public class SettingsPageViewModel : BasePageViewModel
     {
         private readonly DeviceService DeviceService;
         private readonly BackgroundService BackgroundService;
-        private readonly INavigationService NavigationService;
+        private readonly NotificationsService NotificationsService;
 
-        public SettingsPageViewModel(DeviceService deviceService, BackgroundService backgroundService, INavigationService navigationService)
+        public SettingsPageViewModel(
+            DeviceService deviceService, 
+            BackgroundService backgroundService,
+            NotificationsService notificationsService,
+            IDialogService dialogService,
+            INavigationService navigationService) : base(dialogService, navigationService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
-            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
 
-            this.EnableUserNotifications = backgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
+            this.Initialize();
+        }
+
+        public override void Initialize()
+        {
+            this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
             this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
+
+            this.Initialized = true;
+        }
+
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
         }
 
         private bool _enableUserNotifications;
@@ -29,17 +47,38 @@ namespace WinSteroid.App.ViewModels
             get { return _enableUserNotifications; }
             set
             {
+                if (!this.CanEnableUserNotifications) return;
+
                 if (!Set(nameof(EnableUserNotifications), ref _enableUserNotifications, value)) return;
 
                 if (_enableUserNotifications)
                 {
-                    this.BackgroundService.RegisterUserNotificationTask();
+                    this.RegisterUserNotificationTask();
+                    return;
                 }
-                else
-                {
-                    this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
-                }
+
+                this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
             }
+        }
+
+        public bool CanEnableUserNotifications
+        {
+            get { return ApiHelper.CheckIfSystemSupportNotificationListener(); }
+        }
+
+        private async void RegisterUserNotificationTask()
+        {
+            var accessResult = await this.NotificationsService.RequestAccessAsync();
+            if (!accessResult)
+            {
+                this.EnableUserNotifications = false;
+                return;
+            }
+
+            var result = this.BackgroundService.RegisterUserNotificationTask();
+            if (result) return;
+
+            this.EnableUserNotifications = false;
         }
 
         private bool _useBatteryLiveTile;
@@ -53,11 +92,10 @@ namespace WinSteroid.App.ViewModels
                 if (_useBatteryLiveTile)
                 {
                     this.PinBatteryTile();
+                    return;
                 }
-                else
-                {
-                    this.UnpinBatteryTile();
-                }
+
+                this.UnpinBatteryTile();
             }
         }
 
@@ -68,10 +106,15 @@ namespace WinSteroid.App.ViewModels
             var result = await TilesHelper.PinBatteryTileAsync(deviceId, deviceName);
             if (!result)
             {
-                this.EnableUserNotifications = false;
+                this.UseBatteryLiveTile = false;
                 return;
             }
-            
+
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+
+            await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
+
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             TilesHelper.UpdateBatteryTile(batteryPercentage);
         }
@@ -79,10 +122,25 @@ namespace WinSteroid.App.ViewModels
         private async void UnpinBatteryTile()
         {
             var result = await TilesHelper.UnpinBatteryTileAsync();
-            if (result) return;
+            if (result)
+            {
+                this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+                return;
+            }
             
-            this.EnableUserNotifications = true;
+            this.UseBatteryLiveTile = true;
         }
+
+        //private async void InitializeActiveNotificationHandlers()
+        //{
+        //    var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
+
+        //    var result = await this.BackgroundService.RegisterActiveNotificationTask(characteristic);
+        //    if (!result)
+        //    {
+        //        await this.DialogService.ShowMessage("I cannot be able to finish active notification handlers registration!", "Error");
+        //    }
+        //}
 
         private RelayCommand _iconsCommand;
         public RelayCommand IconsCommand
@@ -101,25 +159,6 @@ namespace WinSteroid.App.ViewModels
         private void GoToIcons()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Icons));
-        }
-
-        private RelayCommand _backCommand;
-        public RelayCommand BackCommand
-        {
-            get
-            {
-                if (_backCommand == null)
-                {
-                    _backCommand = new RelayCommand(GoBack);
-                }
-
-                return _backCommand;
-            }
-        }
-
-        private void GoBack()
-        {
-            this.NavigationService.GoBack();
         }
 
         private RelayCommand _exportApplicationsFileCommand;

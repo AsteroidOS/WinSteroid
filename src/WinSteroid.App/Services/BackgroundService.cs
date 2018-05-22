@@ -10,11 +10,14 @@ namespace WinSteroid.App.Services
 {
     public class BackgroundService
     {
-        private const string BatteryLevelTaskName = nameof(BatteryLevelBackgroundTask);
+        public const string BatteryLevelTaskName = nameof(BatteryLevelBackgroundTask);
         private static readonly string BatteryLevelTaskEntryPoint = typeof(BatteryLevelBackgroundTask).FullName;
 
-        private const string ActiveNotificationTaskName = nameof(ActiveNotificationBackgroundTask);
+        public const string ActiveNotificationTaskName = nameof(ActiveNotificationBackgroundTask);
         private static readonly string ActiveNotificationTaskEntryPoint = typeof(ActiveNotificationBackgroundTask).FullName;
+
+        public const string SystemSessionConnectedTaskName = nameof(SystemSessionConnectedTask);
+        private static readonly string SystemSessionConnectedTaskEntryPoint = typeof(SystemSessionConnectedTask).FullName;
 
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
@@ -36,6 +39,21 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
+        public bool RegisterBatteryLevelBackgroundTaskEventHandler(BackgroundTaskProgressEventHandler progressEventHandler)
+        {
+            if (progressEventHandler == null)
+            {
+                throw new ArgumentNullException(nameof(progressEventHandler));
+            }
+
+            var backgroundTask = this.GetBackgroundTask(BatteryLevelTaskName);
+            if (backgroundTask == null) return false;
+
+            backgroundTask.Progress += progressEventHandler;
+
+            return true;
+        }
+
         public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
         {
             if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
@@ -54,16 +72,36 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
-        public void RegisterUserNotificationTask()
+        //public async Task<bool> RegisterSystemSessionConnectedTask()
+        //{
+        //    if (IsBackgroundTaskRegistered(SystemSessionConnectedTaskName)) return true;
+
+        //    var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
+        //    if (!canExecuteBackgroundTasks) return false;
+
+        //    var builder = new BackgroundTaskBuilder
+        //    {
+        //        Name = SystemSessionConnectedTaskName,
+        //        TaskEntryPoint = SystemSessionConnectedTaskEntryPoint
+        //    };
+        //    builder.SetTrigger(new SystemTrigger(SystemTriggerType.SessionConnected, oneShot: false));
+        //    var result = builder.Register();
+
+        //    return result != null;
+        //}
+
+        public bool RegisterUserNotificationTask()
         {
-            if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return;
+            if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return true;
 
             var builder = new BackgroundTaskBuilder
             {
                 Name = UserNotificationsTaskName
             };
             builder.SetTrigger(new UserNotificationChangedTrigger(NotificationKinds.Toast));
-            builder.Register();
+            var result = builder.Register();
+
+            return result != null;
         }
 
         private async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
@@ -77,8 +115,10 @@ namespace WinSteroid.App.Services
 
         public void UnregisterAllTasks()
         {
-            Unregister(BatteryLevelTaskName);
             Unregister(ActiveNotificationTaskName);
+            Unregister(BatteryLevelTaskName);
+            Unregister(SystemSessionConnectedTaskName);
+            Unregister(UserNotificationsTaskName);
         }
 
         public void Unregister(string taskName)
@@ -97,14 +137,9 @@ namespace WinSteroid.App.Services
             return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
         }
 
-        private static IBackgroundTaskRegistration GetBackgroundTask(string taskName)
+        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
         {
-            foreach (var task in BackgroundTaskRegistration.AllTasks.Values)
-            {
-                if (StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName)) return task;
-            }
-
-            return null;
+            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
         }
     }
 }

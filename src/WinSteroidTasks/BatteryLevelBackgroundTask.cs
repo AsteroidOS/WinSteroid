@@ -1,4 +1,5 @@
-﻿using Windows.ApplicationModel.Background;
+﻿using System;
+using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.Background;
 using WinSteroid.Common.Helpers;
 
@@ -27,6 +28,7 @@ namespace WinSteroidTasks
                 TilesHelper.ResetBatteryTile();
             }
 
+            this.BackgroundTaskInstance.Progress = Convert.ToUInt32(percentage);
             this.BackgroundTaskDeferral.Complete();
         }
 

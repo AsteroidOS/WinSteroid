@@ -1,12 +1,16 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Views;
+using System;
 using System.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
+using WinSteroid.App.ViewModels;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App
@@ -18,7 +22,7 @@ namespace WinSteroid.App
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-        
+
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             if (!ApplicationsHelper.Initialized())
@@ -31,8 +35,13 @@ namespace WinSteroid.App
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                
+                rootFrame.Navigated += OnNavigated;
+
                 Window.Current.Content = rootFrame;
+
+                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+
+                SystemNavigationManager.GetForCurrentView().UpdateAppViewBackButtonVisibility(rootFrame);
             }
 
             if (e.PrelaunchActivated == false)
@@ -47,7 +56,28 @@ namespace WinSteroid.App
 
             GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
         }
-        
+
+        private async void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (Window.Current.Content is Frame rootFrame && rootFrame.CanGoBack)
+            {
+                e.Handled = true;
+
+                var navigationService = SimpleIoc.Default.GetInstance<INavigationService>();
+                var viewModel = ViewModelLocator.GetCurrentViewModel(navigationService.CurrentPageKey);
+                var canGoBack = await viewModel.CanGoBack();
+                if (canGoBack)
+                {
+                    rootFrame.GoBack();
+                }
+            }
+        }
+
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().UpdateAppViewBackButtonVisibility((Frame)sender);
+        }
+
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
@@ -63,6 +93,12 @@ namespace WinSteroid.App
         {
             var backgroundTaskDeferral = args.TaskInstance.GetDeferral();
 
+            if (!StringExtensions.OrdinalIgnoreCaseEquals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName))
+            {
+                backgroundTaskDeferral.Complete();
+                return;
+            }
+
             var notificationService = new NotificationsService();
             var deviceService = new DeviceService();
 
@@ -71,45 +107,43 @@ namespace WinSteroid.App
                 await ApplicationsHelper.InitializeAsync();
             }
 
-            if (StringExtensions.OrdinalIgnoreCaseEquals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName))
+            var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
+            if (userNotifications.Length == 0)
             {
-                var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
-                if (userNotifications.Length == 0)
-                {
-                    notificationService.SaveLastNotificationIds(new string[0]);
-                    return;
-                }
-
-                var lastNotificationIds = notificationService.GetLastNotificationIds();
-                if (lastNotificationIds.Count > 0)
-                {
-                    var removedNotificationIds = lastNotificationIds
-                        .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
-                        .ToArray();
-
-                    if (removedNotificationIds?.Length > 0)
-                    {
-                        foreach (var notificationId in removedNotificationIds)
-                        {
-                            await deviceService.RemoveNotificationAsync(notificationId);
-                        }
-                    }
-
-                    userNotifications = userNotifications
-                        .Where(notification => lastNotificationIds.All(id => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
-                        .ToArray();
-                }
-
-                foreach (var userNotification in userNotifications)
-                {
-                    await deviceService.InsertNotificationAsync(userNotification);
-                }
-
-                notificationService.SaveLastNotificationIds(userNotifications);
-
-                //LOG APPS FOR ICONS MANAGEMENT
-                await ApplicationsHelper.UpsertFoundApplicationsAsync(userNotifications);
+                notificationService.SaveLastNotificationIds(new string[0]);
+                backgroundTaskDeferral.Complete();
+                return;
             }
+
+            var lastNotificationIds = notificationService.GetLastNotificationIds();
+            if (lastNotificationIds.Count > 0)
+            {
+                var removedNotificationIds = lastNotificationIds
+                    .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
+                    .ToArray();
+
+                if (removedNotificationIds?.Length > 0)
+                {
+                    foreach (var notificationId in removedNotificationIds)
+                    {
+                        await deviceService.RemoveNotificationAsync(notificationId);
+                    }
+                }
+
+                userNotifications = userNotifications
+                    .Where(notification => lastNotificationIds.All(id => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
+                    .ToArray();
+            }
+
+            foreach (var userNotification in userNotifications)
+            {
+                await deviceService.InsertNotificationAsync(userNotification);
+            }
+
+            notificationService.SaveLastNotificationIds(userNotifications);
+
+            //LOG APPS FOR ICONS MANAGEMENT
+            await ApplicationsHelper.UpsertFoundApplicationsAsync(userNotifications);
 
             backgroundTaskDeferral.Complete();
         }

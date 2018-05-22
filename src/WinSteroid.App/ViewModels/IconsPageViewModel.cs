@@ -1,23 +1,29 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
 {
-    public class IconsPageViewModel : ViewModelBase
+    public class IconsPageViewModel : BasePageViewModel
     {
-        private readonly INavigationService NavigationService;
-
-        public IconsPageViewModel(INavigationService navigationService)
+        public IconsPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            this.Initialize();
+        }
+
+        public override void Initialize()
+        {
             this.IconPreferences = new ObservableCollection<ApplicationPreferenceViewModel>();
-            
-            this.RefreshIconsPreferences();
+
+            this.Initialized = true;
+        }
+
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
         }
 
         private ObservableCollection<ApplicationPreferenceViewModel> _iconPreferences;
@@ -25,6 +31,22 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _iconPreferences; }
             set { Set(nameof(IconPreferences), ref _iconPreferences, value); }
+        }
+
+        private ApplicationPreferenceViewModel _selectedPreferences;
+        public ApplicationPreferenceViewModel SelectedPreferences
+        {
+            get { return _selectedPreferences; }
+            set
+            {
+                if (!Set(nameof(SelectedPreferences), ref _selectedPreferences, value)) return;
+
+                if (_selectedPreferences == null) return;
+
+                this.NavigationService.NavigateTo(nameof(ViewModelLocator.Application), _selectedPreferences.Id);
+
+                this.SelectedPreferences = null;
+            }
         }
 
         private RelayCommand _saveCommand;
@@ -46,28 +68,16 @@ namespace WinSteroid.App.ViewModels
             await ApplicationsHelper.SaveUserIcons();
         }
 
-        private RelayCommand _backCommand;
-        public RelayCommand BackCommand
+        public void RefreshIconsPreferences()
         {
-            get
+            if (this.IconPreferences == null)
             {
-                if (_backCommand == null)
-                {
-                    _backCommand = new RelayCommand(GoBack);
-                }
-
-                return _backCommand;
+                this.IconPreferences = new ObservableCollection<ApplicationPreferenceViewModel>();
             }
-        }
-
-        private void GoBack()
-        {
-            this.NavigationService.GoBack();
-        }
-
-        private void RefreshIconsPreferences()
-        {
-            this.IconPreferences.Clear();
+            else
+            {
+                this.IconPreferences.Clear();
+            }
 
             var iconPreferences = ApplicationsHelper.UserIcons
                 .OrderBy(ui => ui.PackageName)

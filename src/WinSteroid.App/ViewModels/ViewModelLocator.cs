@@ -1,6 +1,7 @@
 ﻿using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
+using System;
 
 namespace WinSteroid.App.ViewModels
 {
@@ -14,8 +15,9 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<SettingsPageViewModel>();
             SimpleIoc.Default.Register<IconsPageViewModel>();
+            SimpleIoc.Default.Register<ApplicationPageViewModel>();
 
-            SimpleIoc.Default.Register<INavigationService>(InitializeNavigationService);
+            SimpleIoc.Default.Register(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
@@ -30,8 +32,28 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Main), typeof(Views.MainPage));
             navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
             navigationService.Configure(nameof(Icons), typeof(Views.IconsPage));
+            navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
 
             return navigationService;
+        }
+
+        public static BasePageViewModel GetCurrentViewModel(string pageKey)
+        {
+            switch (pageKey)
+            {
+                case nameof(Welcome):
+                    return Welcome;
+                case nameof(Main):
+                    return Main;
+                case nameof(Settings):
+                    return Settings;
+                case nameof(Icons):
+                    return Icons;
+                case nameof(Application):
+                    return Application;
+                default:
+                    throw new ArgumentException(nameof(pageKey));
+            }
         }
 
         public static WelcomePageViewModel Welcome
@@ -52,6 +74,11 @@ namespace WinSteroid.App.ViewModels
         public static IconsPageViewModel Icons
         {
             get { return ServiceLocator.Current.GetInstance<IconsPageViewModel>(); }
+        }
+
+        public static ApplicationPageViewModel Application
+        {
+            get { return ServiceLocator.Current.GetInstance<ApplicationPageViewModel>(); }
         }
     }
 }

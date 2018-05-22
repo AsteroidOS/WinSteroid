@@ -16,9 +16,8 @@ namespace WinSteroid.App.Converters
                 switch (batteryLevel)
                 {
                     case BatteryLevel.Good:
-                        return new SolidColorBrush(Colors.Green);
                     case BatteryLevel.Discrete:
-                        return new SolidColorBrush(Colors.LightGreen);
+                        return new SolidColorBrush(Colors.Green);
                     case BatteryLevel.Bad:
                         return new SolidColorBrush(Colors.Orange);
                     case BatteryLevel.Critic:

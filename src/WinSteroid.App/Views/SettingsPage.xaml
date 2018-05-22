@@ -29,7 +29,7 @@
                     Style="{ThemeResource NavigationBackButtonNormalStyle}" />
 
             <TextBlock Grid.Column="1" 
-                       Text="Icons preferences"
+                       Text="Settings"
                        VerticalAlignment="Center"
                        Style="{ThemeResource BaseTextBlockStyle}" />
         </Grid>
@@ -42,6 +42,8 @@
                 <ToggleSwitch Header="Show system notifications on AsteroidOS" 
                               OffContent="No"
                               OnContent="Yes"
+                              IsEnabled="{x:Bind ViewModel.CanEnableUserNotifications}"
+                              IsHitTestVisible="{x:Bind ViewModel.CanEnableUserNotifications}"
                               IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
 
                 <Button Content="Set icons preferences"

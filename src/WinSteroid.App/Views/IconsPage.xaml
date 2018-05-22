@@ -37,8 +37,7 @@
 
         <ListView Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.IconPreferences, Mode=OneWay}"
-                  SelectionMode="None"
-                  Margin="12,0">
+                  SelectedItem="{x:Bind ViewModel.SelectedPreferences, Mode=TwoWay}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -46,7 +45,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:ApplicationPreferenceViewModel">
-                    <Grid>
+                    <Grid Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -62,21 +61,17 @@
                                    Style="{ThemeResource BaseTextBlockStyle}"
                                    Text="{x:Bind Name}" />
 
-                        <!--<TextBlock Grid.Column="0" 
-                                   Grid.Row="1"
-                                   Style="{ThemeResource SubtitleTextBlockStyle}"
-                                   Text="{x:Bind AppId}" />-->
+                        <SymbolIcon Grid.Column="0"
+                                    Grid.Row="1"
+                                    Symbol="Mute"
+                                    Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                        <ToggleSwitch Grid.Column="0"
-                                      Grid.Row="1"
-                                      IsOn="{x:Bind Muted, Mode=TwoWay}" />
-
-                        <Button Grid.Column="1" 
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                FontFamily="{StaticResource IoniconsFont}"
-                                Content="{x:Bind Icon, Mode=OneWay, Converter={StaticResource IoniconsConverter}}"
-                                Command="{x:Bind ChangeIconCommand, Mode=OneWay}" />
+                        <TextBlock Grid.Column="1" 
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2" 
+                                   FontSize="28"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Text="{x:Bind Icon, Mode=OneWay, Converter={StaticResource ApplicationIconToGlyphConverter}}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
@@ -13,6 +14,13 @@ namespace WinSteroid.App.Views
         public IconsPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            this.ViewModel.RefreshIconsPreferences();
+
+            base.OnNavigatedTo(e);
         }
     }
 }

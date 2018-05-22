@@ -1,6 +1,6 @@
 ﻿using Windows.Foundation.Metadata;
 
-namespace WinSteroid.App.Helpers
+namespace WinSteroid.Common.Helpers
 {
     public static class ApiHelper
     {

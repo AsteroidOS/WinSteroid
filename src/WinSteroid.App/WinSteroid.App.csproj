@@ -96,28 +96,27 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomIconDialog.xaml.cs">
-      <DependentUpon>CustomIconDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\IoniconsConverter.cs" />
+    <Compile Include="Converters\ApplicationIconToGlyphConverter.cs" />
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
-    <Compile Include="Extensions\FrameworkElementExtensions.cs" />
-    <Compile Include="Helpers\ApiHelper.cs" />
-    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
     <Compile Include="ViewModels\ApplicationPreferenceViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationPageViewModel.cs" />
+    <Compile Include="ViewModels\BasePageViewModel.cs" />
     <Compile Include="ViewModels\IconsPageViewModel.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WelcomePageViewModel.cs" />
+    <Compile Include="Views\ApplicationPage.xaml.cs">
+      <DependentUpon>ApplicationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\IconsPage.xaml.cs">
       <DependentUpon>IconsPage.xaml</DependentUpon>
     </Compile>
@@ -137,7 +136,6 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="Assets\Icons\defaultIcons.json" />
-    <Content Include="Assets\Fonts\ionicons.ttf" />
     <None Include="WinSteroid.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -194,7 +192,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\CustomIconDialog.xaml">
+    <Page Include="Views\ApplicationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,6 +266,7 @@
       <Name>WinSteroidTasks</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

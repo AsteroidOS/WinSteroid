@@ -1,14 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WinSteroid.Common.Models
+﻿namespace WinSteroid.Common.Models
 {
     public enum VibrationLevel
     {
-        [Display(Name = "none")]
         None = 0,
-        [Display(Name = "normal")]
         Normal = 1,
-        [Display(Name = "strong")]
         Strong = 2
     }
 }

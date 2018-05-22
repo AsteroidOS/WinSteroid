@@ -10,9 +10,7 @@
         <converters:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
         <converters:BooleanToOppositeVisibilityConverter x:Key="BooleanToOppositeVisibilityConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:IoniconsConverter x:Key="IoniconsConverter" />
+        <converters:ApplicationIconToGlyphConverter x:Key="ApplicationIconToGlyphConverter" />
         <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
-
-        <FontFamily x:Key="IoniconsFont">Assets/Fonts/ionicons.ttf#Ionicons</FontFamily>
     </Application.Resources>
 </Application>

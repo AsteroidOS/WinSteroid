@@ -109,12 +109,17 @@
     <Compile Include="Asteroid.cs" />
     <Compile Include="Extensions\ApplicationIconExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\SystemNavigationManagerExtensions.cs" />
     <Compile Include="Extensions\UserNotificationExtensions.cs" />
+    <Compile Include="Extensions\VibrationLevelExtensions.cs" />
+    <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\AsteroidHelper.cs" />
     <Compile Include="Helpers\BatteryHelper.cs" />
     <Compile Include="Helpers\ApplicationsHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\TilesHelper.cs" />
     <Compile Include="Helpers\ToastsHelper.cs" />

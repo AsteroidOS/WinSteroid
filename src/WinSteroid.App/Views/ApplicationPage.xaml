@@ -1,0 +1,92 @@
+﻿<Page
+    x:Class="WinSteroid.App.Views.ApplicationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:WinSteroid.Common.Models"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding Application, Source={StaticResource Locator}}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="" 
+                    Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                    Padding="16,8"
+                    Style="{ThemeResource NavigationBackButtonNormalStyle}" />
+
+            <TextBlock Grid.Column="1" 
+                       Text="{x:Bind ViewModel.Name, Mode=OneWay}"
+                       VerticalAlignment="Center"
+                       Style="{ThemeResource BaseTextBlockStyle}" />
+        </Grid>
+
+        <StackPanel Grid.Row="1"
+                    Padding="12">
+            <ComboBox HorizontalAlignment="Stretch" 
+                      Header="Icon"
+                      ItemsSource="{x:Bind ViewModel.Icons, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.Icon, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:ApplicationIcon">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Text="{x:Bind Converter={StaticResource ApplicationIconToGlyphConverter}}" />
+
+                            <TextBlock Grid.Column="1" 
+                                       TextAlignment="Left" 
+                                       Text="{x:Bind}" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ToggleSwitch Header="Muted" 
+                          IsOn="{x:Bind ViewModel.Muted, Mode=TwoWay}"
+                          Margin="0,12,0,0" />
+
+            <ComboBox HorizontalAlignment="Stretch" 
+                      Header="Vibration"
+                      Visibility="{x:Bind ViewModel.Muted, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                      ItemsSource="{x:Bind ViewModel.AvailableVibrationLevels, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.Vibration, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:VibrationLevel">
+                        <TextBlock TextAlignment="Left" Text="{x:Bind}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Save"
+                              Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Save" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Grid>
+</Page>

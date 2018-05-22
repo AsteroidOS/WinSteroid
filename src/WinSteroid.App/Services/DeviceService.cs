@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
-using Windows.Foundation;
-using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
@@ -137,49 +135,13 @@ namespace WinSteroid.App.Services
             return characteristicResult.Characteristics[0];
         }
 
-        private async Task<bool> WriteSingleByteToCharacteristicAsync(Guid characteristicUuid, byte @byte)
-        {
-            var characteristic = await this.GetGattCharacteristicAsync(characteristicUuid);
-
-            var writer = new DataWriter();
-            writer.WriteByte(@byte);
-
-            var writeOperationResult = await characteristic.WriteValueAsync(writer.DetachBuffer());
-            writer.Dispose();
-
-            return writeOperationResult == GattCommunicationStatus.Success;
-        }
-
         private async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
         {
             var characteristic = await this.GetGattCharacteristicAsync(characteristicUuid);
-
-            var writer = new DataWriter();
-            writer.WriteBytes(bytes);
-
-            var writeOperationResult = await characteristic.WriteValueAsync(writer.DetachBuffer());
-            writer.Dispose();
+            
+            var writeOperationResult = await characteristic.WriteValueAsync(bytes.AsBuffer());
 
             return writeOperationResult == GattCommunicationStatus.Success;
-        }
-
-        public async Task<bool> RegisterBatteryPercentageNotification(TypedEventHandler<GattCharacteristic, GattValueChangedEventArgs> batteryLevelCharacteristicValueChangedHandler)
-        {
-            if (batteryLevelCharacteristicValueChangedHandler == null)
-            {
-                throw new ArgumentNullException(nameof(batteryLevelCharacteristicValueChangedHandler));
-            }
-
-            var characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
-
-            var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-            if (notifyResult == GattCommunicationStatus.Success)
-            {
-                characteristic.ValueChanged += batteryLevelCharacteristicValueChangedHandler;
-                return true;
-            }
-
-            return false;
         }
 
         public async Task<int> GetBatteryPercentageAsync()
@@ -202,19 +164,19 @@ namespace WinSteroid.App.Services
         {
             var commandByte = (byte)mediaCommand;
             
-            return this.WriteSingleByteToCharacteristicAsync(Asteroid.CommandCharacteristicUuid, commandByte);
+            return this.WriteByteArrayToCharacteristicAsync(Asteroid.CommandCharacteristicUuid, new[] { commandByte });
         }
 
         public Task<bool> InsertNotificationAsync(UserNotification userNotification)
         {
-            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(userNotification.AppInfo.Id);
+            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(userNotification.AppInfo.PackageFamilyName);
             if (application != null && application.Muted) return Task.FromResult(true);
 
             var xmlNotification = AsteroidHelper.CreateInsertNotificationCommandXml(
                 packageName: userNotification.AppInfo.PackageFamilyName,
                 id: userNotification.Id.ToString(),
                 applicationName: userNotification.AppInfo.DisplayInfo.DisplayName,
-                applicationIcon: (application?.Icon ?? ApplicationsHelper.GetDefaultApplicationIcon()).GetRealValue(),
+                applicationIcon: (application?.Icon ?? ApplicationsHelper.GetDefaultApplicationIcon()).GetId(),
                 summary: userNotification.GetTitle(),
                 body: userNotification.GetBody(),
                 vibrationLevel: application?.Vibration ?? VibrationLevel.None);
@@ -265,6 +227,11 @@ namespace WinSteroid.App.Services
             return false;
         }
 
+        public Task<bool> TakeScreenshotAsync()
+        {
+            return this.WriteByteArrayToCharacteristicAsync(Asteroid.ScreenshotRequestCharacteristicUuid, new byte[] { 0x1 });
+        }
+
         private int? TotalSize = null;
         private byte[] TotalData = null;
         private int? Progress = null;
@@ -290,7 +257,7 @@ namespace WinSteroid.App.Services
 
             if (!this.TotalSize.HasValue)
             {
-                var size = ConvertBytesToInt32(bytes); //BitConverter.ToInt32(bytes, 0);
+                var size = ConvertBytesToInt32(bytes);
                 this.TotalData = new byte[size];
                 this.TotalSize = size;
                 this.Progress = 0;
@@ -309,37 +276,16 @@ namespace WinSteroid.App.Services
                 return;
             }
 
-            byte[] decodedBytes = null;
-
-            using (var stream = new MemoryStream(this.TotalData))
-            {
-                var decoder = await BitmapDecoder.CreateAsync(stream.AsRandomAccessStream());
-                var provider = await decoder.GetPixelDataAsync();
-                decodedBytes = provider.DetachPixelData();
-            }
-
             //MANAGE
             var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("screenshot.jpg", CreationCollisionOption.GenerateUniqueName);
 
-            await FileIO.WriteBytesAsync(storageFile, decodedBytes); //this.TotalData);
+            await FileIO.WriteBytesAsync(storageFile, this.TotalData);
 
             Debug.WriteLine("Screenshot acquired! File: " + storageFile.Path);
 
             this.Progress = null;
             this.TotalSize = null;
             this.TotalData = null;
-        }
-
-        public async void TakeScreenshotAsync()
-        {
-            var bytes = new byte[] { 0x0 };
-
-            var result = await this.WriteByteArrayToCharacteristicAsync(Asteroid.ScreenshotRequestCharacteristicUuid, bytes);
-            if (!result)
-            {
-                //ERROR
-                throw new Exception();
-            }
         }
     }
 }

@@ -17,21 +17,13 @@ namespace WinSteroid.App.Services
             this.UserNotificationListener = UserNotificationListener.Current;
         }
 
-        public async Task InitializeAsync()
+        public async Task<bool> RequestAccessAsync()
         {
-            var status = await UserNotificationListener.RequestAccessAsync();
-            switch (status)
-            {
-                case UserNotificationListenerAccessStatus.Allowed:
-                    //Show success toast
-                    return;
-                case UserNotificationListenerAccessStatus.Denied:
-                    // :( show message
-                    return;
-                case UserNotificationListenerAccessStatus.Unspecified:
-                    //WTF show info message
-                    return;
-            }
+            var status = this.UserNotificationListener.GetAccessStatus();
+            if (status == UserNotificationListenerAccessStatus.Allowed) return true;
+
+            status = await UserNotificationListener.RequestAccessAsync();
+            return status == UserNotificationListenerAccessStatus.Allowed;
         }
 
         public Task<IReadOnlyList<UserNotification>> RetriveNotificationsAsync()

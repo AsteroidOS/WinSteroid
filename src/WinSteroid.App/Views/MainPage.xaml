@@ -22,15 +22,23 @@
                 <controls:RadialProgressBar Thickness="12"
                                             Minimum="0"
                                             Maximum="100"
-                                            Outline="Gray"
+                                            Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                             Width="240"
                                             Height="240"
+                                            Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
                                             Value="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay}"
                                             Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+
+                <ProgressRing Width="240"
+                              Height="240"
+                              Foreground="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                              IsActive="{x:Bind ViewModel.IsBusy}" 
+                              Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <TextBlock Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
                            Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
                            Style="{ThemeResource HeaderTextBlockStyle}"
+                           Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
                            FontSize="80"
                            FontWeight="Normal"
                            TextAlignment="Center" 
@@ -40,10 +48,10 @@
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Command="{x:Bind ViewModel.UpdateBatteryStatusCommand}"
-                              Label="Refresh">
+                <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
+                              Label="Take screenshot">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Refresh" />
+                        <SymbolIcon Symbol="Pictures" />
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}" 
@@ -53,10 +61,6 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand}" 
-                              Label="Take screenshot" />
-            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

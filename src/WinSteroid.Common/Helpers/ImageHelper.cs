@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace WinSteroid.App.Helpers
+namespace WinSteroid.Common.Helpers
 {
     public static class ImageHelper
     {

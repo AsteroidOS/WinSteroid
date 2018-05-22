@@ -26,7 +26,7 @@ namespace WinSteroid.Common.Helpers
             var defaultJson = await FileIO.ReadTextAsync(defaultIconsFile);
             DefaultIcons = JsonConvert.DeserializeObject<ApplicationPreference[]>(defaultJson);
 
-            var userIconsFile = await ApplicationData.Current.RoamingFolder.CreateFileAsync(UserIconsFileName, CreationCollisionOption.ReplaceExisting);
+            var userIconsFile = await ApplicationData.Current.RoamingFolder.CreateFileAsync(UserIconsFileName, CreationCollisionOption.OpenIfExists);
             var userJson = await FileIO.ReadTextAsync(userIconsFile);
             if (string.IsNullOrWhiteSpace(userJson))
             {
@@ -83,22 +83,20 @@ namespace WinSteroid.Common.Helpers
             ApplicationData.Current.SignalDataChanged();
         }
 
-        public static Task UpsertFoundApplicationsAsync(IEnumerable<UserNotification> userNotifications)
+        public static async Task UpsertFoundApplicationsAsync(IEnumerable<UserNotification> userNotifications)
         {
-            if (userNotifications == null) return Task.CompletedTask;
+            if (userNotifications == null) return;
 
             var newAppNotifications = userNotifications.Where(notification => UserIcons.All(ui => ui.AppId != notification.AppInfo.Id)).ToArray();
             if (newAppNotifications?.Length > 0)
             {
                 foreach (var notification in newAppNotifications)
                 {
-                    UpsertUserIcon(notification.AppInfo.Id, notification.AppInfo.DisplayInfo.DisplayName);
+                    UpsertUserIcon(notification.AppInfo.PackageFamilyName, notification.AppInfo.DisplayInfo.DisplayName);
                 }
 
-                return SaveUserIcons();
+                await SaveUserIcons();
             }
-
-            return Task.CompletedTask;
         }
 
         public static async Task ExportDataAsync()
@@ -109,11 +107,11 @@ namespace WinSteroid.Common.Helpers
 
             StorageApplicationPermissions.FutureAccessList.AddOrReplace("ExportFolderToken", folder);
 
-            var exportFolder = await folder.CreateFolderAsync(nameof(WinSteroid), CreationCollisionOption.OpenIfExists);
+            var exportFolder = await folder.CreateFolderAsync(nameof(WinSteroid), CreationCollisionOption.ReplaceExisting);
 
             var file = await ApplicationData.Current.RoamingFolder.CreateFileAsync(UserIconsFileName, CreationCollisionOption.OpenIfExists);
 
-            await file.CopyAsync(exportFolder);
+            await file.CopyAsync(exportFolder, UserIconsFileName, NameCollisionOption.ReplaceExisting);
         }
     }
 }

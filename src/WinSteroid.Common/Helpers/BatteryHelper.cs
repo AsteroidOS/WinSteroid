@@ -18,15 +18,15 @@ namespace WinSteroid.Common.Helpers
         {
             switch (percentage)
             {
-                case var p when percentage > (int)BatteryLevel.Discrete:
+                case var p when percentage >= (int)BatteryLevel.Discrete:
                     {
                         return "";
                     }
-                case var p when percentage <= (int)BatteryLevel.Discrete && percentage > (int)BatteryLevel.Bad:
+                case var p when percentage < (int)BatteryLevel.Discrete && percentage >= (int)BatteryLevel.Bad:
                     {
                         return "";
                     }
-                case var p when percentage <= (int)BatteryLevel.Bad && percentage > (int)BatteryLevel.Critic:
+                case var p when percentage < (int)BatteryLevel.Bad && percentage >= (int)BatteryLevel.Critic:
                     {
                         return "";
                     }
@@ -39,21 +39,25 @@ namespace WinSteroid.Common.Helpers
         {
             switch (percentage)
             {
-                case var p when percentage > (int)BatteryLevel.Discrete:
+                case var p when percentage >= (int)BatteryLevel.Discrete:
                     {
                         return BatteryLevel.Good;
                     }
-                case var p when percentage <= (int)BatteryLevel.Discrete && percentage > (int)BatteryLevel.Bad:
+                case var p when percentage < (int)BatteryLevel.Discrete && percentage >= (int)BatteryLevel.Bad:
                     {
                         return BatteryLevel.Discrete;
                     }
-                case var p when percentage <= (int)BatteryLevel.Bad && percentage > (int)BatteryLevel.Critic:
+                case var p when percentage < (int)BatteryLevel.Bad && percentage >= (int)BatteryLevel.Critic:
                     {
                         return BatteryLevel.Bad;
                     }
+                case var p when percentage < (int)BatteryLevel.Critic && percentage >= 0:
+                    {
+                        return BatteryLevel.Critic;
+                    }
             }
 
-            return BatteryLevel.Critic;
+            return BatteryLevel.Dead;
         }
     }
 }

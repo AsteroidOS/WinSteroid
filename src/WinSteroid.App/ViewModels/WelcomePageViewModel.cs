@@ -1,46 +1,41 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
 {
-    public class WelcomePageViewModel : ViewModelBase
+    public class WelcomePageViewModel : BasePageViewModel
     {
         private readonly DeviceService DeviceService;
-        private readonly INavigationService NavigationService;
-        private readonly IDialogService DialogService;
 
-        public WelcomePageViewModel(DeviceService deviceService, INavigationService navigationService, IDialogService dialogService)
+        public WelcomePageViewModel(
+            DeviceService deviceService,
+            IDialogService dialogService,
+            INavigationService navigationService) : base(dialogService, navigationService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-            this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
-            var deviceId = deviceService.GetLastSavedDeviceId();
+            this.Initialize();
+        }
+
+        public override void Initialize()
+        {
+            var deviceId = this.DeviceService.GetLastSavedDeviceId();
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
                 this.DeviceId = deviceId;
                 this.Pair();
             }
+
+            this.Initialized = true;
         }
 
-        private const ushort MaxTicksCount = 6;
-
-        private bool _isBusy;
-        public bool IsBusy
+        public override Task<bool> CanGoBack()
         {
-            get { return _isBusy; }
-            set { Set(nameof(IsBusy), ref _isBusy, value); }
-        }
-
-        private string _busyMessage;
-        public string BusyMessage
-        {
-            get { return _busyMessage; }
-            set { Set(nameof(BusyMessage), ref _busyMessage, value); }
+            return Task.FromResult(true);
         }
 
         private string _deviceId;
