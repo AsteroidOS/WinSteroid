@@ -1,11 +1,14 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.ApplicationModel;
 using Windows.UI.Notifications;
 
 namespace WinSteroid.Common.Helpers
 {
     public static class ToastsHelper
     {
-        public static void Send(string title, string message)
+        public static void Show(string message) => Show(Package.Current.DisplayName, message);
+
+        public static void Show(string title, string message)
         {
             var toastVisual = new ToastVisual
             {

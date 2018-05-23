@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
+using Renci.SshNet;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
@@ -33,17 +34,24 @@ namespace WinSteroid.App.ViewModels
         public override async void Initialize()
         {
             this.IsBusy = true;
-            this.BusyMessage = "Initializing...";
+            this.BusyMessage = "Initializing";
 
             this.DeviceName = this.DeviceService.Current.Name;
             this.BatteryLevelProgressEventHandler = new TypedEventHandler<BackgroundTaskRegistration, BackgroundTaskProgressEventArgs>(OnBatteryProgress);
             this.RegisterBatteryLevelHandler();
-            await this.InizializeScreenshotContentHandlersAsync();
+
+            var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+            var oldPercentage = this.BatteryPercentage;
+
+            this.BatteryPercentage = newPercentage;
+            this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
-            this.UpdateBatteryPercentage();
+            Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
+
+            await this.InizializeScreenshotContentHandlersAsync();
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -122,17 +130,6 @@ namespace WinSteroid.App.ViewModels
         public void UnregisterBatteryLevelHandler()
         {
             this.BackgroundService.UnregisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
-        }
-
-        private async void UpdateBatteryPercentage()
-        {
-            var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
-            var oldPercentage = this.BatteryPercentage;
-
-            this.BatteryPercentage = newPercentage;
-            this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-            Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
         }
 
         private async Task InizializeScreenshotContentHandlersAsync()

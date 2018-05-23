@@ -35,7 +35,7 @@ namespace WinSteroidTasks
         private void OnBackgroundTaskInstanceCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
             TilesHelper.ResetBatteryTile();
-            ToastsHelper.Send("OPS!", "Something strange happened and I can no more monitor your watch battery level!");
+            ToastsHelper.Show("OPS!", "Something strange happened and I can no more monitor your watch battery level!");
         }
     }
 }

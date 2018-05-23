@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
@@ -24,7 +23,7 @@ namespace WinSteroid.App.ViewModels
 
         public override void Initialize()
         {
-            this.IconPreferences = new ObservableCollection<ApplicationPreferenceViewModel>();
+            this.IconPreferences = new ObservableCollection<ApplicationViewModel>();
 
             this.Initialized = true;
         }
@@ -34,15 +33,15 @@ namespace WinSteroid.App.ViewModels
             return Task.FromResult(true);
         }
 
-        private ObservableCollection<ApplicationPreferenceViewModel> _iconPreferences;
-        public ObservableCollection<ApplicationPreferenceViewModel> IconPreferences
+        private ObservableCollection<ApplicationViewModel> _iconPreferences;
+        public ObservableCollection<ApplicationViewModel> IconPreferences
         {
             get { return _iconPreferences; }
             set { Set(nameof(IconPreferences), ref _iconPreferences, value); }
         }
 
-        private ApplicationPreferenceViewModel _selectedPreferences;
-        public ApplicationPreferenceViewModel SelectedPreferences
+        private ApplicationViewModel _selectedPreferences;
+        public ApplicationViewModel SelectedPreferences
         {
             get { return _selectedPreferences; }
             set
@@ -63,23 +62,14 @@ namespace WinSteroid.App.ViewModels
         {
             if (this.IconPreferences == null)
             {
-                this.IconPreferences = new ObservableCollection<ApplicationPreferenceViewModel>();
+                this.IconPreferences = new ObservableCollection<ApplicationViewModel>();
             }
             else
             {
                 this.IconPreferences.Clear();
             }
 
-            var iconPreferences = this.ApplicationsService.UserIcons
-                .OrderBy(ui => ui.PackageName)
-                .Select(ui => new ApplicationPreferenceViewModel
-                {
-                    Id = ui.AppId,
-                    Name = ui.PackageName,
-                    Icon = ui.Icon,
-                    Muted = ui.Muted
-                })
-                .ToArray();
+            var iconPreferences = this.ApplicationsService.MapApplications();
 
             foreach (var iconPreference in iconPreferences)
             {

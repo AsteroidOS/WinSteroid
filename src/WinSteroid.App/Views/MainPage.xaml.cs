@@ -12,8 +12,6 @@ namespace WinSteroid.App.Views
     {
         public static MainPage Current;
 
-        public static int Percentage { get; set; }
-
         public MainPageViewModel ViewModel
         {
             get { return this.DataContext as MainPageViewModel; }
@@ -38,6 +36,7 @@ namespace WinSteroid.App.Views
 
             var doubleAnimation = new DoubleAnimation()
             {
+                From = oldPercentage,
                 To = newPercentage,
                 Duration = new Duration(TimeSpan.FromMilliseconds(milliSeconds)),
                 EnableDependentAnimation = true

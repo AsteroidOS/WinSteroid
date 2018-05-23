@@ -47,6 +47,7 @@
     </Application>
   </Applications>
   <Capabilities>
+    <Capability Name="privateNetworkClientServer" />
     <uap3:Capability Name="userNotificationListener" />
     <uap:Capability Name="picturesLibrary" />
     <uap:Capability Name="removableStorage" />

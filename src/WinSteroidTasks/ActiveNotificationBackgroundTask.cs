@@ -27,7 +27,7 @@ namespace WinSteroidTasks
             if (bytes?.Length > 0)
             {
                 var @string = Encoding.UTF8.GetString(bytes);
-                ToastsHelper.Send("Test action", @string);
+                ToastsHelper.Show("Test action", @string);
             }
 
             this.BackgroundTaskDeferral.Complete();

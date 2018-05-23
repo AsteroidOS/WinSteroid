@@ -2,7 +2,7 @@
 
 namespace WinSteroid.App.ViewModels
 {
-    public class ApplicationPreferenceViewModel
+    public class ApplicationViewModel
     {
         public string Id { get; set; }
 
@@ -11,5 +11,7 @@ namespace WinSteroid.App.ViewModels
         public ApplicationIcon Icon { get; set; }
 
         public bool Muted { get; set; }
+
+        public bool HasVibration { get; set; }
     }
 }

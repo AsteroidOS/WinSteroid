@@ -42,6 +42,7 @@
 
                                 <TextBlock Grid.Column="1" 
                                            Text="{TemplateBinding TitleText}" 
+                                           Style="{ThemeResource BaseTextBlockStyle}"
                                            VerticalAlignment="Center" />
                             </Grid>
                         </StackPanel>

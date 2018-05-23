@@ -27,13 +27,6 @@ namespace WinSteroid.App.ViewModels
         public override void Initialize()
         {
             this.AvailableIcons = ApplicationIconExtensions.GetList();
-                //.Select(ai => new IconViewModel
-                //{
-                //    Icon = ai,
-                //    Id = ai.GetId(),
-                //    Name = ai.ToString()
-                //})
-                //.ToList();
 
             var appId = SettingsHelper.GetValue("lastAppId", string.Empty);
 

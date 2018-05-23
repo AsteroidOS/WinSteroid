@@ -44,7 +44,6 @@
                        Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
                        Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
                        Style="{ThemeResource HeaderTextBlockStyle}"
-                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
                        FontSize="80"
                        FontFamily="Segoe MDL2 Assets"
                        FontWeight="Normal"
@@ -65,6 +64,7 @@
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
+                              IsEnabled="False"
                               Label="Take screenshot">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Pictures" />
