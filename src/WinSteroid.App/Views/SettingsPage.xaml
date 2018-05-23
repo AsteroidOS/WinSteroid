@@ -7,8 +7,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings, Source={StaticResource Locator}}">
-    
+
     <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -16,6 +22,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
+              Height="48"
               Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -23,9 +30,13 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Content="" 
+                    Content="" 
                     Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                    Padding="16,8"
+                    Padding="16,12"
+                    Height="48"
+                    Width="48"
+                    VerticalAlignment="Stretch"
+                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                     Style="{ThemeResource NavigationBackButtonNormalStyle}" />
 
             <TextBlock Grid.Column="1" 
@@ -53,19 +64,11 @@
                 <TextBlock Text="Battery"
                            Style="{ThemeResource BaseTextBlockStyle}"
                            Margin="0,24,0,0" />
-                
+
                 <ToggleSwitch Header="Use Live Tile to show current device battery level" 
                               OffContent="No"
                               OnContent="Yes"
                               IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
-
-                <TextBlock Text="DEBUG"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Foreground="Red"
-                           Margin="0,24,0,0" />
-
-                <Button Content="Export icons data" 
-                        Command="{x:Bind ViewModel.ExportApplicationsFileCommand}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

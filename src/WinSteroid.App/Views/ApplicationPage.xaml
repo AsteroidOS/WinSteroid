@@ -4,12 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:WinSteroid.App.Converters"
     xmlns:models="using:WinSteroid.Common.Models"
+    xmlns:viewModels="using:WinSteroid.App.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Application, Source={StaticResource Locator}}">
 
     <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -17,6 +25,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
+              Height="48"
               Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -24,9 +33,13 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Content="" 
+                    Content="{x:Bind ViewModel.SelectedIcon.Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
                     Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                    Padding="16,8"
+                    Padding="16,12"
+                    Height="48"
+                    Width="48"
+                    VerticalAlignment="Stretch"
+                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                     Style="{ThemeResource NavigationBackButtonNormalStyle}" />
 
             <TextBlock Grid.Column="1" 
@@ -37,12 +50,16 @@
 
         <StackPanel Grid.Row="1"
                     Padding="12">
+            <TextBlock Text="Preferences" 
+                       Style="{ThemeResource SubtitleTextBlockStyle}" />
+
             <ComboBox HorizontalAlignment="Stretch" 
                       Header="Icon"
-                      ItemsSource="{x:Bind ViewModel.Icons, Mode=OneWay}"
-                      SelectedItem="{x:Bind ViewModel.Icon, Mode=TwoWay}">
+                      Margin="0,24,0,0"
+                      ItemsSource="{x:Bind ViewModel.AvailableIcons, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="models:ApplicationIcon">
+                    <DataTemplate x:DataType="viewModels:IconViewModel">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -51,11 +68,13 @@
 
                             <TextBlock Grid.Column="0" 
                                        FontFamily="Segoe MDL2 Assets"
-                                       Text="{x:Bind Converter={StaticResource ApplicationIconToGlyphConverter}}" />
+                                       VerticalAlignment="Center"
+                                       Text="{x:Bind Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}" />
 
                             <TextBlock Grid.Column="1" 
                                        TextAlignment="Left" 
-                                       Text="{x:Bind}" />
+                                       Margin="8,0"
+                                       Text="{x:Bind Name}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -63,19 +82,15 @@
 
             <ToggleSwitch Header="Muted" 
                           IsOn="{x:Bind ViewModel.Muted, Mode=TwoWay}"
-                          Margin="0,12,0,0" />
+                          Margin="0,24,0,0" />
 
-            <ComboBox HorizontalAlignment="Stretch" 
-                      Header="Vibration"
-                      Visibility="{x:Bind ViewModel.Muted, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                      ItemsSource="{x:Bind ViewModel.AvailableVibrationLevels, Mode=OneWay}"
-                      SelectedItem="{x:Bind ViewModel.Vibration, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="models:VibrationLevel">
-                        <TextBlock TextAlignment="Left" Text="{x:Bind}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <Slider Header="Vibration" 
+                    Maximum="2" 
+                    Minimum="0"
+                    Margin="0,24,0,0"
+                    Visibility="{x:Bind ViewModel.Muted, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                    Value="{x:Bind ViewModel.Vibration, Mode=TwoWay, Converter={StaticResource VibrationLevelToNumberConverter}}"
+                    ThumbToolTipValueConverter="{StaticResource NumberToVibrationLevelStringConverter}" />
         </StackPanel>
 
         <CommandBar Grid.Row="2">

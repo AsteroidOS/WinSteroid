@@ -19,9 +19,16 @@ namespace WinSteroid.App.ViewModels
 
             SimpleIoc.Default.Register(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
+            SimpleIoc.Default.Register<Services.ApplicationsService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
             SimpleIoc.Default.Register<Services.NotificationsService>();
+
+            var backgroundService = SimpleIoc.Default.GetInstance<Services.BackgroundService>();
+            if (!Common.Helpers.TilesHelper.BatteryTileExists())
+            {
+                backgroundService.Unregister(Services.BackgroundService.BatteryLevelTaskName);
+            }
         }
 
         private INavigationService InitializeNavigationService()

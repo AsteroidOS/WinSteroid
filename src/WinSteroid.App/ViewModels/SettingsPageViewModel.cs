@@ -111,8 +111,7 @@ namespace WinSteroid.App.ViewModels
             }
 
             var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
-
-            await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            
             await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
 
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
@@ -159,25 +158,6 @@ namespace WinSteroid.App.ViewModels
         private void GoToIcons()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Icons));
-        }
-
-        private RelayCommand _exportApplicationsFileCommand;
-        public RelayCommand ExportApplicationsFileCommand
-        {
-            get
-            {
-                if (_exportApplicationsFileCommand == null)
-                {
-                    _exportApplicationsFileCommand = new RelayCommand(ExportData);
-                }
-
-                return _exportApplicationsFileCommand;
-            }
-        }
-
-        private async void ExportData()
-        {
-            await ApplicationsHelper.ExportDataAsync();
         }
     }
 }

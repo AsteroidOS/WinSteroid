@@ -118,7 +118,6 @@
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\AsteroidHelper.cs" />
     <Compile Include="Helpers\BatteryHelper.cs" />
-    <Compile Include="Helpers\ApplicationsHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\TilesHelper.cs" />

@@ -10,6 +10,12 @@
     DataContext="{Binding Icons, Source={StaticResource Locator}}">
 
     <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -17,6 +23,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
+              Height="48"
               Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -24,9 +31,13 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Content="" 
+                    Content="" 
                     Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                    Padding="16,8"
+                    Padding="16,12"
+                    Height="48"
+                    Width="48"
+                    VerticalAlignment="Stretch"
+                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                     Style="{ThemeResource NavigationBackButtonNormalStyle}" />
 
             <TextBlock Grid.Column="1" 
@@ -51,24 +62,19 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}"
+                                       Text="{x:Bind Name}" />
 
-                        <TextBlock Grid.Column="0" 
-                                   Grid.Row="0"
-                                   Style="{ThemeResource BaseTextBlockStyle}"
-                                   Text="{x:Bind Name}" />
+                            <TextBlock Text=""
+                                       VerticalAlignment="Center"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       Margin="8,0"
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </StackPanel>
 
-                        <SymbolIcon Grid.Column="0"
-                                    Grid.Row="1"
-                                    Symbol="Mute"
-                                    Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                        <TextBlock Grid.Column="1" 
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2" 
+                        <TextBlock Grid.Column="1"
                                    FontSize="28"
                                    FontFamily="Segoe MDL2 Assets"
                                    Text="{x:Bind Icon, Mode=OneWay, Converter={StaticResource ApplicationIconToGlyphConverter}}" />
@@ -76,16 +82,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-        <CommandBar Grid.Row="2">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Save"
-                              Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Save" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
     </Grid>
 </Page>

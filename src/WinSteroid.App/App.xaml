@@ -12,5 +12,7 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:ApplicationIconToGlyphConverter x:Key="ApplicationIconToGlyphConverter" />
         <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
+        <converters:NumberToVibrationLevelStringConverter x:Key="NumberToVibrationLevelStringConverter" />
+        <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />
     </Application.Resources>
 </Application>

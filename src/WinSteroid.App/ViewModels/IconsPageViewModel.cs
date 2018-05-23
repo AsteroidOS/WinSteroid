@@ -1,16 +1,23 @@
-﻿using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Views;
+﻿using GalaSoft.MvvmLight.Views;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using WinSteroid.Common.Helpers;
+using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
 {
     public class IconsPageViewModel : BasePageViewModel
     {
-        public IconsPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
+        private readonly ApplicationsService ApplicationsService;
+
+        public IconsPageViewModel(
+            ApplicationsService applicationsService,
+            IDialogService dialogService,
+            INavigationService navigationService) : base(dialogService, navigationService)
         {
+            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
+
             this.Initialize();
         }
 
@@ -49,25 +56,6 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private RelayCommand _saveCommand;
-        public RelayCommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new RelayCommand(SavePreferences);
-                }
-
-                return _saveCommand;
-            }
-        }
-
-        private async void SavePreferences()
-        {
-            await ApplicationsHelper.SaveUserIcons();
-        }
-
         public void RefreshIconsPreferences()
         {
             if (this.IconPreferences == null)
@@ -79,7 +67,7 @@ namespace WinSteroid.App.ViewModels
                 this.IconPreferences.Clear();
             }
 
-            var iconPreferences = ApplicationsHelper.UserIcons
+            var iconPreferences = this.ApplicationsService.UserIcons
                 .OrderBy(ui => ui.PackageName)
                 .Select(ui => new ApplicationPreferenceViewModel
                 {

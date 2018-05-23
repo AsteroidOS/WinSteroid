@@ -4,21 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
-using WinSteroid.Common.Helpers;
+using WinSteroid.App.Services;
 using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels
 {
     public class ApplicationPageViewModel : BasePageViewModel
     {
-        public ApplicationPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
+        private readonly ApplicationsService ApplicationsService;
+
+        public ApplicationPageViewModel(
+            ApplicationsService applicationsService,
+            IDialogService dialogService, 
+            INavigationService navigationService) : base(dialogService, navigationService)
         {
+            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
+
             this.Initialize();
         }
 
         public override void Initialize()
         {
-            this.Icons = ApplicationIconExtensions.GetList();
+            this.AvailableIcons = ApplicationIconExtensions.GetList()
+                .Select(ai => new IconViewModel
+                {
+                    Name = ai.ToString(),
+                    Icon = ai
+                })
+                .ToList();
 
             this.Initialized = true;
         }
@@ -39,18 +52,18 @@ namespace WinSteroid.App.ViewModels
 
         public string Name { get; set; }
 
-        private List<ApplicationIcon> _icons;
-        public List<ApplicationIcon> Icons
+        private List<IconViewModel> _availableIcons;
+        public List<IconViewModel> AvailableIcons
         {
-            get { return _icons; }
-            set { Set(nameof(Icons), ref _icons, value); }
+            get { return _availableIcons; }
+            set { Set(nameof(AvailableIcons), ref _availableIcons, value); }
         }
 
-        private ApplicationIcon _icon;
-        public ApplicationIcon Icon
+        private IconViewModel _selectedIcon;
+        public IconViewModel SelectedIcon
         {
-            get { return _icon; }
-            set { Set(nameof(Icon), ref _icon, value); }
+            get { return _selectedIcon; }
+            set { Set(nameof(SelectedIcon), ref _selectedIcon, value); }
         }
 
         private bool _muted;
@@ -58,16 +71,6 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _muted; }
             set { Set(nameof(Muted), ref _muted, value); }
-        }
-
-        public List<VibrationLevel> AvailableVibrationLevels
-        {
-            get
-            {
-                return EnumExtensions.GetValues<VibrationLevel>()
-                    .OrderBy(vl => (int)vl)
-                    .ToList();
-            }
         }
 
         private VibrationLevel _vibration;
@@ -93,29 +96,29 @@ namespace WinSteroid.App.ViewModels
 
         private async void Save()
         {
-            ApplicationsHelper.UpsertUserIcon(this.Id, this.Name, this.Icon, this.Muted);
+            this.ApplicationsService.UpsertUserIcon(this.Id, this.Name, this.SelectedIcon.Icon, this.Muted, this.Vibration);
 
-            await ApplicationsHelper.SaveUserIcons();
+            await this.ApplicationsService.SaveUserIcons();
 
             this.NavigationService.GoBack();
         }
 
         public void Load(string appId)
         {
-            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(appId);
+            var application = this.ApplicationsService.GetApplicationPreferenceByAppId(appId);
 
             this.Id = application.AppId;
             this.Name = application.PackageName;
-            this.Icon = application.Icon;
+            this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i.Icon == application.Icon);
             this.Muted = application.Muted;
             this.Vibration = application.Vibration;
         }
 
         public bool CheckUnsavedChanges()
         {
-            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(this.Id);
+            var application = this.ApplicationsService.GetApplicationPreferenceByAppId(this.Id);
 
-            return this.Icon != application.Icon 
+            return this.SelectedIcon.Icon != application.Icon 
                 || this.Muted != application.Muted
                 || this.Vibration != application.Vibration;
         }
@@ -124,7 +127,7 @@ namespace WinSteroid.App.ViewModels
         {
             this.Id = string.Empty;
             this.Name = string.Empty;
-            this.Icon = ApplicationIcon.Alert;
+            this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i.Icon == ApplicationIcon.Alert);
             this.Muted = false;
             this.Vibration = VibrationLevel.None;
         }

@@ -102,6 +102,9 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ApplicationIconToGlyphConverter.cs" />
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
+    <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
+    <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
+    <Compile Include="Services\ApplicationsService.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
@@ -135,7 +138,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Assets\Icons\defaultIcons.json" />
     <None Include="WinSteroid.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

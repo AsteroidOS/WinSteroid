@@ -19,6 +19,13 @@ namespace WinSteroid.App.Services
 {
     public class DeviceService
     {
+        private readonly ApplicationsService ApplicationsService;
+
+        public DeviceService(ApplicationsService applicationsService)
+        {
+            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
+        }
+
         private BluetoothLEDevice BluetoothDevice = null;
         public DeviceInformation Current = null;
         public int BatteryLevel { get; set; }
@@ -169,14 +176,14 @@ namespace WinSteroid.App.Services
 
         public Task<bool> InsertNotificationAsync(UserNotification userNotification)
         {
-            var application = ApplicationsHelper.GetApplicationPreferenceByAppId(userNotification.AppInfo.PackageFamilyName);
+            var application = this.ApplicationsService.GetApplicationPreferenceByAppId(userNotification.AppInfo.PackageFamilyName);
             if (application != null && application.Muted) return Task.FromResult(true);
 
             var xmlNotification = AsteroidHelper.CreateInsertNotificationCommandXml(
                 packageName: userNotification.AppInfo.PackageFamilyName,
                 id: userNotification.Id.ToString(),
                 applicationName: userNotification.AppInfo.DisplayInfo.DisplayName,
-                applicationIcon: (application?.Icon ?? ApplicationsHelper.GetDefaultApplicationIcon()).GetId(),
+                applicationIcon: (application?.Icon ?? this.ApplicationsService.GetDefaultApplicationIcon()).GetId(),
                 summary: userNotification.GetTitle(),
                 body: userNotification.GetBody(),
                 vibrationLevel: application?.Vibration ?? VibrationLevel.None);
