@@ -36,8 +36,9 @@ namespace WinSteroid.App.ViewModels
             this.BusyMessage = "Initializing...";
 
             this.BatteryLevelProgressEventHandler = new TypedEventHandler<BackgroundTaskRegistration, BackgroundTaskProgressEventArgs>(OnBatteryProgress);
-            await this.InitializeBatteryLevelHandlers();
-            await this.InizializeScreenshotContentHandlers();
+            this.RegisterBatteryLevelHandler();
+            this.UpdateBatteryPercentage();
+            await this.InizializeScreenshotContentHandlersAsync();
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
@@ -102,17 +103,25 @@ namespace WinSteroid.App.ViewModels
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Settings));
         }
 
-        private async Task InitializeBatteryLevelHandlers()
+        public void RegisterBatteryLevelHandler()
         {
             this.BackgroundService.RegisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
+        }
 
+        public void UnregisterBatteryLevelHandler()
+        {
+            this.BackgroundService.UnregisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
+        }
+
+        private async void UpdateBatteryPercentage()
+        {
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
 
             this.BatteryPercentage = batteryPercentage;
             this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
         }
 
-        private async Task InizializeScreenshotContentHandlers()
+        private async Task InizializeScreenshotContentHandlersAsync()
         {
             var result = await this.DeviceService.RegisterToScreenshotContentService();
             if (!result)

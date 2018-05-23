@@ -116,18 +116,22 @@ namespace WinSteroid.App.ViewModels
 
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             TilesHelper.UpdateBatteryTile(batteryPercentage);
+
+            ViewModelLocator.Main.RegisterBatteryLevelHandler();
         }
 
         private async void UnpinBatteryTile()
         {
             var result = await TilesHelper.UnpinBatteryTileAsync();
-            if (result)
+            if (!result)
             {
-                this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+                this.UseBatteryLiveTile = true;
                 return;
             }
-            
-            this.UseBatteryLiveTile = true;
+
+            this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+
+            ViewModelLocator.Main.UnregisterBatteryLevelHandler();
         }
 
         //private async void InitializeActiveNotificationHandlers()

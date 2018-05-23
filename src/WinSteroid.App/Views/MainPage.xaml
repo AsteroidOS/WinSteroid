@@ -31,7 +31,7 @@
 
                 <ProgressRing Width="240"
                               Height="240"
-                              Foreground="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                               IsActive="{x:Bind ViewModel.IsBusy}" 
                               Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 

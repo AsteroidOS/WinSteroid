@@ -54,6 +54,25 @@ namespace WinSteroid.App.Services
             return true;
         }
 
+        public bool UnregisterBatteryLevelBackgroundTaskEventHandler(BackgroundTaskProgressEventHandler progressEventHandler)
+        {
+            if (progressEventHandler == null)
+            {
+                throw new ArgumentNullException(nameof(progressEventHandler));
+            }
+
+            var backgroundTask = this.GetBackgroundTask(BatteryLevelTaskName);
+            if (backgroundTask == null) return false;
+
+            try
+            {
+                backgroundTask.Progress -= progressEventHandler;
+            }
+            catch { }
+
+            return true;
+        }
+
         public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
         {
             if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
