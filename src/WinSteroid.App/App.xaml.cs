@@ -51,6 +51,28 @@ namespace WinSteroid.App
             GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
         }
 
+        public static void RemoveWelcomePageFromBackStack()
+        {
+            if (!(Window.Current.Content is Frame rootFrame)) return;
+
+            var welcomePageStackEntries = rootFrame.BackStack.Where(p => p.SourcePageType == typeof(Views.WelcomePage)).ToArray();
+            if (welcomePageStackEntries == null || welcomePageStackEntries.Length == 0) return;
+
+            foreach (var pageStackEntry in welcomePageStackEntries)
+            {
+                rootFrame.BackStack.Remove(pageStackEntry);
+            }
+        }
+
+        public static void Reset(string arguments = null)
+        {
+            if (!(Window.Current.Content is Frame rootFrame)) return;
+
+            rootFrame.BackStack.Clear();
+
+            rootFrame.Navigate(typeof(Views.WelcomePage), arguments);
+        }
+
         private async void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
             if (Window.Current.Content is Frame rootFrame && rootFrame.CanGoBack)

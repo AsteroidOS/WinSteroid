@@ -47,8 +47,17 @@
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Padding="12,8">
-                <TextBlock Text="Notifications"
+                <TextBlock Text="Device name"
                            Style="{ThemeResource BaseTextBlockStyle}" />
+                
+                <TextBlock Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
+                           FontWeight="SemiBold"
+                           Margin="0,8,0,0"
+                           Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
+
+                <TextBlock Text="Notifications"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="0,12,0,8" />
                 
                 <ToggleSwitch Header="Show system notifications on AsteroidOS" 
                               OffContent="No"
@@ -63,13 +72,31 @@
 
                 <TextBlock Text="Battery"
                            Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,24,0,0" />
+                           Margin="0,24,0,8" />
 
                 <ToggleSwitch Header="Use Live Tile to show current device battery level" 
                               OffContent="No"
                               OnContent="Yes"
                               IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
+
+                <TextBlock Text="Application"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="0,24,0,8" />
+
+                <Button Content="Reset"
+                        Command="{x:Bind ViewModel.ResetApplicationCommand, Mode=OneWay}"
+                        Margin="0,8,0,0" />
             </StackPanel>
         </ScrollViewer>
+        
+        <Grid Grid.Row="2"
+              Height="48"
+              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            <TextBlock Text="{x:Bind ViewModel.ApplicationFooter, Mode=OneWay}" 
+                       TextAlignment="Right"
+                       VerticalAlignment="Center"
+                       Padding="16,0"
+                       Style="{ThemeResource BaseTextBlockStyle}" />
+        </Grid>
     </Grid>
 </Page>

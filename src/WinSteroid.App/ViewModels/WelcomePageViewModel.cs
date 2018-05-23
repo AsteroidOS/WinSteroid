@@ -2,7 +2,6 @@
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
@@ -29,6 +28,10 @@ namespace WinSteroid.App.ViewModels
                 this.DeviceId = deviceId;
                 this.Pair();
             }
+            else
+            {
+                this.ShowConnectionOptions = true;
+            }
 
             this.Initialized = true;
         }
@@ -52,6 +55,13 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
+        private bool _showConnectionOptions;
+        public bool ShowConnectionOptions
+        {
+            get { return _showConnectionOptions; }
+            set { Set(nameof(ShowConnectionOptions), ref _showConnectionOptions, value); }
+        }
+
         private RelayCommand _startSearchCommand;
         public RelayCommand StartSearchCommand
         {
@@ -68,16 +78,19 @@ namespace WinSteroid.App.ViewModels
 
         private async void StartSearch()
         {
+            this.ShowConnectionOptions = false;
             if (!string.IsNullOrWhiteSpace(this.DeviceId))
             {
                 this.Pair();
                 return;
             }
-
-            var element = (FrameworkElement)Views.WelcomePage.Current;
-
-            var result = await this.DeviceService.PickSingleDeviceAsync(element);
-            if (!result) return;
+            
+            var result = await this.DeviceService.PickSingleDeviceAsync(Views.WelcomePage.Current);
+            if (!result)
+            {
+                this.ShowConnectionOptions = true;
+                return;
+            }
 
             this.DeviceId = this.DeviceService.Current.Id;
             this.DeviceName = this.DeviceService.Current.Name;
@@ -134,6 +147,13 @@ namespace WinSteroid.App.ViewModels
             }
 
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Main));
+        }
+
+        public void Reset()
+        {
+            this.DeviceId = string.Empty;
+            this.DeviceName = string.Empty;
+            this.ShowConnectionOptions = true;
         }
     }
 }

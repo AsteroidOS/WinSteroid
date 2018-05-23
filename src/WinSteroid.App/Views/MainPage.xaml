@@ -15,36 +15,34 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <StackPanel Grid.Row="0" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Center">
-            <Grid>
-                <controls:RadialProgressBar Thickness="12"
-                                            Minimum="0"
-                                            Maximum="100"
-                                            Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                            Width="240"
-                                            Height="240"
-                                            Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                                            Value="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay}"
-                                            Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+        <Grid Grid.Row="0" 
+              VerticalAlignment="Center" 
+              HorizontalAlignment="Center">
+            <controls:RadialProgressBar Thickness="12"
+                                        Minimum="0"
+                                        Maximum="100"
+                                        Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                                        Width="240"
+                                        Height="240"
+                                        Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                                        Value="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay}"
+                                        Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
 
-                <ProgressRing Width="240"
-                              Height="240"
-                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                              IsActive="{x:Bind ViewModel.IsBusy}" 
-                              Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ProgressRing Width="240"
+                          Height="240"
+                          Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                          IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
+                          Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <TextBlock Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
-                           Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                           Style="{ThemeResource HeaderTextBlockStyle}"
-                           Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                           FontSize="80"
-                           FontWeight="Normal"
-                           TextAlignment="Center" 
-                           VerticalAlignment="Center" />
-            </Grid>
-        </StackPanel>
+            <TextBlock Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
+                       Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                       Style="{ThemeResource HeaderTextBlockStyle}"
+                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                       FontSize="80"
+                       FontWeight="Normal"
+                       TextAlignment="Center" 
+                       VerticalAlignment="Center" />
+        </Grid>
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>

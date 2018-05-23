@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
@@ -10,19 +11,22 @@ namespace WinSteroid.App.ViewModels
 {
     public class SettingsPageViewModel : BasePageViewModel
     {
+        private readonly ApplicationsService ApplicationsService;
         private readonly DeviceService DeviceService;
         private readonly BackgroundService BackgroundService;
         private readonly NotificationsService NotificationsService;
 
         public SettingsPageViewModel(
+            ApplicationsService applicationsService,
             DeviceService deviceService, 
             BackgroundService backgroundService,
             NotificationsService notificationsService,
             IDialogService dialogService,
             INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
+            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
 
             this.Initialize();
@@ -30,6 +34,9 @@ namespace WinSteroid.App.ViewModels
 
         public override void Initialize()
         {
+            this.DeviceName = this.DeviceService.Current.Name;
+            this.ApplicationName = Package.Current.DisplayName;
+            this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
             this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
             this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
 
@@ -39,6 +46,27 @@ namespace WinSteroid.App.ViewModels
         public override Task<bool> CanGoBack()
         {
             return Task.FromResult(true);
+        }
+
+        private string _deviceName;
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set { Set(nameof(DeviceName), ref _deviceName, value); }
+        }
+
+        private string _applicationFooter;
+        public string ApplicationFooter
+        {
+            get { return _applicationFooter; }
+            set { Set(nameof(ApplicationFooter), ref _applicationFooter, value); }
+        }
+
+        private string _applicationName;
+        public string ApplicationName
+        {
+            get { return _applicationName; }
+            set { Set(nameof(ApplicationName), ref _applicationName, value); }
         }
 
         private bool _enableUserNotifications;
@@ -162,6 +190,84 @@ namespace WinSteroid.App.ViewModels
         private void GoToIcons()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Icons));
+        }
+
+        private RelayCommand _resetApplicationCommand;
+        public RelayCommand ResetApplicationCommand
+        {
+            get
+            {
+                if (_resetApplicationCommand == null)
+                {
+                    _resetApplicationCommand = new RelayCommand(ResetApplication);
+                }
+
+                return _resetApplicationCommand;
+            }
+        }
+
+        private async void ResetApplication()
+        {
+            await this.DialogService.ShowMessage(
+                message: "Are you sure do you want to disconnect your device and reset the application?",
+                title: $"Reset {this.ApplicationName}",
+                buttonConfirmText: "Yes, I'm sure",
+                buttonCancelText: "Mmm nope",
+                afterHideCallback: ManageResetMessageResult);
+        }
+
+        private async void ManageResetMessageResult(bool confirmed)
+        {
+            if (!confirmed) return;
+
+            await this.DialogService.ShowMessage(
+                message: "Do you want to keep the current icon preferences for another device?",
+                title: "Keep icons preferences",
+                buttonConfirmText: "Yes",
+                buttonCancelText: "No",
+                afterHideCallback: ManageKeepPreferencesMessageResult);
+        }
+
+        private async void ManageKeepPreferencesMessageResult(bool keepIconsPreferences)
+        {
+            this.DeviceName = string.Empty;
+            this.UseBatteryLiveTile = false;
+            this.EnableUserNotifications = false;
+
+            if (!keepIconsPreferences)
+            {
+                await this.ApplicationsService.DeleteUserIcons();
+                App.Reset();
+            }
+
+            await this.DialogService.ShowMessage(
+                message: $"Do you want to save a copy of icon preferences as file (to be imported in other {this.ApplicationName} installations?",
+                title: "Export data",
+                buttonConfirmText: "Yes",
+                buttonCancelText: "No",
+                afterHideCallback: ManageExportIconPreferencesMessageResult);
+        }
+
+        private async void ManageExportIconPreferencesMessageResult(bool exportFile)
+        {
+            if (exportFile)
+            {
+                var result = await this.ApplicationsService.ExportDataAsync();
+                if (!result)
+                {
+                    await this.DialogService.ShowMessage(
+                        message: $"Export failed or canceled. Do you want to retry?",
+                        title: "Export data",
+                        buttonConfirmText: "Yes",
+                        buttonCancelText: "No",
+                        afterHideCallback: ManageExportIconPreferencesMessageResult);
+                    return;
+                }
+            }
+
+            ViewModelLocator.Main.Reset();
+            ViewModelLocator.Welcome.Reset();
+            App.Reset();
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 using Windows.UI.Notifications;
 using WinSteroid.Common.Models;
 
@@ -85,6 +88,13 @@ namespace WinSteroid.App.Services
             ApplicationData.Current.SignalDataChanged();
         }
 
+        public Task DeleteUserIcons()
+        {
+            this.UserIcons = new List<ApplicationPreference>();
+
+            return this.SaveUserIcons();
+        }
+
         public async Task UpsertFoundApplicationsAsync(IEnumerable<UserNotification> userNotifications)
         {
             if (userNotifications == null) return;
@@ -99,6 +109,27 @@ namespace WinSteroid.App.Services
 
                 await SaveUserIcons();
             }
+        }
+
+        public async Task<bool> ExportDataAsync()
+        {
+            var folderPicker = new FolderPicker();
+            folderPicker.FileTypeFilter.Add("*");
+
+            var folder = await folderPicker.PickSingleFolderAsync();
+            if (folder == null) return false;
+
+            StorageApplicationPermissions.FutureAccessList.AddOrReplace("ExportFolderToken", folder);
+
+            var fileName = $"userIcons_export_{DateTime.Now.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture)}.json";
+
+            var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+            var json = JsonConvert.SerializeObject(this.UserIcons);
+
+            await FileIO.WriteTextAsync(file, json);
+
+            return true;
         }
     }
 }

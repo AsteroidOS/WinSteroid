@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
@@ -17,7 +18,7 @@ namespace WinSteroid.Common.Helpers
 
             var batteryTile = new SecondaryTile(
                 tileId: BatteryTileId,
-                displayName: nameof(WinSteroid),
+                displayName: Package.Current.DisplayName,
                 arguments: "deviceId=" + System.Net.WebUtility.UrlEncode(deviceId),
                 square150x150Logo: new Uri("ms-appx:///Assets/Square150x150Logo.png"),
                 desiredSize: TileSize.Default);

@@ -43,12 +43,14 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
+            App.RemoveWelcomePageFromBackStack();
+
             this.Initialized = true;
         }
 
         public override Task<bool> CanGoBack()
         {
-            return Task.FromResult(false);
+            return Task.FromResult(true);
         }
 
         private int _batteryPercentage;
@@ -139,6 +141,12 @@ namespace WinSteroid.App.ViewModels
                 this.BatteryPercentage = batteryPercentage;
                 this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
             });
+        }
+
+        public void Reset()
+        {
+            this.BatteryLevel = BatteryLevel.Dead;
+            this.BatteryPercentage = 0;
         }
     }
 }
