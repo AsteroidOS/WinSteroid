@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings, Source={StaticResource Locator}}">
-
+    
     <Grid>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -49,6 +49,7 @@
                               IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
 
                 <Button Content="Set icons preferences"
+                        Padding="12,4"
                         Command="{x:Bind ViewModel.IconsCommand, Mode=OneWay}"
                         IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
 
@@ -66,6 +67,7 @@
                            Margin="0,24,0,8" />
 
                 <Button Content="Reset"
+                        Padding="12,4"
                         Command="{x:Bind ViewModel.ResetApplicationCommand, Mode=OneWay}"
                         Margin="0,8,0,0" />
             </StackPanel>

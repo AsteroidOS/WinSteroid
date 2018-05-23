@@ -22,15 +22,15 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <controls:RadialProgressBar Grid.Row="0" 
+                                        x:Name="PercentageRadialProgressBar"
                                         Thickness="12"
                                         Minimum="0"
                                         Maximum="100"
                                         Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                         Width="240"
                                         Height="240"
-                                        Value="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay}"
                                         Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
             <ProgressRing Grid.Row="0" 
                           Width="240"
@@ -54,8 +54,7 @@
             <TextBlock Grid.Row="1"
                        TextAlignment="Center"
                        Padding="12"
-                       FontSize="28"
-                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}">
+                       FontSize="28">
                 <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
                      Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
                 <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 

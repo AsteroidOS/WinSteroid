@@ -40,26 +40,32 @@
                 <DataTemplate x:DataType="viewmodels:ApplicationPreferenceViewModel">
                     <Grid Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}"
-                                       Text="{x:Bind Name}" />
-
-                            <TextBlock Text=""
-                                       VerticalAlignment="Center"
-                                       FontFamily="Segoe MDL2 Assets"
-                                       Margin="8,0"
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        </StackPanel>
-
-                        <TextBlock Grid.Column="1"
+                        
+                        <TextBlock Grid.Column="0"
+                                   Text="{x:Bind Icon, Mode=OneWay, Converter={StaticResource ApplicationIconToGlyphConverter}}"
+                                   VerticalAlignment="Center"
                                    FontSize="28"
                                    FontFamily="Segoe MDL2 Assets"
-                                   Text="{x:Bind Icon, Mode=OneWay, Converter={StaticResource ApplicationIconToGlyphConverter}}" />
+                                   Style="{ThemeResource BodyTextBlockStyle}" />
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{x:Bind Name}"
+                                   VerticalAlignment="Center"
+                                   Margin="12,0"
+                                   Style="{ThemeResource BaseTextBlockStyle}" />
+
+                        <TextBlock Grid.Column="2" 
+                                   Text=""
+                                   VerticalAlignment="Center"
+                                   FontSize="24"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
+                                   Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   Style="{ThemeResource BodyTextBlockStyle}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

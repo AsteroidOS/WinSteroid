@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using WinSteroid.App.Services;
+using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels
@@ -25,13 +26,24 @@ namespace WinSteroid.App.ViewModels
 
         public override void Initialize()
         {
-            this.AvailableIcons = ApplicationIconExtensions.GetList()
-                .Select(ai => new IconViewModel
-                {
-                    Name = ai.ToString(),
-                    Icon = ai
-                })
-                .ToList();
+            this.AvailableIcons = ApplicationIconExtensions.GetList();
+                //.Select(ai => new IconViewModel
+                //{
+                //    Icon = ai,
+                //    Id = ai.GetId(),
+                //    Name = ai.ToString()
+                //})
+                //.ToList();
+
+            var appId = SettingsHelper.GetValue("lastAppId", string.Empty);
+
+            var application = this.ApplicationsService.GetApplicationPreferenceByAppId(appId);
+
+            this.Id = application.AppId;
+            this.Name = application.PackageName;
+            this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i == application.Icon);
+            this.Muted = application.Muted;
+            this.Vibration = application.Vibration;
 
             this.Initialized = true;
         }
@@ -52,15 +64,15 @@ namespace WinSteroid.App.ViewModels
 
         public string Name { get; set; }
 
-        private List<IconViewModel> _availableIcons;
-        public List<IconViewModel> AvailableIcons
+        private List<ApplicationIcon> _availableIcons;
+        public List<ApplicationIcon> AvailableIcons
         {
             get { return _availableIcons; }
             set { Set(nameof(AvailableIcons), ref _availableIcons, value); }
         }
 
-        private IconViewModel _selectedIcon;
-        public IconViewModel SelectedIcon
+        private ApplicationIcon _selectedIcon;
+        public ApplicationIcon SelectedIcon
         {
             get { return _selectedIcon; }
             set { Set(nameof(SelectedIcon), ref _selectedIcon, value); }
@@ -96,40 +108,20 @@ namespace WinSteroid.App.ViewModels
 
         private async void Save()
         {
-            this.ApplicationsService.UpsertUserIcon(this.Id, this.Name, this.SelectedIcon.Icon, this.Muted, this.Vibration);
+            this.ApplicationsService.UpsertUserIcon(this.Id, this.Name, this.SelectedIcon, this.Muted, this.Vibration);
 
             await this.ApplicationsService.SaveUserIcons();
 
             this.NavigationService.GoBack();
         }
 
-        public void Load(string appId)
-        {
-            var application = this.ApplicationsService.GetApplicationPreferenceByAppId(appId);
-
-            this.Id = application.AppId;
-            this.Name = application.PackageName;
-            this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i.Icon == application.Icon);
-            this.Muted = application.Muted;
-            this.Vibration = application.Vibration;
-        }
-
-        public bool CheckUnsavedChanges()
+        private bool CheckUnsavedChanges()
         {
             var application = this.ApplicationsService.GetApplicationPreferenceByAppId(this.Id);
 
-            return this.SelectedIcon.Icon != application.Icon 
+            return this.SelectedIcon != application.Icon 
                 || this.Muted != application.Muted
                 || this.Vibration != application.Vibration;
-        }
-
-        public void Reset()
-        {
-            this.Id = string.Empty;
-            this.Name = string.Empty;
-            this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i.Icon == ApplicationIcon.Alert);
-            this.Muted = false;
-            this.Vibration = VibrationLevel.None;
         }
     }
 }

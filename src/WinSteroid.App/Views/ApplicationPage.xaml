@@ -5,7 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
-    xmlns:viewModels="using:WinSteroid.App.ViewModels"
+    xmlns:models="using:WinSteroid.Common.Models"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Application, Source={StaticResource Locator}}">
@@ -24,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <controls:NavigationPageHeader Grid.Row="0"
-                                       ButtonGlyph="{x:Bind ViewModel.SelectedIcon.Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
+                                       ButtonGlyph="{x:Bind ViewModel.SelectedIcon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
                                        TitleText="{x:Bind ViewModel.Name, Mode=OneWay}" />
 
@@ -33,13 +34,15 @@
             <TextBlock Text="Preferences" 
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <ComboBox HorizontalAlignment="Stretch" 
+            <ComboBox x:Name="IconComboBox"
+                      HorizontalAlignment="Stretch" 
                       Header="Icon"
                       Margin="0,24,0,0"
-                      ItemsSource="{x:Bind ViewModel.AvailableIcons, Mode=OneWay}"
-                      SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}">
+                      ItemsSource="{x:Bind ViewModel.AvailableIcons}"
+                      SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}"
+                      PlaceholderText="{x:Bind ViewModel.SelectedIcon, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="viewModels:IconViewModel">
+                    <DataTemplate x:DataType="models:ApplicationIcon">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -49,12 +52,12 @@
                             <TextBlock Grid.Column="0" 
                                        FontFamily="Segoe MDL2 Assets"
                                        VerticalAlignment="Center"
-                                       Text="{x:Bind Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}" />
+                                       Text="{x:Bind Converter={StaticResource ApplicationIconToGlyphConverter}}" />
 
                             <TextBlock Grid.Column="1" 
                                        TextAlignment="Left" 
                                        Margin="8,0"
-                                       Text="{x:Bind Name}" />
+                                       Text="{x:Bind}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

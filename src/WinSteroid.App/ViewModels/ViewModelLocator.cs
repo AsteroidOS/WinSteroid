@@ -1,4 +1,5 @@
 ﻿using CommonServiceLocator;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using System;
@@ -86,6 +87,12 @@ namespace WinSteroid.App.ViewModels
         public static ApplicationPageViewModel Application
         {
             get { return ServiceLocator.Current.GetInstance<ApplicationPageViewModel>(); }
+        }
+
+        public static void Clear<T>() where T : ViewModelBase
+        {
+            SimpleIoc.Default.Unregister<T>();
+            SimpleIoc.Default.Register<T>();
         }
     }
 }

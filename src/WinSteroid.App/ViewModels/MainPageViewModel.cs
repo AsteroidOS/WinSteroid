@@ -126,10 +126,13 @@ namespace WinSteroid.App.ViewModels
 
         private async void UpdateBatteryPercentage()
         {
-            var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+            var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+            var oldPercentage = this.BatteryPercentage;
 
-            this.BatteryPercentage = batteryPercentage;
-            this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
+            this.BatteryPercentage = newPercentage;
+            this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+
+            Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
         }
 
         private async Task InizializeScreenshotContentHandlersAsync()
@@ -145,10 +148,13 @@ namespace WinSteroid.App.ViewModels
         {
             await DispatcherHelper.RunAsync(() =>
             {
-                var batteryPercentage = Convert.ToInt32(args.Progress);
+                var newPercentage = Convert.ToInt32(args.Progress);
+                var oldPercentage = this.BatteryPercentage;
 
-                this.BatteryPercentage = batteryPercentage;
-                this.BatteryLevel = BatteryHelper.Parse(batteryPercentage);
+                this.BatteryPercentage = newPercentage;
+                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+
+                Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
             });
         }
 

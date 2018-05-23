@@ -1,5 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+﻿using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
@@ -14,23 +14,13 @@ namespace WinSteroid.App.Views
         public ApplicationPage()
         {
             this.InitializeComponent();
+
+            this.Unloaded += OnPageUnloaded;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void OnPageUnloaded(object sender, RoutedEventArgs e)
         {
-            if (e.Parameter != null && e.Parameter is string appId)
-            {
-                this.ViewModel.Load(appId);
-            }
-
-            base.OnNavigatedTo(e);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            this.ViewModel.Reset();
-
-            base.OnNavigatedFrom(e);
+            ViewModelLocator.Clear<ApplicationPageViewModel>();
         }
     }
 }
