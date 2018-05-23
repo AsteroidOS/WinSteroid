@@ -60,6 +60,13 @@
                        TextAlignment="Right"
                        VerticalAlignment="Center"
                        Padding="16,0"
+                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       Style="{ThemeResource BaseTextBlockStyle}" />
+            <TextBlock Text="{x:Bind ViewModel.ApplicationFooter, Mode=OneWay}" 
+                       TextAlignment="Right"
+                       VerticalAlignment="Center"
+                       Padding="16,0"
+                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
                        Style="{ThemeResource BaseTextBlockStyle}" />
         </Grid>
     </Grid>

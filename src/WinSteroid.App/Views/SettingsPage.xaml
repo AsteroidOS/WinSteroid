@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinSteroid.App.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings, Source={StaticResource Locator}}">
@@ -21,29 +22,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Height="48"
-              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0"
-                    Content="" 
-                    Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                    Padding="16,12"
-                    Height="48"
-                    Width="48"
-                    VerticalAlignment="Stretch"
-                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                    Style="{ThemeResource NavigationBackButtonNormalStyle}" />
-
-            <TextBlock Grid.Column="1" 
-                       Text="Settings"
-                       VerticalAlignment="Center"
-                       Style="{ThemeResource BaseTextBlockStyle}" />
-        </Grid>
+        <controls:NavigationPageHeader Grid.Row="0" 
+                                       ButtonGlyph="" 
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                                       TitleText="Settings" />
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Padding="12,8">

@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converters="using:WinSteroid.App.Converters"
-    xmlns:models="using:WinSteroid.Common.Models"
+    xmlns:controls="using:WinSteroid.App.Controls"
     xmlns:viewModels="using:WinSteroid.App.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -24,29 +23,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Height="48"
-              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0"
-                    Content="{x:Bind ViewModel.SelectedIcon.Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
-                    Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                    Padding="16,12"
-                    Height="48"
-                    Width="48"
-                    VerticalAlignment="Stretch"
-                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                    Style="{ThemeResource NavigationBackButtonNormalStyle}" />
-
-            <TextBlock Grid.Column="1" 
-                       Text="{x:Bind ViewModel.Name, Mode=OneWay}"
-                       VerticalAlignment="Center"
-                       Style="{ThemeResource BaseTextBlockStyle}" />
-        </Grid>
+        <controls:NavigationPageHeader Grid.Row="0"
+                                       ButtonGlyph="{x:Bind ViewModel.SelectedIcon.Icon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                                       TitleText="{x:Bind ViewModel.Name, Mode=OneWay}" />
 
         <StackPanel Grid.Row="1"
                     Padding="12">

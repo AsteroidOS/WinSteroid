@@ -2,6 +2,7 @@
     x:Class="WinSteroid.App.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:WinSteroid.App.Controls"
     xmlns:converters="using:WinSteroid.App.Converters"
     xmlns:viewmodels="using:WinSteroid.App.ViewModels">
     <Application.Resources>
@@ -14,5 +15,39 @@
         <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
         <converters:NumberToVibrationLevelStringConverter x:Key="NumberToVibrationLevelStringConverter" />
         <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />
+        
+        <Style TargetType="controls:NavigationPageHeader">
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:NavigationPageHeader">
+                        <StackPanel>
+                            <Grid Background="{TemplateBinding Background}" 
+                                  Height="{ThemeResource AppBarThemeCompactHeight}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Content="{TemplateBinding ButtonGlyph}" 
+                                        Command="{TemplateBinding ButtonCommand}"
+                                        Padding="16,12"
+                                        Height="48"
+                                        Width="48"
+                                        VerticalAlignment="Stretch"
+                                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                        Style="{ThemeResource NavigationBackButtonNormalStyle}" />
+
+                                <TextBlock Grid.Column="1" 
+                                           Text="{TemplateBinding TitleText}" 
+                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Application.Resources>
 </Application>

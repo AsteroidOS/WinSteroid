@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using WinSteroid.App.Services;
 
 namespace WinSteroid.App.ViewModels
@@ -22,6 +23,8 @@ namespace WinSteroid.App.ViewModels
 
         public override void Initialize()
         {
+            this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
+
             var deviceId = this.DeviceService.GetLastSavedDeviceId();
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
@@ -53,6 +56,13 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _deviceName; }
             set { Set(nameof(DeviceName), ref _deviceName, value); }
+        }
+
+        private string _applicationFooter;
+        public string ApplicationFooter
+        {
+            get { return _applicationFooter; }
+            set { Set(nameof(ApplicationFooter), ref _applicationFooter, value); }
         }
 
         private bool _showConnectionOptions;
