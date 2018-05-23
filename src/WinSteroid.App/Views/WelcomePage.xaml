@@ -18,7 +18,7 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Visibility="{x:Bind ViewModel.ShowConnectionOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Viewbox Width="128" Height="192">
+            <Viewbox Width="192" Height="288">
                 <Canvas Width="128" Height="192">
                     <Path Width="64" 
                           Height="64" 
@@ -38,6 +38,7 @@
             <Button Content="Connect to the device" 
                     HorizontalAlignment="Stretch"
                     Margin="0,36,0,0"
+                    Padding="8"
                     Foreground="{ThemeResource MediaTextThemeBrush}"
                     Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                     Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
@@ -51,6 +52,7 @@
                       Height="240"
                       Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
+                      Style="{StaticResource LargeProgressRingStyle}"
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <Grid Grid.Row="1"

@@ -20,19 +20,19 @@ namespace WinSteroid.Common.Helpers
             {
                 case var p when percentage >= (int)BatteryLevel.Discrete:
                     {
-                        return "";
+                        return "";
                     }
                 case var p when percentage < (int)BatteryLevel.Discrete && percentage >= (int)BatteryLevel.Bad:
                     {
-                        return "";
+                        return "";
                     }
                 case var p when percentage < (int)BatteryLevel.Bad && percentage >= (int)BatteryLevel.Critic:
                     {
-                        return "";
+                        return "";
                     }
             }
 
-            return "";
+            return "";
         }
 
         public static BatteryLevel Parse(int percentage)

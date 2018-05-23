@@ -35,13 +35,15 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = true;
             this.BusyMessage = "Initializing...";
 
+            this.DeviceName = this.DeviceService.Current.Name;
             this.BatteryLevelProgressEventHandler = new TypedEventHandler<BackgroundTaskRegistration, BackgroundTaskProgressEventArgs>(OnBatteryProgress);
             this.RegisterBatteryLevelHandler();
-            this.UpdateBatteryPercentage();
             await this.InizializeScreenshotContentHandlersAsync();
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
+
+            this.UpdateBatteryPercentage();
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -51,6 +53,13 @@ namespace WinSteroid.App.ViewModels
         public override Task<bool> CanGoBack()
         {
             return Task.FromResult(true);
+        }
+
+        private string _deviceName;
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
         private int _batteryPercentage;

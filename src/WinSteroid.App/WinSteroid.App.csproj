@@ -102,6 +102,7 @@
     <Compile Include="Converters\BooleanToOppositeVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ApplicationIconToGlyphConverter.cs" />
+    <Compile Include="Converters\NumberToBatteryIconConverter.cs" />
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
