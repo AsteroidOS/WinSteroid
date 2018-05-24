@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
@@ -217,12 +216,12 @@ namespace WinSteroid.App.Services
 
             return true;
         }
-
+        
         public async Task<bool> RegisterToScreenshotContentService()
         {
             var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
             if (characteristic != null)
-            {
+            {        
                 var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
                 if (notifyResult == GattCommunicationStatus.Success)
                 {
@@ -241,6 +240,7 @@ namespace WinSteroid.App.Services
 
         private int? TotalSize = null;
         private byte[] TotalData = null;
+        private int? Progress = null;
 
         private async void OnScreenshotContentCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
@@ -252,33 +252,30 @@ namespace WinSteroid.App.Services
                 var size = BitConverter.ToInt32(bytes, 0);
                 this.TotalData = new byte[size];
                 this.TotalSize = size;
+                this.Progress = 0;
                 return;
             }
-
-            var bytesOverQuota = this.TotalSize.Value - bytes.Length < 0;
-            if (bytesOverQuota)
+            
+            if (this.Progress.Value + bytes.Length <= this.TotalData.Length)
             {
-                Debugger.Break();
+                Array.Copy(bytes, 0, this.TotalData, this.Progress.Value, bytes.Length);
             }
 
-            var length = !bytesOverQuota ? bytes.Length : this.TotalSize.Value;
-            Array.Copy(bytes, 0, this.TotalData, this.TotalData.Length - this.TotalSize.Value, length);
+            this.Progress += bytes.Length;
 
-            this.TotalSize -= bytes.Length;
-            Debug.WriteLine("Total size: " + this.TotalSize.Value);
-            if (this.TotalSize.Value > 0) return;
+            System.Diagnostics.Debug.WriteLine("Progress: " + this.Progress.Value + "; Total size: " + this.TotalSize.Value);
 
-            //MANAGE
+            if (this.Progress.Value < this.TotalSize.Value) return;
+            
             var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("screenshot.jpg", CreationCollisionOption.GenerateUniqueName);
 
             await FileIO.WriteBytesAsync(storageFile, this.TotalData);
-
-            Debug.WriteLine("Screenshot acquired! File: " + storageFile.Path);
-
-            ToastsHelper.Show("Screenshot acquired!");
+            
+            ToastsHelper.Show("Screenshot acquired! File: " + storageFile.Path);
             
             this.TotalSize = null;
             this.TotalData = null;
+            this.Progress = null;
         }
     }
 }
