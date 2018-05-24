@@ -241,12 +241,10 @@ namespace WinSteroid.App.Services
 
         private int? TotalSize = null;
         private byte[] TotalData = null;
-        private int? Progress = null;
 
         private async void OnScreenshotContentCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             var bytes = new byte[args.CharacteristicValue.Length];
-
             DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(bytes);
 
             if (!this.TotalSize.HasValue)
@@ -254,21 +252,21 @@ namespace WinSteroid.App.Services
                 var size = BitConverter.ToInt32(bytes, 0);
                 this.TotalData = new byte[size];
                 this.TotalSize = size;
-                this.Progress = 0;
                 return;
             }
-            
-            if (bytes.Length + this.Progress.Value <= this.TotalData.Length)
+
+            var bytesOverQuota = this.TotalSize.Value - bytes.Length < 0;
+            if (bytesOverQuota)
             {
-                var length = this.Progress.Value + bytes.Length <= this.TotalSize.Value
-                    ? bytes.Length
-                    : (this.Progress.Value + bytes.Length) - this.TotalSize.Value;
-                Array.Copy(bytes, 0, this.TotalData, this.Progress.Value, bytes.Length);
+                Debugger.Break();
             }
 
-            this.Progress += bytes.Length;
-            Debug.WriteLine("Progress: " + this.Progress.Value + "; Total size: " + this.TotalSize.Value);
-            if (this.Progress.Value < this.TotalSize.Value / 10) return;
+            var length = !bytesOverQuota ? bytes.Length : this.TotalSize.Value;
+            Array.Copy(bytes, 0, this.TotalData, this.TotalData.Length - this.TotalSize.Value, length);
+
+            this.TotalSize -= bytes.Length;
+            Debug.WriteLine("Total size: " + this.TotalSize.Value);
+            if (this.TotalSize.Value > 0) return;
 
             //MANAGE
             var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("screenshot.jpg", CreationCollisionOption.GenerateUniqueName);
@@ -278,8 +276,7 @@ namespace WinSteroid.App.Services
             Debug.WriteLine("Screenshot acquired! File: " + storageFile.Path);
 
             ToastsHelper.Show("Screenshot acquired!");
-
-            this.Progress = null;
+            
             this.TotalSize = null;
             this.TotalData = null;
         }

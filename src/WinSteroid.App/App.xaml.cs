@@ -22,6 +22,8 @@ namespace WinSteroid.App
             this.Suspending += OnSuspending;
         }
 
+        private bool Running { get; set; }
+
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             if (!(Window.Current.Content is Frame rootFrame))
@@ -49,6 +51,7 @@ namespace WinSteroid.App
             }
 
             GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
+            this.Running = true;
         }
 
         public static void RemoveWelcomePageFromBackStack()
@@ -115,10 +118,23 @@ namespace WinSteroid.App
                 return;
             }
 
-            var applicationsService = new ApplicationsService();
-            var notificationService = new NotificationsService();
-            var deviceService = new DeviceService(applicationsService);
+            ApplicationsService applicationsService = null;
+            NotificationsService notificationService = null;
+            DeviceService deviceService = null;
 
+            if (this.Running)
+            {
+                applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
+                notificationService = SimpleIoc.Default.GetInstance<NotificationsService>();
+                deviceService = SimpleIoc.Default.GetInstance<DeviceService>();
+            }
+            else
+            {
+                applicationsService = new ApplicationsService();
+                notificationService = new NotificationsService();
+                deviceService = new DeviceService(applicationsService);
+            }
+            
             var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
             if (userNotifications.Length == 0)
             {
@@ -153,8 +169,7 @@ namespace WinSteroid.App
             }
 
             notificationService.SaveLastNotificationIds(userNotifications);
-
-            //LOG APPS FOR ICONS MANAGEMENT
+            
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
 
             backgroundTaskDeferral.Complete();
