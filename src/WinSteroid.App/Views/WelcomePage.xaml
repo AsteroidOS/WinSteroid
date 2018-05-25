@@ -8,44 +8,74 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Welcome, Source={StaticResource Locator}}">
 
-    <Grid x:Name="RootGrid">
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="48" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Visibility="{x:Bind ViewModel.ShowConnectionOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Viewbox Width="192" Height="288">
-                <Canvas Width="128" Height="192">
-                    <Path Width="64" 
-                          Height="64" 
+        <Viewbox Grid.Row="0"
+                 Grid.RowSpan="3"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Width="192" 
+                 Height="288">
+            <Canvas Width="128" 
+                    Height="192">
+                <FontIcon Glyph="❌"
+                          FontFamily="Segoe UI Symbol"
+                          FontWeight="Bold"
+                          FontSize="64"
                           Canvas.Left="32" 
-                          Canvas.Top="64" 
-                          Stretch="Fill" 
-                          Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
-                          Data="F1 M 32,96.0371L 47.6826,80.3174L 47.9811,80.0182L 48.0056,79.9937L 48.0559,79.9432L 63.9623,64L 79.8687,79.9432L 79.9251,79.9995L 79.9814,80.0557L 80.0925,80.1671L 96,96.1119L 80.0936,112.056C 71.3446,120.825 64.1191,128 64.0362,128L 63.9977,127.971L 63.984,127.982L 63.9615,128L 60.6491,124.696L 48.2958,112.372L 48.0163,112.093L 47.9899,112.066L 47.979,112.056L 36.3345,100.384L 32.0726,96.1362L 32.0849,96.1239L 32.0726,96.1119L 32,96.0371 Z M 76.6414,89.7956L 70.3404,83.4791L 67.2628,86.5609L 67.2254,86.5978L 64.111,89.7174L 67.1515,92.767L 67.4855,93.1029L 70.4128,96.0391L 70.4869,96.1132L 64.1113,102.505L 57.8087,108.823L 57.8091,108.824L 63.9971,115.027L 73.4897,105.589L 73.5271,105.551L 80.3411,98.7205L 82.9306,96.1014L 76.6414,89.7956 Z M 60.6981,86.5999L 57.5868,83.4797L 57.5847,83.479L 54.5072,86.5609L 54.4706,86.5978L 51.3554,89.7173L 54.4318,92.8038L 57.6188,95.9233L 59.444,94.096L 63.809,89.7209L 60.6981,86.5999 Z "/>
-                    <Path Width="128" 
-                          Height="192" 
-                          Stretch="Fill" 
-                          Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
-                          Data="M 128,96C 128,123.224 111.001,146.479 87.0388,155.728L 87.0184,192L 40.485,192L 40.4812,155.54C 16.772,146.167 0,123.042 0,96C 0,68.9577 16.772,45.8326 40.4812,36.4596L 40.4621,0L 87.022,0L 87.0388,36.2721C 111.001,45.5213 128,68.7755 128,96 Z M 64,44.8C 92.277,44.8 115.2,67.723 115.2,96C 115.2,124.277 92.277,147.2 64,147.2C 35.723,147.2 12.8,124.277 12.8,96C 12.8,67.723 35.723,44.8 64,44.8 Z "/>
-                </Canvas>
-            </Viewbox>
+                          Canvas.Top="52"
+                          Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                          Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-            <Button Content="Connect to the device" 
-                    HorizontalAlignment="Stretch"
-                    Margin="0,36,0,0"
-                    Padding="8"
-                    Foreground="{ThemeResource MediaTextThemeBrush}"
-                    Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-                    Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                    Command="{x:Bind ViewModel.StartSearchCommand}" />
-        </StackPanel>
+                <Path Width="64" 
+                      Height="64" 
+                      Canvas.Left="32" 
+                      Canvas.Top="64" 
+                      Stretch="Fill" 
+                      Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                      Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                      Data="F1 M 32,96.0371L 47.6826,80.3174L 47.9811,80.0182L 48.0056,79.9937L 48.0559,79.9432L 63.9623,64L 79.8687,79.9432L 79.9251,79.9995L 79.9814,80.0557L 80.0925,80.1671L 96,96.1119L 80.0936,112.056C 71.3446,120.825 64.1191,128 64.0362,128L 63.9977,127.971L 63.984,127.982L 63.9615,128L 60.6491,124.696L 48.2958,112.372L 48.0163,112.093L 47.9899,112.066L 47.979,112.056L 36.3345,100.384L 32.0726,96.1362L 32.0849,96.1239L 32.0726,96.1119L 32,96.0371 Z M 76.6414,89.7956L 70.3404,83.4791L 67.2628,86.5609L 67.2254,86.5978L 64.111,89.7174L 67.1515,92.767L 67.4855,93.1029L 70.4128,96.0391L 70.4869,96.1132L 64.1113,102.505L 57.8087,108.823L 57.8091,108.824L 63.9971,115.027L 73.4897,105.589L 73.5271,105.551L 80.3411,98.7205L 82.9306,96.1014L 76.6414,89.7956 Z M 60.6981,86.5999L 57.5868,83.4797L 57.5847,83.479L 54.5072,86.5609L 54.4706,86.5978L 51.3554,89.7173L 54.4318,92.8038L 57.6188,95.9233L 59.444,94.096L 63.809,89.7209L 60.6981,86.5999 Z "/>
+
+                <Path Width="128" 
+                      Height="192" 
+                      Stretch="Fill"
+                      Fill="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToBrushConverter}}" 
+                      Data="M 128,96C 128,123.224 111.001,146.479 87.0388,155.728L 87.0184,192L 40.485,192L 40.4812,155.54C 16.772,146.167 0,123.042 0,96C 0,68.9577 16.772,45.8326 40.4812,36.4596L 40.4621,0L 87.022,0L 87.0388,36.2721C 111.001,45.5213 128,68.7755 128,96 Z M 64,44.8C 92.277,44.8 115.2,67.723 115.2,96C 115.2,124.277 92.277,147.2 64,147.2C 35.723,147.2 12.8,124.277 12.8,96C 12.8,67.723 35.723,44.8 64,44.8 Z "/>
+            </Canvas>
+        </Viewbox>
+
+        <Button Grid.Row="2" 
+                Content="Connect to the device"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Padding="12,8"
+                Margin="0,0,0,24"
+                Foreground="{ThemeResource MediaTextThemeBrush}"
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                Visibility="{x:Bind ViewModel.ShowConnectionOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Bind ViewModel.StartSearchCommand, Mode=OneWay}" />
+
+        <Button Grid.Row="2" 
+                Content="Retry to connect"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Padding="12,8"
+                Margin="0,0,0,24"
+                Foreground="{ThemeResource MediaTextThemeBrush}"
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Bind ViewModel.PairCommand, Mode=OneWay}" />
 
         <ProgressRing Grid.Row="0" 
+                      Grid.RowSpan="3"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
                       Width="240"
@@ -55,7 +85,7 @@
                       Style="{StaticResource LargeProgressRingStyle}"
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <Grid Grid.Row="1"
+        <Grid Grid.Row="3"
               Height="48"
               Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
             <TextBlock Text="{x:Bind ViewModel.BusyMessage, Mode=OneWay}" 

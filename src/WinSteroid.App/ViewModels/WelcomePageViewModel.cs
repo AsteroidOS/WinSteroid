@@ -72,6 +72,13 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(ShowConnectionOptions), ref _showConnectionOptions, value); }
         }
 
+        private bool _connectionFailed;
+        public bool ConnectionFailed
+        {
+            get { return _connectionFailed; }
+            set { Set(nameof(ConnectionFailed), ref _connectionFailed, value); }
+        }
+
         private RelayCommand _startSearchCommand;
         public RelayCommand StartSearchCommand
         {
@@ -88,6 +95,7 @@ namespace WinSteroid.App.ViewModels
 
         private async void StartSearch()
         {
+            this.ConnectionFailed = false;
             this.ShowConnectionOptions = false;
             if (!string.IsNullOrWhiteSpace(this.DeviceId))
             {
@@ -131,6 +139,7 @@ namespace WinSteroid.App.ViewModels
         {
             this.IsBusy = true;
             this.BusyMessage = "Pairing";
+            this.ConnectionFailed = false;
 
             if (string.IsNullOrWhiteSpace(this.DeviceId) && this.DeviceService.Current != null)
             {
@@ -143,6 +152,7 @@ namespace WinSteroid.App.ViewModels
             {
                 this.IsBusy = false;
                 this.BusyMessage = string.Empty;
+                this.ConnectionFailed = true;
                 await this.DialogService.ShowMessage("I cannot connect to selected Bluetooth device", "Error");
                 return;
             }
@@ -152,6 +162,7 @@ namespace WinSteroid.App.ViewModels
             {
                 this.IsBusy = false;
                 this.BusyMessage = string.Empty;
+                this.ConnectionFailed = true;
                 await this.DialogService.ShowMessage("Paired operation failed", "Error");
                 return;
             }
