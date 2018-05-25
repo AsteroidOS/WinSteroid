@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
@@ -19,16 +21,19 @@ namespace WinSteroid.App.Services
     public class DeviceService
     {
         private readonly ApplicationsService ApplicationsService;
+        private readonly List<GattCharacteristic> CachedCharacteristics;
 
         public DeviceService(ApplicationsService applicationsService)
         {
             this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
+            this.CachedCharacteristics = new List<GattCharacteristic>();
         }
 
-        private BluetoothLEDevice BluetoothDevice = null;
-        public DeviceInformation Current = null;
-        public int BatteryLevel { get; set; }
-        public bool IsDeviceConnected { get; set; }
+        public BluetoothLEDevice BluetoothDevice { get; private set; }
+        private TypedEventHandler<BluetoothLEDevice, object> ConnectionStatusChangedEventHandler = null;
+
+        public DeviceInformation Current { get; private set; }
+
 
         public string GetLastSavedDeviceId() => SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
 
@@ -47,7 +52,6 @@ namespace WinSteroid.App.Services
                 this.BluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
                 if (this.BluetoothDevice == null) return false;
 
-                this.BluetoothDevice.ConnectionStatusChanged += OnConnectionStatusChanged;
                 this.Current = BluetoothDevice.DeviceInformation;
             }
             catch
@@ -59,9 +63,10 @@ namespace WinSteroid.App.Services
             return this.BluetoothDevice != null && this.Current != null;
         }
 
-        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        public void AttachConnectionStatusChangedHandler(TypedEventHandler<BluetoothLEDevice, object> connectionStatusChangedHandler)
         {
-            this.IsDeviceConnected = sender.ConnectionStatus == BluetoothConnectionStatus.Connected;
+            this.ConnectionStatusChangedEventHandler = connectionStatusChangedHandler;
+            this.BluetoothDevice.ConnectionStatusChanged += this.ConnectionStatusChangedEventHandler;
         }
 
         public async Task<PairingResult> PairAsync()
@@ -87,11 +92,25 @@ namespace WinSteroid.App.Services
             return new PairingResult("Pairing operation denied or failed");
         }
 
-        public void Disconnect()
+        public async Task DisconnectAsync()
         {
+            if (!this.CachedCharacteristics.IsNullOrEmpty())
+            {
+                foreach (var characteristic in this.CachedCharacteristics)
+                {
+                    await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.None);
+                    this.CachedCharacteristics.Remove(characteristic);
+                }
+            }
+
             if (this.BluetoothDevice != null)
             {
-                this.BluetoothDevice.ConnectionStatusChanged -= OnConnectionStatusChanged;
+                if (this.ConnectionStatusChangedEventHandler != null)
+                {
+                    this.BluetoothDevice.ConnectionStatusChanged -= ConnectionStatusChangedEventHandler;
+                    this.ConnectionStatusChangedEventHandler = null;
+                }
+
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
             }
@@ -105,17 +124,8 @@ namespace WinSteroid.App.Services
 
         public async Task<GattCharacteristic> GetGattCharacteristicAsync(Guid characteristicUuid)
         {
-            if (this.BluetoothDevice == null)
-            {
-                var lastSavedDeviceId = SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
-                await this.ConnectAsync(lastSavedDeviceId);
-            }
-
-            if (this.BluetoothDevice == null) //Again
-            {
-                //ERRROR
-                throw new Exception();
-            }
+            var cachedCharacteristic = this.CachedCharacteristics.FirstOrDefault(gc => Equals(gc.Uuid, characteristicUuid));
+            if (characteristicUuid != null) return cachedCharacteristic;
 
             var service = Asteroid.Services.FirstOrDefault(s => s.Characteristics.Any(c => c.Uuid == characteristicUuid));
             if (service == null)
@@ -138,7 +148,13 @@ namespace WinSteroid.App.Services
                 throw new Exception();
             }
 
-            return characteristicResult.Characteristics[0];
+            var characteristic = characteristicResult.Characteristics[0];
+            if (this.CachedCharacteristics.All(gc => !Equals(characteristic.Uuid, gc.Uuid)))
+            {
+                this.CachedCharacteristics.Add(characteristic);
+            }
+
+            return characteristic;
         }
 
         private async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)

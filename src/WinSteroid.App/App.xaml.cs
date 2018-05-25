@@ -22,7 +22,7 @@ namespace WinSteroid.App
             this.Suspending += OnSuspending;
         }
 
-        private bool Running { get; set; }
+        private bool IsRunning { get; set; }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
@@ -51,7 +51,7 @@ namespace WinSteroid.App
             }
 
             GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
-            this.Running = true;
+            this.IsRunning = true;
         }
 
         public static void RemoveWelcomePageFromBackStack()
@@ -122,7 +122,7 @@ namespace WinSteroid.App
             NotificationsService notificationService = null;
             DeviceService deviceService = null;
 
-            if (this.Running)
+            if (this.IsRunning)
             {
                 applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
                 notificationService = SimpleIoc.Default.GetInstance<NotificationsService>();

@@ -267,6 +267,7 @@ namespace WinSteroid.App.ViewModels
 
             ViewModelLocator.Main.Reset();
             ViewModelLocator.Welcome.Reset();
+            await this.DeviceService.DisconnectAsync();
             App.Reset();
         }
     }

@@ -1,10 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
-using Renci.SshNet;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.Devices.Bluetooth;
 using Windows.Foundation;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
@@ -37,7 +37,8 @@ namespace WinSteroid.App.ViewModels
             this.BusyMessage = "Initializing";
 
             this.DeviceName = this.DeviceService.Current.Name;
-            this.BatteryLevelProgressEventHandler = new TypedEventHandler<BackgroundTaskRegistration, BackgroundTaskProgressEventArgs>(OnBatteryProgress);
+            this.DeviceService.AttachConnectionStatusChangedHandler(OnConnectionStatusChanged);
+            this.BatteryLevelProgressEventHandler = OnBatteryProgress;
             this.RegisterBatteryLevelHandler();
 
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
@@ -51,7 +52,7 @@ namespace WinSteroid.App.ViewModels
 
             Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
 
-            await this.InizializeScreenshotContentHandlersAsync();
+            //await this.InizializeScreenshotContentHandlersAsync();
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -68,6 +69,13 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _deviceName; }
             set { Set(nameof(DeviceName), ref _deviceName, value); }
+        }
+
+        private bool _isDeviceConnected;
+        public bool IsDeviceConnected
+        {
+            get { return _isDeviceConnected; }
+            set { Set(nameof(IsDeviceConnected), ref _isDeviceConnected, value); }
         }
 
         private int _batteryPercentage;
@@ -139,6 +147,11 @@ namespace WinSteroid.App.ViewModels
             {
                 await this.DialogService.ShowMessage("I cannot be able to finish screenshot content handlers registration!", "Error");
             }
+        }
+
+        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        {
+            this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
         }
 
         private async void OnBatteryProgress(BackgroundTaskRegistration sender, BackgroundTaskProgressEventArgs args)
