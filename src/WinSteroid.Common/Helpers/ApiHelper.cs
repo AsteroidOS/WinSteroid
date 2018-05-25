@@ -8,5 +8,10 @@ namespace WinSteroid.Common.Helpers
         {
             return ApiInformation.IsTypePresent("Windows.UI.Notifications.Management.UserNotificationListener");
         }
+
+        public static bool CheckIfSystemIsMobile()
+        {
+            return ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons");
+        }
     }
 }

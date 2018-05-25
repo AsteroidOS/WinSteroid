@@ -18,12 +18,18 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<IconsPageViewModel>();
             SimpleIoc.Default.Register<ApplicationPageViewModel>();
 
+            if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+            {
+                SimpleIoc.Default.Register<WatchFacePageViewModel>();
+            }
+
             SimpleIoc.Default.Register(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<Services.ApplicationsService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
             SimpleIoc.Default.Register<Services.NotificationsService>();
+            SimpleIoc.Default.Register<Services.ScpService>();
 
             var backgroundService = SimpleIoc.Default.GetInstance<Services.BackgroundService>();
             if (!Common.Helpers.TilesHelper.BatteryTileExists())
@@ -41,6 +47,11 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
             navigationService.Configure(nameof(Icons), typeof(Views.IconsPage));
             navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
+
+            if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+            {
+                navigationService.Configure(nameof(WatchFace), typeof(Views.WatchFacePage));
+            }
 
             return navigationService;
         }
@@ -87,6 +98,19 @@ namespace WinSteroid.App.ViewModels
         public static ApplicationPageViewModel Application
         {
             get { return ServiceLocator.Current.GetInstance<ApplicationPageViewModel>(); }
+        }
+
+        public static WatchFacePageViewModel WatchFace
+        {
+            get
+            {
+                if (Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+                {
+                    throw new PlatformNotSupportedException();
+                }
+
+                return ServiceLocator.Current.GetInstance<WatchFacePageViewModel>();
+            }
         }
 
         public static void Clear<T>() where T : ViewModelBase

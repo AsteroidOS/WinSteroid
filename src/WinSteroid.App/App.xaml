@@ -15,8 +15,9 @@
         <converters:NumberToBatteryIconConverter x:Key="NumberToBatteryIconConverter" />
         <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
         <converters:NumberToVibrationLevelStringConverter x:Key="NumberToVibrationLevelStringConverter" />
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />
-        
+
         <Style TargetType="controls:NavigationPageHeader">
             <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
             <Setter Property="Template">

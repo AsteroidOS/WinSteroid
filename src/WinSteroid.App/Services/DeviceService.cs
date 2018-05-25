@@ -125,7 +125,7 @@ namespace WinSteroid.App.Services
         public async Task<GattCharacteristic> GetGattCharacteristicAsync(Guid characteristicUuid)
         {
             var cachedCharacteristic = this.CachedCharacteristics.FirstOrDefault(gc => Equals(gc.Uuid, characteristicUuid));
-            if (characteristicUuid != null) return cachedCharacteristic;
+            if (cachedCharacteristic != null) return cachedCharacteristic;
 
             var service = Asteroid.Services.FirstOrDefault(s => s.Characteristics.Any(c => c.Uuid == characteristicUuid));
             if (service == null)
