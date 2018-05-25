@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
 using WinSteroid.Common.Helpers;
@@ -26,9 +27,9 @@ namespace WinSteroid.App.Services
             return status == UserNotificationListenerAccessStatus.Allowed;
         }
 
-        public Task<IReadOnlyList<UserNotification>> RetriveNotificationsAsync()
+        public IAsyncOperation<IReadOnlyList<UserNotification>> RetriveNotificationsAsync()
         {
-            return UserNotificationListener.GetNotificationsAsync(NotificationKinds.Toast).AsTask();
+            return UserNotificationListener.GetNotificationsAsync(NotificationKinds.Toast);
         }
 
         public void SaveLastNotificationIds(IEnumerable<UserNotification> notifications)

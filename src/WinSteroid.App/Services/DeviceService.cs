@@ -34,7 +34,6 @@ namespace WinSteroid.App.Services
 
         public DeviceInformation Current { get; private set; }
 
-
         public string GetLastSavedDeviceId() => SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
 
         public string GetLastSavedDeviceName() => SettingsHelper.GetValue("lastSavedDeviceName", string.Empty);

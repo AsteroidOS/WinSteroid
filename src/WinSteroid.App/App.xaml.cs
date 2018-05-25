@@ -134,7 +134,13 @@ namespace WinSteroid.App
                 notificationService = new NotificationsService();
                 deviceService = new DeviceService(applicationsService);
             }
-            
+
+            if (deviceService.BluetoothDevice == null || deviceService.Current == null)
+            {
+                var deviceId = deviceService.GetLastSavedDeviceId();
+                await deviceService.ConnectAsync(deviceId);
+            }
+
             var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
             if (userNotifications.Length == 0)
             {
