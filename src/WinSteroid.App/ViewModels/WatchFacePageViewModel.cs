@@ -12,14 +12,14 @@ namespace WinSteroid.App.ViewModels
 {
     public class WatchFacePageViewModel : BasePageViewModel
     {
-        private readonly ScpService ScpService;
+        private readonly TransferService TransferService;
 
         public WatchFacePageViewModel(
-            ScpService scpService,
+            TransferService transferService,
             IDialogService dialogService, 
             INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.ScpService = scpService ?? throw new ArgumentNullException(nameof(scpService));
+            this.TransferService = transferService ?? throw new ArgumentNullException(nameof(transferService));
         }
 
         public override void Initialize()
@@ -54,33 +54,53 @@ namespace WinSteroid.App.ViewModels
 
         private async void Connect()
         {
+            var uploadResult = false;
+
             var scpCredentialsDialog = new ScpCredentialsDialog();
             var result = await scpCredentialsDialog.ShowAsync();
             if (result != ContentDialogResult.Primary) return;
 
-            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/WatchFaces/100-win-digital.qml"));
-
-            var scpClient = this.ScpService.Connect(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password);
-            scpClient.Uploading += OnClientUploading;
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/WatchFaces/100-win-digital.qml"));         
 
             try
             {
-                using (var randomAccessStream = await storageFile.OpenReadAsync())
+                using (var scpClient = this.TransferService.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
                 {
-                    using (var stream = randomAccessStream.AsStream())
+                    scpClient.Uploading += OnClientUploading;
+
+                    using (var randomAccessStream = await storageFile.OpenReadAsync())
                     {
-                        scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + storageFile.Name);
+                        using (var stream = randomAccessStream.AsStream())
+                        {
+                            scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + storageFile.Name);
+                        }
                     }
+
+                    scpClient.Uploading -= OnClientUploading;
                 }
+
+                uploadResult = true;
             }
             catch (Exception exception)
             {
                 await this.DialogService.ShowError(exception, "SCP Connection Error", null, () => { });
             }
 
-            scpClient.Uploading -= OnClientUploading;
-            scpClient.Disconnect();
-            scpClient.Dispose();
+            if (!uploadResult) return;
+
+            var restartSystem = await this.DialogService.ShowMessage(
+                message: "AsteroidOS may cache the current watchface. Do you want to restart device to refresh it?",
+                title: "WatchFace uploaded",
+                buttonConfirmText: "Yes",
+                buttonCancelText: "No",
+                afterHideCallback: b => { });
+
+            if (!restartSystem) return;
+
+            using (var sshClient = this.TransferService.CreateSshClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
+            {
+                sshClient.RunCommand("systemctl restart user@1000");
+            }
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)

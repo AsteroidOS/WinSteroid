@@ -29,7 +29,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
             SimpleIoc.Default.Register<Services.BackgroundService>();
             SimpleIoc.Default.Register<Services.NotificationsService>();
-            SimpleIoc.Default.Register<Services.ScpService>();
+            SimpleIoc.Default.Register<Services.TransferService>();
 
             var backgroundService = SimpleIoc.Default.GetInstance<Services.BackgroundService>();
             if (!Common.Helpers.TilesHelper.BatteryTileExists())

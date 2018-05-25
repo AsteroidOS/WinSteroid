@@ -114,7 +114,7 @@
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
-    <Compile Include="Services\ScpService.cs" />
+    <Compile Include="Services\TransferService.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\ApplicationPageViewModel.cs" />
     <Compile Include="ViewModels\BasePageViewModel.cs" />

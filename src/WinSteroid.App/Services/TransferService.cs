@@ -5,16 +5,16 @@ using System;
 
 namespace WinSteroid.App.Services
 {
-    public class ScpService
+    public class TransferService
     {
         private readonly IDialogService DialogService;
 
-        public ScpService(IDialogService dialogService)
+        public TransferService(IDialogService dialogService)
         {
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
         
-        public ScpClient Connect(string ip, string username, string password)
+        public ScpClient CreateScpClient(string ip, string username, string password)
         {
             var authenticationsMethods = new AuthenticationMethod[]
             {
@@ -29,6 +29,25 @@ namespace WinSteroid.App.Services
             if (client.IsConnected) return client;
 
             client.RemotePathTransformation = RemotePathTransformation.ShellQuote;
+            client.Connect();
+
+            return client;
+        }
+
+        public SshClient CreateSshClient(string ip, string username, string password)
+        {
+            var authenticationsMethods = new AuthenticationMethod[]
+            {
+                new NoneAuthenticationMethod(username)
+            };
+
+            var connectionInfo = new ConnectionInfo(ip, username, authenticationsMethods);
+
+            var client = new SshClient(connectionInfo);
+            client.ErrorOccurred += OnErrorOccured;
+
+            if (client.IsConnected) return client;
+            
             client.Connect();
 
             return client;
