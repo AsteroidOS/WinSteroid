@@ -6,9 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
-using Windows.Storage.AccessCache;
-using Windows.Storage.Pickers;
 using Windows.UI.Notifications;
+using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Services
@@ -113,13 +112,8 @@ namespace WinSteroid.App.Services
 
         public async Task<bool> ExportDataAsync()
         {
-            var folderPicker = new FolderPicker();
-            folderPicker.FileTypeFilter.Add("*");
-
-            var folder = await folderPicker.PickSingleFolderAsync();
+            var folder = await FilesHelper.PickFolderAsync("ExportFolderToken");
             if (folder == null) return false;
-
-            StorageApplicationPermissions.FutureAccessList.AddOrReplace("ExportFolderToken", folder);
 
             var fileName = $"userIcons_export_{DateTime.Now.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture)}.json";
 

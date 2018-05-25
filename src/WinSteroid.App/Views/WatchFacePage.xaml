@@ -27,19 +27,51 @@
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
                                        TitleText="WatchFaces" />
 
-        <StackPanel Grid.Row="1">
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Padding="12,8"
+                        Width="360"
+                        HorizontalAlignment="Left">
+                <TextBlock Text="Install new WatchFace"
+                           Style="{ThemeResource BaseTextBlockStyle}" />
 
-        </StackPanel>
+                <TextBox Text="{x:Bind ViewModel.SelectedFileName, Mode=OneWay}"
+                         IsReadOnly="True"
+                         FontWeight="SemiBold"
+                         Margin="0,8,0,0"
+                         Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
 
-        <CommandBar Grid.Row="2">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Connect"
-                              Command="{x:Bind ViewModel.ConnectCommand}">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Sync" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,8,0,0">
+                    <Button Content="Choose"
+                            Padding="12,4"
+                            Margin="0,0,12,0"
+                            IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                            Command="{x:Bind ViewModel.LoadFileCommand, Mode=OneWay}" />
+
+                    <Button Content="Install"
+                            Padding="12,4"
+                            Command="{x:Bind ViewModel.ConnectCommand, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                            Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
+                </StackPanel>
+
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                           Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Margin="0,24,0,8">
+                    <Run Text="Installation progress" />
+                    <Run Text="{x:Bind ViewModel.UploadProgress}" />
+                </TextBlock>
+                <Grid Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ProgressBar IsIndeterminate="True"
+                                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+
+                    <ProgressBar Value="{x:Bind ViewModel.UploadProgress, Mode=OneWay}" 
+                                 Minimum="0"
+                                 Maximum="100"
+                                 Background="Transparent"
+                                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:triggers="using:WinSteroid.App.Triggers"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -14,6 +15,35 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Mobile">
+                    <VisualState.StateTriggers>
+                        <triggers:DeviceFamilyTrigger DeviceFamily="Mobile" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="WatchFaceButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Desktop">
+                    <VisualState.StateTriggers>
+                        <triggers:DeviceFamilyTrigger DeviceFamily="Desktop" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="WatchFaceButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         
         <Grid Grid.Row="0" 
               VerticalAlignment="Center" 
@@ -63,6 +93,14 @@
 
         <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
+                <AppBarButton x:Name="WatchFaceButton" 
+                              Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}"
+                              Label="WatchFaces">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="" 
+                                  FontFamily="Segoe MDL2 Assets" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
                 <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
                               IsEnabled="False"
                               Label="Take screenshot">
@@ -77,10 +115,6 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}"
-                              Label="WatchFaces" />
-            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Asteroid.cs" />
     <Compile Include="Extensions\ApplicationIconExtensions.cs" />
+    <Compile Include="Extensions\DeviceFamilyExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\AsteroidHelper.cs" />
     <Compile Include="Helpers\BatteryHelper.cs" />
+    <Compile Include="Helpers\FilesHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Extensions\PackageExtensions.cs" />
     <Compile Include="Helpers\IPHelper.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Models\BLECharacteristic.cs" />
     <Compile Include="Models\BLEService.cs" />
     <Compile Include="Models\ApplicationPreference.cs" />
+    <Compile Include="Models\DeviceFamily.cs" />
     <Compile Include="Models\MediaCommandType.cs" />
     <Compile Include="Models\MediaInfo.cs" />
     <Compile Include="Models\PairingResult.cs" />

@@ -31,7 +31,7 @@
             <StackPanel Padding="12,8">
                 <TextBlock Text="Device name"
                            Style="{ThemeResource BaseTextBlockStyle}" />
-                
+
                 <TextBlock Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
                            FontWeight="SemiBold"
                            Margin="0,8,0,0"
@@ -40,7 +40,7 @@
                 <TextBlock Text="Notifications"
                            Style="{ThemeResource BaseTextBlockStyle}"
                            Margin="0,12,0,8" />
-                
+
                 <ToggleSwitch Header="Show system notifications on AsteroidOS" 
                               OffContent="No"
                               OnContent="Yes"
@@ -72,7 +72,7 @@
                         Margin="0,8,0,0" />
             </StackPanel>
         </ScrollViewer>
-        
+
         <Grid Grid.Row="2"
               Height="48"
               Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">

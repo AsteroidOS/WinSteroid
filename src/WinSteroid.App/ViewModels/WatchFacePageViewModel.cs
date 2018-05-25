@@ -6,20 +6,15 @@ using GalaSoft.MvvmLight.Views;
 using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.App.Controls;
-using WinSteroid.App.Services;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
 {
     public class WatchFacePageViewModel : BasePageViewModel
     {
-        private readonly TransferService TransferService;
-
-        public WatchFacePageViewModel(
-            TransferService transferService,
-            IDialogService dialogService, 
-            INavigationService navigationService) : base(dialogService, navigationService)
+        public WatchFacePageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.TransferService = transferService ?? throw new ArgumentNullException(nameof(transferService));
+
         }
 
         public override void Initialize()
@@ -31,11 +26,58 @@ namespace WinSteroid.App.ViewModels
             return Task.FromResult(!this.IsBusy);
         }
 
-        private long _uploadProgress;
-        public long UploadProgress
+        private int _uploadProgress;
+        public int UploadProgress
         {
             get { return _uploadProgress; }
             set { Set(nameof(UploadProgress), ref _uploadProgress, value); }
+        }
+
+        private bool _isUploading;
+        public bool IsUploading
+        {
+            get { return _isUploading; }
+            set { Set(nameof(IsUploading), ref _isUploading, value); }
+        }
+
+        private StorageFile _selectedFile;
+        public StorageFile SelectedFile
+        {
+            get { return _selectedFile; }
+            set { Set(nameof(SelectedFile), ref _selectedFile, value); }
+        }
+
+        private string _selectedFileName;
+        public string SelectedFileName
+        {
+            get { return _selectedFileName; }
+            private set { Set(nameof(SelectedFileName), ref _selectedFileName, value); }
+        }
+        
+        private RelayCommand _loadFileCommand;
+        public RelayCommand LoadFileCommand
+        {
+            get
+            {
+                if (_loadFileCommand == null)
+                {
+                    _loadFileCommand = new RelayCommand(LoadFile);
+                }
+
+                return _loadFileCommand;
+            }
+        }
+
+        private async void LoadFile()
+        {
+            this.IsBusy = true;
+
+            var file = await FilesHelper.PickFileAsync(".qml");
+            if (file == null) return;
+
+            this.SelectedFile = file;
+            this.SelectedFileName = file?.Name;
+            this.IsBusy = false;
         }
 
         private RelayCommand _connectCommand;
@@ -54,58 +96,101 @@ namespace WinSteroid.App.ViewModels
 
         private async void Connect()
         {
-            var uploadResult = false;
+            if (this.SelectedFile == null) return;
+
+            var successfulUpload = false;
+            this.IsBusy = true;
 
             var scpCredentialsDialog = new ScpCredentialsDialog();
             var result = await scpCredentialsDialog.ShowAsync();
-            if (result != ContentDialogResult.Primary) return;
+            if (result != ContentDialogResult.Primary)
+            {
+                this.IsBusy = false;
+                return;
+            }
 
-            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/WatchFaces/100-win-digital.qml"));         
-
+            this.IsUploading = true;
+            
             try
             {
-                using (var scpClient = this.TransferService.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
+                using (var scpClient = SecureConnectionsHelper.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
                 {
+                    scpClient.ErrorOccurred += OnClientErrorOccured;
                     scpClient.Uploading += OnClientUploading;
 
-                    using (var randomAccessStream = await storageFile.OpenReadAsync())
+                    using (var randomAccessStream = await this.SelectedFile.OpenReadAsync())
                     {
                         using (var stream = randomAccessStream.AsStream())
                         {
-                            scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + storageFile.Name);
+                            scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + this.SelectedFile.Name);
                         }
                     }
 
                     scpClient.Uploading -= OnClientUploading;
+                    scpClient.ErrorOccurred -= OnClientErrorOccured;
                 }
 
-                uploadResult = true;
+                successfulUpload = true;
             }
             catch (Exception exception)
             {
-                await this.DialogService.ShowError(exception, "SCP Connection Error", null, () => { });
+                await this.DialogService.ShowError(exception, "SCP Connection Error");
             }
 
-            if (!uploadResult) return;
+            this.IsUploading = false;
+            this.UploadProgress = 0;
 
-            var restartSystem = await this.DialogService.ShowMessage(
-                message: "AsteroidOS may cache the current watchface. Do you want to restart device to refresh it?",
-                title: "WatchFace uploaded",
-                buttonConfirmText: "Yes",
-                buttonCancelText: "No",
-                afterHideCallback: b => { });
-
-            if (!restartSystem) return;
-
-            using (var sshClient = this.TransferService.CreateSshClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
+            if (successfulUpload)
             {
-                sshClient.RunCommand("systemctl restart user@1000");
+                ToastsHelper.Show("Watchface successfully installed");
             }
+
+            //if (!successfulUpload)
+            //{
+            //    this.IsBusy = false;
+            //    return;
+            //}
+
+            //var restartSystem = await this.DialogService.ShowMessage(
+            //    message: "AsteroidOS may cache the current watchface. Do you want to restart device to refresh it?",
+            //    title: "WatchFace uploaded",
+            //    buttonConfirmText: "Yes",
+            //    buttonCancelText: "No",
+            //    afterHideCallback: b => { });
+
+            //if (!restartSystem)
+            //{
+            //    this.IsBusy = false;
+            //    return;
+            //}
+
+            //try
+            //{
+            //    using (var sshClient = SecureConnectionsHelper.CreateSshClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
+            //    {
+            //        sshClient.ErrorOccurred += OnClientErrorOccured;
+
+            //        sshClient.RunCommand("systemctl restart user@1000");
+
+            //        sshClient.ErrorOccurred -= OnClientErrorOccured;
+            //    }
+            //}
+            //catch (Exception exception)
+            //{
+            //    await this.DialogService.ShowError(exception, "SSH Connection Error");
+            //}
+
+            this.IsBusy = false;
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)
         {
-            this.UploadProgress = ((args.Size - args.Uploaded) * 100) / args.Size;
+            this.UploadProgress = Convert.ToInt32(((args.Size - args.Uploaded) * 100) / args.Size);
+        }
+
+        private async void OnClientErrorOccured(object sender, Renci.SshNet.Common.ExceptionEventArgs args)
+        {
+            await this.DialogService.ShowError(args.Exception, "Client Error");
         }
     }
 }

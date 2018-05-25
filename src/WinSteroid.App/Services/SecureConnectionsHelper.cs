@@ -1,20 +1,10 @@
-﻿using GalaSoft.MvvmLight.Views;
-using Renci.SshNet;
-using Renci.SshNet.Common;
-using System;
+﻿using Renci.SshNet;
 
-namespace WinSteroid.App.Services
+namespace WinSteroid.Common.Helpers
 {
-    public class TransferService
-    {
-        private readonly IDialogService DialogService;
-
-        public TransferService(IDialogService dialogService)
-        {
-            this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-        }
-        
-        public ScpClient CreateScpClient(string ip, string username, string password)
+    public static class SecureConnectionsHelper
+    {        
+        public static ScpClient CreateScpClient(string ip, string username, string password)
         {
             var authenticationsMethods = new AuthenticationMethod[]
             {
@@ -24,7 +14,6 @@ namespace WinSteroid.App.Services
             var connectionInfo = new ConnectionInfo(ip, 22, username, authenticationsMethods);
 
             var client = new ScpClient(connectionInfo);
-            client.ErrorOccurred += OnErrorOccured;
 
             if (client.IsConnected) return client;
 
@@ -34,7 +23,7 @@ namespace WinSteroid.App.Services
             return client;
         }
 
-        public SshClient CreateSshClient(string ip, string username, string password)
+        public static SshClient CreateSshClient(string ip, string username, string password)
         {
             var authenticationsMethods = new AuthenticationMethod[]
             {
@@ -44,18 +33,12 @@ namespace WinSteroid.App.Services
             var connectionInfo = new ConnectionInfo(ip, username, authenticationsMethods);
 
             var client = new SshClient(connectionInfo);
-            client.ErrorOccurred += OnErrorOccured;
 
             if (client.IsConnected) return client;
             
             client.Connect();
 
             return client;
-        }
-
-        private async void OnErrorOccured(object sender, ExceptionEventArgs args)
-        {
-            await this.DialogService.ShowError(args.Exception, "SCP Upload Error", null, () => { });
         }
     }
 }

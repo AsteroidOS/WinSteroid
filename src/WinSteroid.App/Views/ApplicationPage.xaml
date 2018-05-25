@@ -29,7 +29,7 @@
                                        TitleText="{x:Bind ViewModel.Name, Mode=OneWay}" />
 
         <StackPanel Grid.Row="1"
-                    Padding="12">
+                    Padding="12,8">
             <TextBlock Text="Preferences" 
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 

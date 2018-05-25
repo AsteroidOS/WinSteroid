@@ -101,20 +101,24 @@
       <DependentUpon>ScpCredentialsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
+    <Compile Include="Converters\BooleanToCornerRadiusConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ApplicationIconToGlyphConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToBatteryIconConverter.cs" />
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
+    <Compile Include="Extensions\IDialogServiceExtensions.cs" />
     <Compile Include="Services\ApplicationsService.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
-    <Compile Include="Services\TransferService.cs" />
+    <Compile Include="Services\SecureConnectionsHelper.cs" />
+    <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\ApplicationPageViewModel.cs" />
     <Compile Include="ViewModels\BasePageViewModel.cs" />
@@ -148,7 +152,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="Assets\WatchFaces\100-win-digital.qml" />
     <None Include="WinSteroid.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
