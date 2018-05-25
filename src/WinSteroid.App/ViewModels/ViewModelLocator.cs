@@ -70,6 +70,8 @@ namespace WinSteroid.App.ViewModels
                     return Icons;
                 case nameof(Application):
                     return Application;
+                case nameof(WatchFace):
+                    return WatchFace;
                 default:
                     throw new ArgumentException(nameof(pageKey));
             }

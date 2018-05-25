@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.App.Controls;
 using WinSteroid.App.Services;
@@ -56,8 +58,29 @@ namespace WinSteroid.App.ViewModels
             var result = await scpCredentialsDialog.ShowAsync();
             if (result != ContentDialogResult.Primary) return;
 
-            this.ScpService.Connect(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password);
-            this.ScpService.AttachUploadProgressHandler(OnClientUploading);
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/WatchFaces/100-win-digital.qml"));
+
+            var scpClient = this.ScpService.Connect(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password);
+            scpClient.Uploading += OnClientUploading;
+
+            try
+            {
+                using (var randomAccessStream = await storageFile.OpenReadAsync())
+                {
+                    using (var stream = randomAccessStream.AsStream())
+                    {
+                        scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + storageFile.Name);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                await this.DialogService.ShowError(exception, "SCP Connection Error", null, () => { });
+            }
+
+            scpClient.Uploading -= OnClientUploading;
+            scpClient.Disconnect();
+            scpClient.Dispose();
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)

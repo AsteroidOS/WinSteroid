@@ -16,6 +16,10 @@ namespace WinSteroid.App.Controls
 
         public ScpCredentialsDialog()
         {
+            this.HostIP = string.Empty;
+            this.Username = string.Empty;
+            this.Password = string.Empty;
+            this.ValidationSummary = string.Empty;
             this.InitializeComponent();
         }
 

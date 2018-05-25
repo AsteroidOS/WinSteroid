@@ -2,9 +2,6 @@
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using System;
-using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace WinSteroid.App.Services
 {
@@ -16,70 +13,30 @@ namespace WinSteroid.App.Services
         {
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
-
-        private ScpClient Client { get; set; }
-
-        public bool Connect(string ip, string username, string password)
+        
+        public ScpClient Connect(string ip, string username, string password)
         {
-            if (this.Client == null)
+            var authenticationsMethods = new AuthenticationMethod[]
             {
-                this.Client = new ScpClient(ip, username, password);
-                this.Client.ErrorOccurred += OnErrorOccured;
-            }
+                new NoneAuthenticationMethod(username)
+            };
 
-            if (this.Client.IsConnected) return true;
+            var connectionInfo = new ConnectionInfo(ip, 22, username, authenticationsMethods);
 
-            try
-            {
-                this.Client.Connect();
-                return this.Client.IsConnected;
-            }
-            catch (Exception exception)
-            {
-                this.DialogService.ShowError(exception, "SCP Connection Error", null, () => { });
-                return false;
-            }
+            var client = new ScpClient(connectionInfo);
+            client.ErrorOccurred += OnErrorOccured;
+
+            if (client.IsConnected) return client;
+
+            client.RemotePathTransformation = RemotePathTransformation.ShellQuote;
+            client.Connect();
+
+            return client;
         }
 
         private async void OnErrorOccured(object sender, ExceptionEventArgs args)
         {
             await this.DialogService.ShowError(args.Exception, "SCP Upload Error", null, () => { });
-        }
-
-        public void Disconnect()
-        {
-            if (this.Client == null || !this.Client.IsConnected) return;
-
-            this.Client.Disconnect();
-            this.Client.Dispose();
-            this.Client = null;
-        }
-
-        public void AttachUploadProgressHandler(EventHandler<ScpUploadEventArgs> progressHandler)
-        {
-            this.Client.Uploading += progressHandler;
-        }
-
-        public async Task<bool> UploadAsync(IStorageFile storageFile)
-        {
-            if (!this.Client.IsConnected) return false;
-
-            try
-            {
-                using (var randomAccessStream = await storageFile.OpenReadAsync())
-                {
-                    using (var stream = randomAccessStream.AsStream())
-                    {
-                        this.Client.Upload(randomAccessStream.AsStream(), "/");
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
     }
 }

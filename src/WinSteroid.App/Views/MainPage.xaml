@@ -77,6 +77,10 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}"
+                              Label="WatchFaces" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

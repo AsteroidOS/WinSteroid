@@ -26,5 +26,20 @@
                                        ButtonGlyph=""
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
                                        TitleText="WatchFaces" />
+
+        <StackPanel Grid.Row="1">
+
+        </StackPanel>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Connect"
+                              Command="{x:Bind ViewModel.ConnectCommand}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Sync" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

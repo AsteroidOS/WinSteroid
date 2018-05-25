@@ -130,6 +130,25 @@ namespace WinSteroid.App.ViewModels
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Settings));
         }
 
+        private RelayCommand _watchFacesCommand;
+        public RelayCommand WatchFacesCommand
+        {
+            get
+            {
+                if (_watchFacesCommand == null)
+                {
+                    _watchFacesCommand = new RelayCommand(GoToWatchFaces);
+                }
+
+                return _watchFacesCommand;
+            }
+        }
+
+        private void GoToWatchFaces()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.WatchFace));
+        }
+
         public void RegisterBatteryLevelHandler()
         {
             this.BackgroundService.RegisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
