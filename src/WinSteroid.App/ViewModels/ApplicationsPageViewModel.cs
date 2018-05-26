@@ -1,17 +1,19 @@
 ﻿using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels
 {
-    public class IconsPageViewModel : BasePageViewModel
+    public class ApplicationsPageViewModel : BasePageViewModel
     {
         private readonly ApplicationsService ApplicationsService;
 
-        public IconsPageViewModel(
+        public ApplicationsPageViewModel(
             ApplicationsService applicationsService,
             IDialogService dialogService,
             INavigationService navigationService) : base(dialogService, navigationService)
@@ -21,6 +23,11 @@ namespace WinSteroid.App.ViewModels
             this.Initialize();
         }
 
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
+        }
+
         public override void Initialize()
         {
             this.IconPreferences = new ObservableCollection<ApplicationViewModel>();
@@ -28,9 +35,9 @@ namespace WinSteroid.App.ViewModels
             this.Initialized = true;
         }
 
-        public override Task<bool> CanGoBack()
+        public override void Reset()
         {
-            return Task.FromResult(true);
+            
         }
 
         private ObservableCollection<ApplicationViewModel> _iconPreferences;
@@ -69,12 +76,40 @@ namespace WinSteroid.App.ViewModels
                 this.IconPreferences.Clear();
             }
 
-            var iconPreferences = this.ApplicationsService.MapApplications();
+            var iconPreferences = this.ApplicationsService.UserIcons
+                .OrderBy(ui => ui.PackageName)
+                .Select(ToApplicationViewModel)
+                .ToArray();
 
             foreach (var iconPreference in iconPreferences)
             {
                 this.IconPreferences.Add(iconPreference);
             }
         }
+
+        private ApplicationViewModel ToApplicationViewModel(ApplicationPreference applicationPreference)
+        {
+            return new ApplicationViewModel
+            {
+                Id = applicationPreference.AppId,
+                Name = applicationPreference.PackageName,
+                Icon = applicationPreference.Icon,
+                Muted = applicationPreference.Muted,
+                Vibration = applicationPreference.Muted ? false : applicationPreference.Vibration != VibrationLevel.None
+            };
+        }
+    }
+
+    public class ApplicationViewModel
+    {
+        public ApplicationIcon Icon { get; set; }
+
+        public string Id { get; set; }
+
+        public bool Muted { get; set; }
+
+        public string Name { get; set; }
+
+        public bool Vibration { get; set; }
     }
 }

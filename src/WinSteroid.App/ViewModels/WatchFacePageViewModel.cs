@@ -17,13 +17,19 @@ namespace WinSteroid.App.ViewModels
 
         }
 
-        public override void Initialize()
-        {
-        }
-
         public override Task<bool> CanGoBack()
         {
             return Task.FromResult(!this.IsBusy);
+        }
+
+        public override void Initialize()
+        {
+
+        }
+
+        public override void Reset()
+        {
+
         }
 
         private int _uploadProgress;

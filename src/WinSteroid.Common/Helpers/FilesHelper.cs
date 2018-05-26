@@ -51,5 +51,16 @@ namespace WinSteroid.Common.Helpers
 
             return folder;
         }
+
+        public static async Task<string> WriteBytesAsync(string fileName, StorageFolder folder, byte[] bytes, bool replaceExisting = false)
+        {
+            var collisionOption = replaceExisting ? CreationCollisionOption.ReplaceExisting : CreationCollisionOption.GenerateUniqueName;
+
+            var file = await folder.CreateFileAsync(fileName, collisionOption);
+
+            await FileIO.WriteBytesAsync(file, bytes);
+
+            return file.Path;
+        }
     }
 }

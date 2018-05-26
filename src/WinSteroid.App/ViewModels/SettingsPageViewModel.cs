@@ -32,6 +32,11 @@ namespace WinSteroid.App.ViewModels
             this.Initialize();
         }
 
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
+        }
+
         public override void Initialize()
         {
             this.DeviceName = this.DeviceService.Current.Name;
@@ -43,16 +48,11 @@ namespace WinSteroid.App.ViewModels
             this.Initialized = true;
         }
 
-        public override Task<bool> CanGoBack()
+        public override void Reset()
         {
-            return Task.FromResult(true);
-        }
-
-        private string _deviceName;
-        public string DeviceName
-        {
-            get { return _deviceName; }
-            set { Set(nameof(DeviceName), ref _deviceName, value); }
+            this.DeviceName = string.Empty;
+            this.UseBatteryLiveTile = false;
+            this.EnableUserNotifications = false;
         }
 
         private string _applicationFooter;
@@ -67,6 +67,18 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _applicationName; }
             set { Set(nameof(ApplicationName), ref _applicationName, value); }
+        }
+
+        public bool CanEnableUserNotifications
+        {
+            get { return ApiHelper.CheckIfSystemSupportNotificationListener(); }
+        }
+
+        private string _deviceName;
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
         private bool _enableUserNotifications;
@@ -87,11 +99,6 @@ namespace WinSteroid.App.ViewModels
 
                 this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
             }
-        }
-
-        public bool CanEnableUserNotifications
-        {
-            get { return ApiHelper.CheckIfSystemSupportNotificationListener(); }
         }
 
         private async void RegisterUserNotificationTask()
@@ -173,23 +180,23 @@ namespace WinSteroid.App.ViewModels
         //    }
         //}
 
-        private RelayCommand _iconsCommand;
-        public RelayCommand IconsCommand
+        private RelayCommand _applicationsCommand;
+        public RelayCommand ApplicationsCommand
         {
             get
             {
-                if (_iconsCommand == null)
+                if (_applicationsCommand == null)
                 {
-                    _iconsCommand = new RelayCommand(GoToIcons);
+                    _applicationsCommand = new RelayCommand(GoToApplications);
                 }
 
-                return _iconsCommand;
+                return _applicationsCommand;
             }
         }
 
-        private void GoToIcons()
+        private void GoToApplications()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Icons));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Applications));
         }
 
         private RelayCommand _resetApplicationCommand;
@@ -230,9 +237,7 @@ namespace WinSteroid.App.ViewModels
 
         private async void ManageKeepPreferencesMessageResult(bool keepIconsPreferences)
         {
-            this.DeviceName = string.Empty;
-            this.UseBatteryLiveTile = false;
-            this.EnableUserNotifications = false;
+            this.Reset();
 
             if (!keepIconsPreferences)
             {

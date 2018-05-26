@@ -31,6 +31,11 @@ namespace WinSteroid.App.ViewModels
             this.Initialize();
         }
 
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
+        }
+
         public override async void Initialize()
         {
             this.IsBusy = true;
@@ -59,9 +64,24 @@ namespace WinSteroid.App.ViewModels
             this.Initialized = true;
         }
 
-        public override Task<bool> CanGoBack()
+        public override void Reset()
         {
-            return Task.FromResult(true);
+            this.BatteryLevel = BatteryLevel.Dead;
+            this.BatteryPercentage = 0;
+        }
+
+        private BatteryLevel _batteryLevel;
+        public BatteryLevel BatteryLevel
+        {
+            get { return _batteryLevel; }
+            set { Set(nameof(BatteryLevel), ref _batteryLevel, value); }
+        }
+
+        private int _batteryPercentage;
+        public int BatteryPercentage
+        {
+            get { return _batteryPercentage; }
+            set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
         }
 
         private string _deviceName;
@@ -76,20 +96,6 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _isDeviceConnected; }
             set { Set(nameof(IsDeviceConnected), ref _isDeviceConnected, value); }
-        }
-
-        private int _batteryPercentage;
-        public int BatteryPercentage
-        {
-            get { return _batteryPercentage; }
-            set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
-        }
-
-        private BatteryLevel _batteryLevel;
-        public BatteryLevel BatteryLevel
-        {
-            get { return _batteryLevel; }
-            set { Set(nameof(BatteryLevel), ref _batteryLevel, value); }
         }
 
         private RelayCommand _takeScreenshotCommand;
@@ -168,11 +174,6 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
-        {
-            this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
-        }
-
         private async void OnBatteryProgress(BackgroundTaskRegistration sender, BackgroundTaskProgressEventArgs args)
         {
             await DispatcherHelper.RunAsync(() =>
@@ -187,10 +188,9 @@ namespace WinSteroid.App.ViewModels
             });
         }
 
-        public void Reset()
+        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
         {
-            this.BatteryLevel = BatteryLevel.Dead;
-            this.BatteryPercentage = 0;
+            this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
         }
     }
 }

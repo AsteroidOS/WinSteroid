@@ -24,36 +24,6 @@ namespace WinSteroid.App
 
         private bool IsRunning { get; set; }
 
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
-        {
-            if (!(Window.Current.Content is Frame rootFrame))
-            {
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.Navigated += OnNavigated;
-
-                Window.Current.Content = rootFrame;
-
-                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
-
-                SystemNavigationManager.GetForCurrentView().UpdateAppViewBackButtonVisibility(rootFrame);
-            }
-
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    rootFrame.Navigate(typeof(Views.WelcomePage), e.Arguments);
-                }
-
-                Window.Current.Activate();
-            }
-
-            GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
-            this.IsRunning = true;
-        }
-
         public static void RemoveWelcomePageFromBackStack()
         {
             if (!(Window.Current.Content is Frame rootFrame)) return;
@@ -97,7 +67,7 @@ namespace WinSteroid.App
             SystemNavigationManager.GetForCurrentView().UpdateAppViewBackButtonVisibility((Frame)sender);
         }
 
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
@@ -138,7 +108,12 @@ namespace WinSteroid.App
             if (deviceService.BluetoothDevice == null || deviceService.Current == null)
             {
                 var deviceId = deviceService.GetLastSavedDeviceId();
-                await deviceService.ConnectAsync(deviceId);
+                var connected = await deviceService.ConnectAsync(deviceId);
+                if (!connected)
+                {
+                    backgroundTaskDeferral.Complete();
+                    return;
+                }
             }
 
             var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
@@ -175,10 +150,40 @@ namespace WinSteroid.App
             }
 
             notificationService.SaveLastNotificationIds(userNotifications);
-            
+
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
 
             backgroundTaskDeferral.Complete();
+        }
+
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        {
+            if (!(Window.Current.Content is Frame rootFrame))
+            {
+                rootFrame = new Frame();
+
+                rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.Navigated += OnNavigated;
+
+                Window.Current.Content = rootFrame;
+
+                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+
+                SystemNavigationManager.GetForCurrentView().UpdateAppViewBackButtonVisibility(rootFrame);
+            }
+
+            if (e.PrelaunchActivated == false)
+            {
+                if (rootFrame.Content == null)
+                {
+                    rootFrame.Navigate(typeof(Views.WelcomePage), e.Arguments);
+                }
+
+                Window.Current.Activate();
+            }
+
+            GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
+            this.IsRunning = true;
         }
     }
 }

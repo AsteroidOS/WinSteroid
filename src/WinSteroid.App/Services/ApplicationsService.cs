@@ -125,20 +125,5 @@ namespace WinSteroid.App.Services
 
             return true;
         }
-
-        public IEnumerable<ViewModels.ApplicationViewModel> MapApplications()
-        {
-            return this.UserIcons
-                .OrderBy(ui => ui.PackageName)
-                .Select(ui => new ViewModels.ApplicationViewModel
-                {
-                    Id = ui.AppId,
-                    Name = ui.PackageName,
-                    Icon = ui.Icon,
-                    Muted = ui.Muted,
-                    HasVibration = ui.Muted ? false : ui.Vibration != VibrationLevel.None
-                })
-                .ToArray();
-        }
     }
 }

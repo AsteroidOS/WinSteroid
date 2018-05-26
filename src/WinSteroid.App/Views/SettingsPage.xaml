@@ -50,7 +50,7 @@
 
                 <Button Content="Set icons preferences"
                         Padding="12,4"
-                        Command="{x:Bind ViewModel.IconsCommand, Mode=OneWay}"
+                        Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}"
                         IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
 
                 <TextBlock Text="Battery"

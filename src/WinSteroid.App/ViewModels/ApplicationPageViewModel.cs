@@ -24,6 +24,18 @@ namespace WinSteroid.App.ViewModels
             this.Initialize();
         }
 
+        public override Task<bool> CanGoBack()
+        {
+            if (!this.CheckUnsavedChanges()) return Task.FromResult(true);
+
+            return this.DialogService.ShowMessage(
+                message: "I detected some unsaved changes. Are you sure to discard them and go back?",
+                title: "Unsaved changes",
+                buttonConfirmText: "Yes",
+                buttonCancelText: "No",
+                afterHideCallback: r => { });
+        }
+
         public override void Initialize()
         {
             this.AvailableIcons = ApplicationIconExtensions.GetList();
@@ -41,16 +53,9 @@ namespace WinSteroid.App.ViewModels
             this.Initialized = true;
         }
 
-        public override Task<bool> CanGoBack()
+        public override void Reset()
         {
-            if (!this.CheckUnsavedChanges()) return Task.FromResult(true);
-
-            return this.DialogService.ShowMessage(
-                message: "I detected some unsaved changes. Are you sure to discard them and go back?",
-                title: "Unsaved changes",
-                buttonConfirmText: "Yes",
-                buttonCancelText: "No",
-                afterHideCallback: r => { });
+            
         }
 
         public string Id { get; set; }
@@ -64,18 +69,18 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(AvailableIcons), ref _availableIcons, value); }
         }
 
-        private ApplicationIcon _selectedIcon;
-        public ApplicationIcon SelectedIcon
-        {
-            get { return _selectedIcon; }
-            set { Set(nameof(SelectedIcon), ref _selectedIcon, value); }
-        }
-
         private bool _muted;
         public bool Muted
         {
             get { return _muted; }
             set { Set(nameof(Muted), ref _muted, value); }
+        }
+
+        private ApplicationIcon _selectedIcon;
+        public ApplicationIcon SelectedIcon
+        {
+            get { return _selectedIcon; }
+            set { Set(nameof(SelectedIcon), ref _selectedIcon, value); }
         }
 
         private VibrationLevel _vibration;

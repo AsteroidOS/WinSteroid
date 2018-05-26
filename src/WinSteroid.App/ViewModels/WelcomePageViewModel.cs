@@ -21,6 +21,11 @@ namespace WinSteroid.App.ViewModels
             this.Initialize();
         }
 
+        public override Task<bool> CanGoBack()
+        {
+            return Task.FromResult(true);
+        }
+
         public override void Initialize()
         {
             this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
@@ -39,9 +44,25 @@ namespace WinSteroid.App.ViewModels
             this.Initialized = true;
         }
 
-        public override Task<bool> CanGoBack()
+        public override void Reset()
         {
-            return Task.FromResult(true);
+            this.DeviceId = string.Empty;
+            this.DeviceName = string.Empty;
+            this.ShowConnectionOptions = true;
+        }
+
+        private string _applicationFooter;
+        public string ApplicationFooter
+        {
+            get { return _applicationFooter; }
+            set { Set(nameof(ApplicationFooter), ref _applicationFooter, value); }
+        }
+
+        private bool _connectionFailed;
+        public bool ConnectionFailed
+        {
+            get { return _connectionFailed; }
+            set { Set(nameof(ConnectionFailed), ref _connectionFailed, value); }
         }
 
         private string _deviceId;
@@ -58,25 +79,11 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
-        private string _applicationFooter;
-        public string ApplicationFooter
-        {
-            get { return _applicationFooter; }
-            set { Set(nameof(ApplicationFooter), ref _applicationFooter, value); }
-        }
-
         private bool _showConnectionOptions;
         public bool ShowConnectionOptions
         {
             get { return _showConnectionOptions; }
             set { Set(nameof(ShowConnectionOptions), ref _showConnectionOptions, value); }
-        }
-
-        private bool _connectionFailed;
-        public bool ConnectionFailed
-        {
-            get { return _connectionFailed; }
-            set { Set(nameof(ConnectionFailed), ref _connectionFailed, value); }
         }
 
         private RelayCommand _startSearchCommand;
@@ -130,7 +137,7 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        public bool CanPair()
+        private bool CanPair()
         {
             return !string.IsNullOrWhiteSpace(this.DeviceId) || this.DeviceService.Current != null;
         }
@@ -168,13 +175,6 @@ namespace WinSteroid.App.ViewModels
             }
 
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Main));
-        }
-
-        public void Reset()
-        {
-            this.DeviceId = string.Empty;
-            this.DeviceName = string.Empty;
-            this.ShowConnectionOptions = true;
         }
     }
 }

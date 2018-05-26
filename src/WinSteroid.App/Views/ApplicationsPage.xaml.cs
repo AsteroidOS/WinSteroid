@@ -4,14 +4,14 @@ using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
 {
-    public sealed partial class IconsPage : Page
+    public sealed partial class ApplicationsPage : Page
     {
-        public IconsPageViewModel ViewModel
+        public ApplicationsPageViewModel ViewModel
         {
-            get { return this.DataContext as IconsPageViewModel; }
+            get { return this.DataContext as ApplicationsPageViewModel; }
         }
 
-        public IconsPage()
+        public ApplicationsPage()
         {
             this.InitializeComponent();
         }

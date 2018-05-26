@@ -15,7 +15,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<WelcomePageViewModel>();
             SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<SettingsPageViewModel>();
-            SimpleIoc.Default.Register<IconsPageViewModel>();
+            SimpleIoc.Default.Register<ApplicationsPageViewModel>();
             SimpleIoc.Default.Register<ApplicationPageViewModel>();
 
             if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
@@ -44,7 +44,7 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Welcome), typeof(Views.WelcomePage));
             navigationService.Configure(nameof(Main), typeof(Views.MainPage));
             navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
-            navigationService.Configure(nameof(Icons), typeof(Views.IconsPage));
+            navigationService.Configure(nameof(Applications), typeof(Views.ApplicationsPage));
             navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
 
             if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
@@ -65,8 +65,8 @@ namespace WinSteroid.App.ViewModels
                     return Main;
                 case nameof(Settings):
                     return Settings;
-                case nameof(Icons):
-                    return Icons;
+                case nameof(Applications):
+                    return Applications;
                 case nameof(Application):
                     return Application;
                 case nameof(WatchFace):
@@ -91,9 +91,9 @@ namespace WinSteroid.App.ViewModels
             get { return ServiceLocator.Current.GetInstance<SettingsPageViewModel>(); }
         }
 
-        public static IconsPageViewModel Icons
+        public static ApplicationsPageViewModel Applications
         {
-            get { return ServiceLocator.Current.GetInstance<IconsPageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<ApplicationsPageViewModel>(); }
         }
 
         public static ApplicationPageViewModel Application

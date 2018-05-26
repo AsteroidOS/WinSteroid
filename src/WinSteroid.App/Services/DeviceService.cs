@@ -8,7 +8,6 @@ using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
-using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -30,7 +29,8 @@ namespace WinSteroid.App.Services
         }
 
         public BluetoothLEDevice BluetoothDevice { get; private set; }
-        private TypedEventHandler<BluetoothLEDevice, object> ConnectionStatusChangedEventHandler = null;
+
+        private TypedEventHandler<BluetoothLEDevice, object> ConnectionStatusChangedEventHandler { get; set; }
 
         public DeviceInformation Current { get; private set; }
 
@@ -282,11 +282,9 @@ namespace WinSteroid.App.Services
 
             if (this.Progress.Value < this.TotalSize.Value) return;
             
-            var storageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("screenshot.jpg", CreationCollisionOption.GenerateUniqueName);
-
-            await FileIO.WriteBytesAsync(storageFile, this.TotalData);
+            var storageFilePath = await FilesHelper.WriteBytesAsync("screenshot.jpg", Windows.Storage.KnownFolders.PicturesLibrary, this.TotalData);
             
-            ToastsHelper.Show("Screenshot acquired! File: " + storageFile.Path);
+            ToastsHelper.Show("Screenshot acquired! File: " + storageFilePath);
             
             this.TotalSize = null;
             this.TotalData = null;

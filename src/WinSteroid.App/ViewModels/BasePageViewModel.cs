@@ -17,14 +17,11 @@ namespace WinSteroid.App.ViewModels
             this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
+        public abstract Task<bool> CanGoBack();
+
         public abstract void Initialize();
 
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(nameof(IsBusy), ref _isBusy, value); }
-        }
+        public abstract void Reset();
 
         private string _busyMessage;
         public string BusyMessage
@@ -34,6 +31,13 @@ namespace WinSteroid.App.ViewModels
         }
 
         public bool Initialized { get; internal set; }
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { Set(nameof(IsBusy), ref _isBusy, value); }
+        }
 
         private RelayCommand _backCommand;
         public RelayCommand BackCommand
@@ -48,8 +52,6 @@ namespace WinSteroid.App.ViewModels
                 return _backCommand;
             }
         }
-
-        public abstract Task<bool> CanGoBack();
 
         private async void GoBack()
         {
