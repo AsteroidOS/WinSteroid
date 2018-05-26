@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth;
@@ -98,23 +99,76 @@ namespace WinSteroid.App.ViewModels
             set { Set(nameof(IsDeviceConnected), ref _isDeviceConnected, value); }
         }
 
-        private RelayCommand _takeScreenshotCommand;
-        public RelayCommand TakeScreenshotCommand
+        private bool _isMenuOpen;
+        public bool IsMenuOpen
+        {
+            get { return _isMenuOpen; }
+            set { Set(nameof(IsMenuOpen), ref _isMenuOpen, value); }
+        }
+
+        public List<MenuOptionViewModel> MenuOptions
         {
             get
             {
-                if (_takeScreenshotCommand == null)
+                var menuOptions = new List<MenuOptionViewModel>
                 {
-                    _takeScreenshotCommand = new RelayCommand(this.TakeScreenshot);
+                    new MenuOptionViewModel { Glyph = "", Label = "Settings", Type = MenuOptionType.Settings },
+                    new MenuOptionViewModel { Glyph = "", Label = "Screenshots", Type = MenuOptionType.Screenshots }
+                };
+
+                if (!ApiHelper.CheckIfSystemIsMobile())
+                {
+                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Type = MenuOptionType.WatchFaces });
                 }
 
-                return _takeScreenshotCommand;
+                return menuOptions;
             }
         }
 
-        private async void TakeScreenshot()
+        private MenuOptionViewModel _selectedMenuOption;
+        public MenuOptionViewModel SelectedMenuOption
         {
-            await this.DeviceService.TakeScreenshotAsync();
+            get { return _selectedMenuOption; }
+            set
+            {
+                if (!Set(nameof(SelectedMenuOption), ref _selectedMenuOption, value)) return;
+
+                if (_selectedMenuOption == null) return;
+                
+                switch (_selectedMenuOption.Type)
+                {
+                    case MenuOptionType.Settings:
+                        this.GoToSettings();
+                        break;
+                    case MenuOptionType.Screenshots:
+                        this.TakeScreenshot();
+                        break;
+                    case MenuOptionType.WatchFaces:
+                        this.GoToWatchFaces();
+                        break;
+                }
+                
+                this.IsMenuOpen = false;
+            }
+        }
+
+        private RelayCommand _menuCommand;
+        public RelayCommand MenuCommand
+        {
+            get
+            {
+                if (_menuCommand == null)
+                {
+                    _menuCommand = new RelayCommand(ToggleMenu);
+                }
+
+                return _menuCommand;
+            }
+        }
+
+        private void ToggleMenu()
+        {
+            this.IsMenuOpen = !this.IsMenuOpen;
         }
 
         private RelayCommand _settingsCommand;
@@ -134,6 +188,25 @@ namespace WinSteroid.App.ViewModels
         private void GoToSettings()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Settings));
+        }
+
+        private RelayCommand _takeScreenshotCommand;
+        public RelayCommand TakeScreenshotCommand
+        {
+            get
+            {
+                if (_takeScreenshotCommand == null)
+                {
+                    _takeScreenshotCommand = new RelayCommand(this.TakeScreenshot);
+                }
+
+                return _takeScreenshotCommand;
+            }
+        }
+
+        private async void TakeScreenshot()
+        {
+            await this.DeviceService.TakeScreenshotAsync();
         }
 
         private RelayCommand _watchFacesCommand;
@@ -192,5 +265,21 @@ namespace WinSteroid.App.ViewModels
         {
             this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
         }
+    }
+
+    public class MenuOptionViewModel
+    {
+        public string Glyph { get; set; }
+
+        public string Label { get; set; }
+
+        public MenuOptionType Type { get; set; }
+    }
+
+    public enum MenuOptionType
+    {
+        Settings,
+        WatchFaces,
+        Screenshots
     }
 }

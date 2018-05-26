@@ -48,5 +48,12 @@ namespace WinSteroid.App.Views
             storyBoard.Children.Add(doubleAnimation);
             storyBoard.Begin();
         }
+
+        private void OnMenuListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is ListView listView)) return;
+
+            listView.SelectedIndex = -1;
+        }
     }
 }

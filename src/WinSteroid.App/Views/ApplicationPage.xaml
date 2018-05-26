@@ -49,7 +49,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" 
-                                       FontFamily="Segoe MDL2 Assets"
+                                       FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                        VerticalAlignment="Center"
                                        Text="{x:Bind Converter={StaticResource ApplicationIconToGlyphConverter}}" />
 

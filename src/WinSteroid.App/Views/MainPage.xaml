@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:triggers="using:WinSteroid.App.Triggers"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels"
+    xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -15,12 +16,68 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        
         <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainSplitView.CompactPaneLength" Value="48" />
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="1000" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
+                        <Setter Target="MainSplitView.CompactPaneLength" Value="300" />
+                        <Setter Target="MenuButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
             <VisualStateGroup>
                 <VisualState x:Name="Mobile">
                     <VisualState.StateTriggers>
-                        <triggers:DeviceFamilyTrigger DeviceFamily="Mobile" />
+                        <windowsstatetriggers:DeviceFamilyStateTrigger DeviceFamily="Mobile" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="WatchFaceButton.Visibility">
@@ -32,7 +89,7 @@
                 </VisualState>
                 <VisualState x:Name="Desktop">
                     <VisualState.StateTriggers>
-                        <triggers:DeviceFamilyTrigger DeviceFamily="Desktop" />
+                        <windowsstatetriggers:DeviceFamilyStateTrigger DeviceFamily="Desktop" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="WatchFaceButton.Visibility">
@@ -44,61 +101,118 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
-        <Grid Grid.Row="0" 
-              VerticalAlignment="Center" 
-              HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
 
-            <controls:RadialProgressBar Grid.Row="0" 
-                                        x:Name="PercentageRadialProgressBar"
-                                        Thickness="12"
-                                        Minimum="0"
-                                        Maximum="100"
-                                        Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                        Width="240"
-                                        Height="240"
-                                        Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
-            <ProgressRing Grid.Row="0" 
-                          Width="240"
-                          Height="240"
-                          Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                          IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
-                          Style="{StaticResource LargeProgressRingStyle}"
-                          Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <SplitView Grid.Row="0" 
+                   x:Name="MainSplitView"
+                   IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
+            <SplitView.Pane>
+                <StackPanel HorizontalAlignment="Stretch">
+                    <Button x:Name="MenuButton" 
+                            Padding="16,12"
+                            Height="48"
+                            Width="48"
+                            VerticalAlignment="Stretch"
+                            Content=""
+                            Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                            Style="{ThemeResource NavigationBackButtonNormalStyle}"
+                            Command="{x:Bind ViewModel.MenuCommand, Mode=OneWay}" />
+                    
+                    <ListView ItemsSource="{x:Bind ViewModel.MenuOptions}"
+                              SelectedItem="{x:Bind ViewModel.SelectedMenuOption, Mode=TwoWay}"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              HorizontalAlignment="Stretch"
+                              SelectionChanged="OnMenuListViewSelectionChanged">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:MenuOptionViewModel">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="48" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
-                       Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                       Style="{ThemeResource HeaderTextBlockStyle}"
-                       FontSize="80"
-                       FontFamily="Segoe MDL2 Assets"
-                       FontWeight="Normal"
-                       TextAlignment="Center" 
-                       VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="0" 
+                                               Height="48"
+                                               FontSize="21"
+                                               Padding="12"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                               Text="{x:Bind Glyph, Mode=OneWay}" />
 
-            <TextBlock Grid.Row="1"
-                       TextAlignment="Center"
-                       Padding="12"
-                       FontSize="28">
-                <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
-                     Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
-                <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
-                     Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
-            </TextBlock>
-        </Grid>
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Text="{x:Bind Label, Mode=OneWay}"
+                                               Style="{ThemeResource BodyTextBlockStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid VerticalAlignment="Center" 
+                      HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-        <CommandBar Grid.Row="1">
+                    <controls:RadialProgressBar Grid.Row="0" 
+                                                x:Name="PercentageRadialProgressBar"
+                                                Thickness="12"
+                                                Minimum="0"
+                                                Maximum="100"
+                                                Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                                                Width="240"
+                                                Height="240"
+                                                Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                    <ProgressRing Grid.Row="0" 
+                                  Width="240"
+                                  Height="240"
+                                  Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                  IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
+                                  Style="{StaticResource LargeProgressRingStyle}"
+                                  Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                    <TextBlock Grid.Row="0"
+                               Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
+                               Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                               Style="{ThemeResource HeaderTextBlockStyle}"
+                               FontSize="80"
+                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                               FontWeight="Normal"
+                               TextAlignment="Center" 
+                               VerticalAlignment="Center" />
+
+                    <TextBlock Grid.Row="1"
+                               TextAlignment="Center"
+                               Padding="12"
+                               FontSize="28">
+                        <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
+                             Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
+                        <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
+                             Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                    </TextBlock>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+
+        <CommandBar Grid.Row="1"
+                    x:Name="MainCommandBar">
             <CommandBar.PrimaryCommands>
                 <AppBarButton x:Name="WatchFaceButton" 
                               Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}"
                               Label="WatchFaces">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="" 
-                                  FontFamily="Segoe MDL2 Assets" />
+                                  FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
