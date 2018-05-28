@@ -107,7 +107,7 @@ namespace WinSteroid.App.ViewModels
                     new MenuOptionViewModel { Glyph = "", Label = "Screenshots", Type = MenuOptionType.Screenshots }
                 };
 
-                if (!ApiHelper.CheckIfSystemIsMobile())
+                if (!ApiHelper.CheckIfIsSystemMobile())
                 {
                     menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Type = MenuOptionType.WatchFaces });
                 }

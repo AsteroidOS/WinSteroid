@@ -7,6 +7,7 @@ using Windows.Foundation;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
+using Windows.UI.ViewManagement;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.Services
@@ -75,6 +76,24 @@ namespace WinSteroid.App.Services
                 var @string = Encoding.UTF8.GetString(bytes);
                 ToastsHelper.Show("Test action", @string);
             }
+        }
+
+        public Task ShowBusySystemTrayAsync(string text)
+        {
+            if (!ApiHelper.CheckIfIsSystemTrayPresent()) return Task.CompletedTask;
+
+            var statusBar = StatusBar.GetForCurrentView();
+            statusBar.ProgressIndicator.Text = text;
+            return statusBar.ProgressIndicator.ShowAsync().AsTask();
+        }
+
+        public Task HideBusySystemTrayAsync()
+        {
+            if (!ApiHelper.CheckIfIsSystemTrayPresent()) return Task.CompletedTask;
+
+            var statusBar = StatusBar.GetForCurrentView();
+            statusBar.ProgressIndicator.Text = string.Empty;
+            return statusBar.ProgressIndicator.HideAsync().AsTask();
         }
     }
 }

@@ -38,9 +38,11 @@ namespace WinSteroid.App.ViewModels
 
         public override void Initialize()
         {
-            this.DeviceName = this.DeviceService.Current.Name;
             this.ApplicationName = Package.Current.DisplayName;
             this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
+            this.CustomDate = DateTimeOffset.Now;
+            this.CustomTime = DateTimeOffset.Now.TimeOfDay;
+            this.DeviceName = this.DeviceService.Current.Name;
             this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
             this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
 
@@ -71,6 +73,20 @@ namespace WinSteroid.App.ViewModels
         public bool CanEnableUserNotifications
         {
             get { return ApiHelper.CheckIfSystemSupportNotificationListener(); }
+        }
+
+        private DateTimeOffset _customDate;
+        public DateTimeOffset CustomDate
+        {
+            get { return _customDate; }
+            set { Set(nameof(CustomDate), ref _customDate, value); }
+        }
+
+        private TimeSpan _customTime;
+        public TimeSpan CustomTime
+        {
+            get { return _customTime; }
+            set { Set(nameof(CustomTime), ref _customTime, value); }
         }
 
         private string _deviceName;
@@ -113,6 +129,20 @@ namespace WinSteroid.App.ViewModels
             if (result) return;
 
             this.EnableUserNotifications = false;
+        }
+
+        private bool _showCustomDateTimeOptions;
+        public bool ShowCustomDateTimeOptions
+        {
+            get { return _showCustomDateTimeOptions; }
+            set { Set(nameof(ShowCustomDateTimeOptions), ref _showCustomDateTimeOptions, value); }
+        }
+
+        private bool _timeSetSuccessfully;
+        public bool TimeSetSuccessfully
+        {
+            get { return _timeSetSuccessfully; }
+            set { Set(nameof(TimeSetSuccessfully), ref _timeSetSuccessfully, value); }
         }
 
         private bool _useBatteryLiveTile;
@@ -203,6 +233,56 @@ namespace WinSteroid.App.ViewModels
                 buttonConfirmText: "Yes, I'm sure",
                 buttonCancelText: "Mmm nope",
                 afterHideCallback: ManageResetMessageResult);
+        }
+
+        private RelayCommand _syncDateCommand;
+        public RelayCommand SyncDateCommand
+        {
+            get
+            {
+                if (_syncDateCommand == null)
+                {
+                    _syncDateCommand = new RelayCommand(SyncDate);
+                }
+
+                return _syncDateCommand;
+            }
+        }
+
+        private async void SyncDate()
+        {
+            var dateSynced = await this.DeviceService.SetTimeAsync(DateTime.Now);
+            this.TimeSetSuccessfully = dateSynced;
+
+            if (dateSynced) return;
+
+            await this.DialogService.ShowError("I cannot be able to automatically set time on your device", "Error");
+        }
+
+        private RelayCommand _manuallySyncDateCommand;
+        public RelayCommand ManuallySyncDateCommand
+        {
+            get
+            {
+                if (_manuallySyncDateCommand == null)
+                {
+                    _manuallySyncDateCommand = new RelayCommand(ManuallySyncDate);
+                }
+
+                return _manuallySyncDateCommand;
+            }
+        }
+
+        private async void ManuallySyncDate()
+        {
+            var fullDateTime = this.CustomDate.Date.Add(this.CustomTime);
+
+            var dateSynced = await this.DeviceService.SetTimeAsync(fullDateTime);
+            this.TimeSetSuccessfully = dateSynced;
+
+            if (dateSynced) return;
+
+            await this.DialogService.ShowError("I cannot be able to manually set time on your device", "Error");
         }
 
         private async void ManageResetMessageResult(bool confirmed)

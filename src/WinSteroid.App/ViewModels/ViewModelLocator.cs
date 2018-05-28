@@ -18,7 +18,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<ApplicationsPageViewModel>();
             SimpleIoc.Default.Register<ApplicationPageViewModel>();
 
-            if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+            if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 SimpleIoc.Default.Register<WatchFacePageViewModel>();
             }
@@ -47,7 +47,7 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Applications), typeof(Views.ApplicationsPage));
             navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
 
-            if (!Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+            if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 navigationService.Configure(nameof(WatchFace), typeof(Views.WatchFacePage));
             }
@@ -105,7 +105,7 @@ namespace WinSteroid.App.ViewModels
         {
             get
             {
-                if (Common.Helpers.ApiHelper.CheckIfSystemIsMobile())
+                if (Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
                 {
                     throw new PlatformNotSupportedException();
                 }

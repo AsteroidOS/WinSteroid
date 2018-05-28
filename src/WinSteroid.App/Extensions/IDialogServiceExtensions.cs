@@ -9,5 +9,10 @@ namespace GalaSoft.MvvmLight.Views
         {
             return dialogService.ShowError(exception, title, null, () => { });
         }
+
+        public static Task ShowError(this IDialogService dialogService, string message, string title)
+        {
+            return dialogService.ShowError(message, title, null, () => { });
+        }
     }
 }

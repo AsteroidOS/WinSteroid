@@ -290,5 +290,24 @@ namespace WinSteroid.App.Services
             this.TotalData = null;
             this.Progress = null;
         }
+
+        public Task<bool> SetTimeAsync(DateTime dateTime)
+        {
+            return this.SetTimeAsync(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
+        }
+
+        public Task<bool> SetTimeAsync(int year, int month, int day, int hour, int minute, int second)
+        {
+            var yearByte = Convert.ToByte(year - 1900);
+            var monthByte = Convert.ToByte(month - 1);
+            var dayByte = Convert.ToByte(day);
+            var hourByte = Convert.ToByte(hour);
+            var minuteByte = Convert.ToByte(minute);
+            var secondByte = Convert.ToByte(second);
+
+            var bytes = new[] { yearByte, monthByte, dayByte, hourByte, minuteByte, secondByte };
+
+            return this.WriteByteArrayToCharacteristicAsync(Asteroid.TimeSetCharacteristicUuid, bytes);
+        }
     }
 }
