@@ -2,8 +2,11 @@
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
+using Windows.Devices.Bluetooth.Background;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -11,6 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
 using WinSteroid.App.ViewModels;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App
 {
@@ -82,12 +86,63 @@ namespace WinSteroid.App
         {
             var backgroundTaskDeferral = args.TaskInstance.GetDeferral();
 
-            if (!StringExtensions.OrdinalIgnoreCaseEquals(args.TaskInstance.Task.Name, BackgroundService.UserNotificationsTaskName))
+            switch (args.TaskInstance.Task.Name)
             {
-                backgroundTaskDeferral.Complete();
-                return;
+                case BackgroundService.UserNotificationsTaskName:
+                    {
+                        await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
+                        break;
+                    }
+                case BackgroundService.ActiveNotificationTaskName:
+                    {
+                        await this.OnActiveNotificationBackgroundTaskActivated(args.TaskInstance);
+                        break;
+                    }
+                case BackgroundService.BatteryLevelTaskName:
+                    {
+                        await this.OnBatteryLevelBackgroundTaskActivated(args.TaskInstance);
+                        break;
+                    }
             }
 
+            backgroundTaskDeferral.Complete();
+        }
+
+        private Task OnActiveNotificationBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
+        {
+            //var notificationService = this.IsRunning ? SimpleIoc.Default.GetInstance<NotificationsService>() : new NotificationsService();
+
+            //var details = (GattCharacteristicNotificationTriggerDetails)backgroundTaskInstance.TriggerDetails;
+
+            //notificationService.ManageNotificationAction(details.Value);
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnBatteryLevelBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
+        {
+            var details = (GattCharacteristicNotificationTriggerDetails)backgroundTaskInstance.TriggerDetails;
+
+            var percentage = BatteryHelper.GetPercentage(details.Value);
+            if (percentage > 0)
+            {
+                TilesHelper.UpdateBatteryTile(percentage);
+            }
+            else
+            {
+                TilesHelper.ResetBatteryTile();
+            }
+
+            if (this.IsRunning)
+            {
+                ViewModelLocator.Main.BatteryPercentage = percentage;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private async Task OnUserNotificationsBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
+        {
             ApplicationsService applicationsService = null;
             NotificationsService notificationService = null;
             DeviceService deviceService = null;
@@ -109,18 +164,13 @@ namespace WinSteroid.App
             {
                 var deviceId = deviceService.GetLastSavedDeviceId();
                 var connected = await deviceService.ConnectAsync(deviceId);
-                if (!connected)
-                {
-                    backgroundTaskDeferral.Complete();
-                    return;
-                }
+                if (!connected) return;
             }
 
             var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
             if (userNotifications.Length == 0)
             {
                 notificationService.SaveLastNotificationIds(new string[0]);
-                backgroundTaskDeferral.Complete();
                 return;
             }
 
@@ -152,8 +202,6 @@ namespace WinSteroid.App
             notificationService.SaveLastNotificationIds(userNotifications);
 
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
-
-            backgroundTaskDeferral.Complete();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)

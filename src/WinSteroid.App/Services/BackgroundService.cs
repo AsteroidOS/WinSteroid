@@ -4,86 +4,35 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
-using WinSteroidTasks;
+using WinSteroid.Common;
 
 namespace WinSteroid.App.Services
 {
     public class BackgroundService
     {
-        public const string BatteryLevelTaskName = nameof(BatteryLevelBackgroundTask);
-        private static readonly string BatteryLevelTaskEntryPoint = typeof(BatteryLevelBackgroundTask).FullName;
+        private readonly DeviceService DeviceService;
 
-        public const string ActiveNotificationTaskName = nameof(ActiveNotificationBackgroundTask);
-        private static readonly string ActiveNotificationTaskEntryPoint = typeof(ActiveNotificationBackgroundTask).FullName;
+        public BackgroundService(DeviceService deviceService)
+        {
+            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+        }
 
-        public const string SystemSessionConnectedTaskName = nameof(SystemSessionConnectedTask);
-        private static readonly string SystemSessionConnectedTaskEntryPoint = typeof(SystemSessionConnectedTask).FullName;
-
+        public const string BatteryLevelTaskName = "BatteryLevelBackgroundTask";
+        public const string ActiveNotificationTaskName = "ActiveNotificationBackgroundTask";
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
-        public async Task<bool> RegisterBatteryLevelTask(GattCharacteristic characteristic)
-        {
-            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return true;
-
-            var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
-            if (!canExecuteBackgroundTasks) return false;
-
-            var builder = new BackgroundTaskBuilder
-            {
-                Name = BatteryLevelTaskName,
-                TaskEntryPoint = BatteryLevelTaskEntryPoint
-            };
-            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-            var result = builder.Register();
-
-            return result != null;
-        }
-
-        public bool RegisterBatteryLevelBackgroundTaskEventHandler(BackgroundTaskProgressEventHandler progressEventHandler)
-        {
-            if (progressEventHandler == null)
-            {
-                throw new ArgumentNullException(nameof(progressEventHandler));
-            }
-
-            var backgroundTask = this.GetBackgroundTask(BatteryLevelTaskName);
-            if (backgroundTask == null) return false;
-
-            backgroundTask.Progress += progressEventHandler;
-
-            return true;
-        }
-
-        public bool UnregisterBatteryLevelBackgroundTaskEventHandler(BackgroundTaskProgressEventHandler progressEventHandler)
-        {
-            if (progressEventHandler == null)
-            {
-                throw new ArgumentNullException(nameof(progressEventHandler));
-            }
-
-            var backgroundTask = this.GetBackgroundTask(BatteryLevelTaskName);
-            if (backgroundTask == null) return false;
-
-            try
-            {
-                backgroundTask.Progress -= progressEventHandler;
-            }
-            catch { }
-
-            return true;
-        }
-
-        public async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
+        public async Task<bool> RegisterActiveNotificationTask()
         {
             if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
 
             var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
             if (!canExecuteBackgroundTasks) return false;
 
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
+
             var builder = new BackgroundTaskBuilder
             {
-                Name = ActiveNotificationTaskName,
-                TaskEntryPoint = ActiveNotificationTaskEntryPoint
+                Name = ActiveNotificationTaskName
             };
             builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
             var result = builder.Register();
@@ -91,33 +40,20 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
-        //public async Task<bool> RegisterSystemSessionConnectedTask()
-        //{
-        //    if (IsBackgroundTaskRegistered(SystemSessionConnectedTaskName)) return true;
-
-        //    var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
-        //    if (!canExecuteBackgroundTasks) return false;
-
-        //    var builder = new BackgroundTaskBuilder
-        //    {
-        //        Name = SystemSessionConnectedTaskName,
-        //        TaskEntryPoint = SystemSessionConnectedTaskEntryPoint
-        //    };
-        //    builder.SetTrigger(new SystemTrigger(SystemTriggerType.SessionConnected, oneShot: false));
-        //    var result = builder.Register();
-
-        //    return result != null;
-        //}
-
-        public bool RegisterUserNotificationTask()
+        public async Task<bool> RegisterBatteryLevelTask()
         {
-            if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return true;
+            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return true;
+
+            var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
+            if (!canExecuteBackgroundTasks) return false;
+
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
 
             var builder = new BackgroundTaskBuilder
             {
-                Name = UserNotificationsTaskName
+                Name = BatteryLevelTaskName
             };
-            builder.SetTrigger(new UserNotificationChangedTrigger(NotificationKinds.Toast));
+            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
             var result = builder.Register();
 
             return result != null;
@@ -132,12 +68,28 @@ namespace WinSteroid.App.Services
                 && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
         }
 
-        public void UnregisterAllTasks()
+        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
         {
-            Unregister(ActiveNotificationTaskName);
-            Unregister(BatteryLevelTaskName);
-            Unregister(SystemSessionConnectedTaskName);
-            Unregister(UserNotificationsTaskName);
+            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
+        }
+
+        public bool IsBackgroundTaskRegistered(string taskName)
+        {
+            return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
+        }
+        
+        public bool RegisterUserNotificationTask()
+        {
+            if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return true;
+
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = UserNotificationsTaskName
+            };
+            builder.SetTrigger(new UserNotificationChangedTrigger(NotificationKinds.Toast));
+            var result = builder.Register();
+
+            return result != null;
         }
 
         public void Unregister(string taskName)
@@ -149,16 +101,6 @@ namespace WinSteroid.App.Services
                     task.Unregister(cancelTask: true);
                 }
             }
-        }
-
-        public bool IsBackgroundTaskRegistered(string taskName)
-        {
-            return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
-        }
-
-        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
-        {
-            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
         }
     }
 }

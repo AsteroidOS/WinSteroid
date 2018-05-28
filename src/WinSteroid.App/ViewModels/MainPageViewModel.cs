@@ -1,12 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth;
-using Windows.Foundation;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -17,9 +14,7 @@ namespace WinSteroid.App.ViewModels
     {
         private readonly BackgroundService BackgroundService;
         private readonly DeviceService DeviceService;
-
-        private TypedEventHandler<BackgroundTaskRegistration, BackgroundTaskProgressEventArgs> BatteryLevelProgressEventHandler = null;
-
+        
         public MainPageViewModel(
             BackgroundService backgroundService,
             DeviceService deviceService,
@@ -44,8 +39,6 @@ namespace WinSteroid.App.ViewModels
 
             this.DeviceName = this.DeviceService.Current.Name;
             this.DeviceService.AttachConnectionStatusChangedHandler(OnConnectionStatusChanged);
-            this.BatteryLevelProgressEventHandler = OnBatteryProgress;
-            this.RegisterBatteryLevelHandler();
 
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
@@ -57,8 +50,6 @@ namespace WinSteroid.App.ViewModels
             this.BusyMessage = string.Empty;
 
             Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
-
-            //await this.InizializeScreenshotContentHandlersAsync();
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -227,17 +218,7 @@ namespace WinSteroid.App.ViewModels
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.WatchFace));
         }
-
-        public void RegisterBatteryLevelHandler()
-        {
-            this.BackgroundService.RegisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
-        }
-
-        public void UnregisterBatteryLevelHandler()
-        {
-            this.BackgroundService.UnregisterBatteryLevelBackgroundTaskEventHandler(OnBatteryProgress);
-        }
-
+        
         private async Task InizializeScreenshotContentHandlersAsync()
         {
             var result = await this.DeviceService.RegisterToScreenshotContentService();
@@ -245,20 +226,6 @@ namespace WinSteroid.App.ViewModels
             {
                 await this.DialogService.ShowMessage("I cannot be able to finish screenshot content handlers registration!", "Error");
             }
-        }
-
-        private async void OnBatteryProgress(BackgroundTaskRegistration sender, BackgroundTaskProgressEventArgs args)
-        {
-            await DispatcherHelper.RunAsync(() =>
-            {
-                var newPercentage = Convert.ToInt32(args.Progress);
-                var oldPercentage = this.BatteryPercentage;
-
-                this.BatteryPercentage = newPercentage;
-                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-                Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
-            });
         }
 
         private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)

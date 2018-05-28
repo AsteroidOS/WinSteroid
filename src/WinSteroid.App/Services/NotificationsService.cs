@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
 using WinSteroid.Common.Helpers;
@@ -60,6 +62,19 @@ namespace WinSteroid.App.Services
             if (string.IsNullOrWhiteSpace(value)) return new string[0];
 
             return value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public void ManageNotificationAction(IBuffer buffer)
+        {
+            var bytes = new byte[buffer.Length];
+
+            DataReader.FromBuffer(buffer).ReadBytes(bytes);
+
+            if (bytes?.Length > 0)
+            {
+                var @string = Encoding.UTF8.GetString(bytes);
+                ToastsHelper.Show("Test action", @string);
+            }
         }
     }
 }

@@ -25,25 +25,6 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
-      <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroidTasks.BatteryLevelBackgroundTask">
-          <BackgroundTasks>
-            <Task Type="deviceConnectionChange" />
-            <Task Type="bluetooth" />
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroidTasks.ActiveNotificationBackgroundTask">
-          <BackgroundTasks>
-            <Task Type="deviceConnectionChange" />
-            <Task Type="bluetooth" />
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="WinSteroidTasks.SystemSessionConnectedTask">
-          <BackgroundTasks>
-            <Task Type="systemEvent" />
-          </BackgroundTasks>
-        </Extension>
-      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

@@ -3,7 +3,6 @@ using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 
@@ -28,7 +27,7 @@ namespace WinSteroid.App.ViewModels
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
-
+            
             this.Initialize();
         }
 
@@ -144,15 +143,11 @@ namespace WinSteroid.App.ViewModels
                 this.UseBatteryLiveTile = false;
                 return;
             }
-
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
             
-            await this.BackgroundService.RegisterBatteryLevelTask(characteristic);
+            await this.BackgroundService.RegisterBatteryLevelTask();
 
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             TilesHelper.UpdateBatteryTile(batteryPercentage);
-
-            ViewModelLocator.Main.RegisterBatteryLevelHandler();
         }
 
         private async void UnpinBatteryTile()
@@ -165,20 +160,7 @@ namespace WinSteroid.App.ViewModels
             }
 
             this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
-
-            ViewModelLocator.Main.UnregisterBatteryLevelHandler();
         }
-
-        //private async void InitializeActiveNotificationHandlers()
-        //{
-        //    var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
-
-        //    var result = await this.BackgroundService.RegisterActiveNotificationTask(characteristic);
-        //    if (!result)
-        //    {
-        //        await this.DialogService.ShowMessage("I cannot be able to finish active notification handlers registration!", "Error");
-        //    }
-        //}
 
         private RelayCommand _applicationsCommand;
         public RelayCommand ApplicationsCommand

@@ -287,10 +287,6 @@
       <Project>{ec5251db-f7cf-4d33-bb34-4ed03bae15a2}</Project>
       <Name>WinSteroid.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WinSteroidTasks\WinSteroidTasks.csproj">
-      <Project>{C0211A87-DCD0-4A8F-B73E-4DBFA391CE30}</Project>
-      <Name>WinSteroidTasks</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
