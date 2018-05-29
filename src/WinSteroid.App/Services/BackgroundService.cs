@@ -15,13 +15,10 @@ namespace WinSteroid.App.Services
         public BackgroundService(DeviceService deviceService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-
-            this.RegisterSystemSessionTask();
         }
 
         public const string BatteryLevelTaskName = "BatteryLevelBackgroundTask";
         public const string ActiveNotificationTaskName = "ActiveNotificationBackgroundTask";
-        public const string SystemSessionTaskName = "SystemSessionTask";
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
         private async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
@@ -76,20 +73,6 @@ namespace WinSteroid.App.Services
                 Name = BatteryLevelTaskName
             };
             builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-            var result = builder.Register();
-
-            return result != null;
-        }
-
-        private bool RegisterSystemSessionTask()
-        {
-            if (IsBackgroundTaskRegistered(SystemSessionTaskName)) return true;
-
-            var builder = new BackgroundTaskBuilder
-            {
-                Name = SystemSessionTaskName
-            };
-            builder.SetTrigger(new SystemTrigger(SystemTriggerType.SessionConnected, oneShot: false));
             var result = builder.Register();
 
             return result != null;

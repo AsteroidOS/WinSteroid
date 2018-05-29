@@ -98,14 +98,6 @@ namespace WinSteroid.App
                         await this.OnBatteryLevelBackgroundTaskActivated(args.TaskInstance);
                         break;
                     }
-                case BackgroundService.SystemSessionTaskName:
-                    {
-                        await this.OnSystemSessionBackgroundTaskActivated(args.TaskInstance);
-#if DEBUG
-                        ToastsHelper.Show("Battery task re-registered!");
-#endif
-                        break;
-                    }
                 case BackgroundService.UserNotificationsTaskName:
                     {
                         await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
