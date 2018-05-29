@@ -88,11 +88,6 @@ namespace WinSteroid.App
 
             switch (args.TaskInstance.Task.Name)
             {
-                case BackgroundService.UserNotificationsTaskName:
-                    {
-                        await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
-                        break;
-                    }
                 case BackgroundService.ActiveNotificationTaskName:
                     {
                         await this.OnActiveNotificationBackgroundTaskActivated(args.TaskInstance);
@@ -101,6 +96,19 @@ namespace WinSteroid.App
                 case BackgroundService.BatteryLevelTaskName:
                     {
                         await this.OnBatteryLevelBackgroundTaskActivated(args.TaskInstance);
+                        break;
+                    }
+                case BackgroundService.SystemSessionTaskName:
+                    {
+                        await this.OnSystemSessionBackgroundTaskActivated(args.TaskInstance);
+#if DEBUG
+                        ToastsHelper.Show("Battery task re-registered!");
+#endif
+                        break;
+                    }
+                case BackgroundService.UserNotificationsTaskName:
+                    {
+                        await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
                         break;
                     }
             }
@@ -139,6 +147,31 @@ namespace WinSteroid.App
             }
 
             return Task.CompletedTask;
+        }
+
+        private Task OnSystemSessionBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
+        {
+            if (!TilesHelper.BatteryTileExists()) return Task.CompletedTask;
+
+            ApplicationsService applicationsService = null;
+            DeviceService deviceService = null;
+            BackgroundService backgroundService = null;
+
+            if (this.IsRunning)
+            {
+                applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
+                deviceService = SimpleIoc.Default.GetInstance<DeviceService>();
+                backgroundService = SimpleIoc.Default.GetInstance<BackgroundService>();
+            }
+            else
+            {
+                applicationsService = new ApplicationsService();
+                deviceService = new DeviceService(applicationsService);
+                backgroundService = new BackgroundService(deviceService);
+            }
+
+            backgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+            return backgroundService.RegisterBatteryLevelTask();
         }
 
         private async Task OnUserNotificationsBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)

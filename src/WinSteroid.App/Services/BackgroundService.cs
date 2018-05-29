@@ -15,11 +15,33 @@ namespace WinSteroid.App.Services
         public BackgroundService(DeviceService deviceService)
         {
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+
+            this.RegisterSystemSessionTask();
         }
 
         public const string BatteryLevelTaskName = "BatteryLevelBackgroundTask";
         public const string ActiveNotificationTaskName = "ActiveNotificationBackgroundTask";
+        public const string SystemSessionTaskName = "SystemSessionTask";
         public const string UserNotificationsTaskName = "UserNotificationsTask";
+
+        private async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+
+            return backgroundAccessStatus != BackgroundAccessStatus.DeniedByUser
+                && backgroundAccessStatus != BackgroundAccessStatus.DeniedBySystemPolicy
+                && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
+        }
+
+        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
+        {
+            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
+        }
+
+        public bool IsBackgroundTaskRegistered(string taskName)
+        {
+            return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
+        }
 
         public async Task<bool> RegisterActiveNotificationTask()
         {
@@ -59,25 +81,20 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
-        private async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
+        private bool RegisterSystemSessionTask()
         {
-            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            if (IsBackgroundTaskRegistered(SystemSessionTaskName)) return true;
 
-            return backgroundAccessStatus != BackgroundAccessStatus.DeniedByUser
-                && backgroundAccessStatus != BackgroundAccessStatus.DeniedBySystemPolicy
-                && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
+            var builder = new BackgroundTaskBuilder
+            {
+                Name = SystemSessionTaskName
+            };
+            builder.SetTrigger(new SystemTrigger(SystemTriggerType.SessionConnected, oneShot: false));
+            var result = builder.Register();
+
+            return result != null;
         }
 
-        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
-        {
-            return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
-        }
-
-        public bool IsBackgroundTaskRegistered(string taskName)
-        {
-            return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
-        }
-        
         public bool RegisterUserNotificationTask()
         {
             if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return true;
