@@ -25,7 +25,7 @@ namespace WinSteroid.App.Converters
         {
             if (value is bool boolean)
             {
-                return new CornerRadius(boolean ? 120 : 24);
+                return new CornerRadius(boolean ? 120 : 0);
             }
 
             return value;
