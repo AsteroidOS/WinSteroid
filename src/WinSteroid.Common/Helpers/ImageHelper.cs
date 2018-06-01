@@ -17,7 +17,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System;
@@ -43,6 +45,35 @@ namespace WinSteroid.Common.Helpers
                 await bitmapImage.SetSourceAsync(ras);
 
                 return bitmapImage;
+            }
+        }
+
+        public static async Task<byte[]> EncodeToSquareJpegImageAsync(StorageFile inputFile, uint size, double dpi = 72)
+        {
+            var pixelsBytes = new byte[0];
+
+            using (var inputStream = await inputFile.OpenReadAsync())
+            {
+                var decoder = await BitmapDecoder.CreateAsync(inputStream);
+                var pixelData = await decoder.GetPixelDataAsync();
+                pixelsBytes = pixelData.DetachPixelData();
+            }
+
+            using (var inMemoryRandomAccessStream = new InMemoryRandomAccessStream())
+            {
+                var bitmapPropertySet = new BitmapPropertySet();
+                var bitmapTypedValue = new BitmapTypedValue(1.0d, PropertyType.Single);
+                bitmapPropertySet.Add("ImageQuality", bitmapTypedValue);
+
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, inMemoryRandomAccessStream, bitmapPropertySet);
+
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, size, size, dpi, dpi, pixelsBytes);
+
+                await encoder.FlushAsync();
+
+                await inMemoryRandomAccessStream.FlushAsync();
+
+                return await inMemoryRandomAccessStream.ToByteArrayAsync();
             }
         }
 

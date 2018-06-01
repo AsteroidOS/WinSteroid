@@ -33,7 +33,7 @@ namespace WinSteroid.App.ViewModels
         {
         }
 
-        private const int DefaultImageSize = 320;
+        private const int DefaultImageSize = 480;
 
         public override Task<bool> CanGoBack()
         {
@@ -144,21 +144,21 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
         }
 
-        private RelayCommand _connectCommand;
-        public RelayCommand ConnectCommand
+        private RelayCommand _uploadCommand;
+        public RelayCommand UploadCommand
         {
             get
             {
-                if (_connectCommand == null)
+                if (_uploadCommand == null)
                 {
-                    _connectCommand = new RelayCommand(Connect);
+                    _uploadCommand = new RelayCommand(Upload);
                 }
 
-                return _connectCommand;
+                return _uploadCommand;
             }
         }
 
-        private async void Connect()
+        private async void Upload()
         {
             if (this.SelectedFile == null) return;
 
@@ -182,12 +182,14 @@ namespace WinSteroid.App.ViewModels
                     scpClient.ErrorOccurred += OnClientErrorOccured;
                     scpClient.Uploading += OnClientUploading;
 
-                    using (var randomAccessStream = await this.SelectedFile.OpenReadAsync())
+                    var bytes = await ImageHelper.EncodeToSquareJpegImageAsync(this.SelectedFile, DefaultImageSize);
+
+                    using (var memoryStream = new MemoryStream())
                     {
-                        using (var stream = randomAccessStream.AsStream())
-                        {
-                            scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces-img/" + this.SelectedFile.Name);
-                        }
+                        memoryStream.Write(bytes, 0, bytes.Length);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+
+                        scpClient.Upload(memoryStream, "/usr/share/asteroid-launcher/wallpapers/" + this.SelectedFile.Name);
                     }
 
                     scpClient.Uploading -= OnClientUploading;

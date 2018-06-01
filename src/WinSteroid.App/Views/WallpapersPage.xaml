@@ -93,7 +93,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                     <Button Content="Install"
                             Padding="12,4"
-                            Command="{x:Bind ViewModel.ConnectCommand, Mode=OneWay}"
+                            Command="{x:Bind ViewModel.UploadCommand, Mode=OneWay}"
                             IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
                             Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
                 </StackPanel>

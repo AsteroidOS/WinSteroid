@@ -110,6 +110,7 @@
     <Compile Include="Extensions\ApplicationIconExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
+    <Compile Include="Extensions\IRandomAccessStreamExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
