@@ -102,21 +102,21 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
         }
 
-        private RelayCommand _connectCommand;
-        public RelayCommand ConnectCommand
+        private RelayCommand _uploadCommand;
+        public RelayCommand UploadCommand
         {
             get
             {
-                if (_connectCommand == null)
+                if (_uploadCommand == null)
                 {
-                    _connectCommand = new RelayCommand(Connect);
+                    _uploadCommand = new RelayCommand(Upload);
                 }
 
-                return _connectCommand;
+                return _uploadCommand;
             }
         }
 
-        private async void Connect()
+        private async void Upload()
         {
             if (this.SelectedFile == null) return;
 
