@@ -36,6 +36,7 @@ namespace WinSteroid.App.ViewModels
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 SimpleIoc.Default.Register<WatchFacePageViewModel>();
+                SimpleIoc.Default.Register<WallpapersPageViewModel>();
             }
 
             SimpleIoc.Default.Register(InitializeNavigationService);
@@ -65,6 +66,7 @@ namespace WinSteroid.App.ViewModels
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 navigationService.Configure(nameof(WatchFace), typeof(Views.WatchFacePage));
+                navigationService.Configure(nameof(Wallpapers), typeof(Views.WallpapersPage));
             }
 
             return navigationService;
@@ -86,6 +88,8 @@ namespace WinSteroid.App.ViewModels
                     return Application;
                 case nameof(WatchFace):
                     return WatchFace;
+                case nameof(Wallpapers):
+                    return Wallpapers;
                 default:
                     throw new ArgumentException(nameof(pageKey));
             }
@@ -126,6 +130,19 @@ namespace WinSteroid.App.ViewModels
                 }
 
                 return ServiceLocator.Current.GetInstance<WatchFacePageViewModel>();
+            }
+        }
+
+        public static WallpapersPageViewModel Wallpapers
+        {
+            get
+            {
+                if (Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
+                {
+                    throw new PlatformNotSupportedException();
+                }
+
+                return ServiceLocator.Current.GetInstance<WallpapersPageViewModel>();
             }
         }
 

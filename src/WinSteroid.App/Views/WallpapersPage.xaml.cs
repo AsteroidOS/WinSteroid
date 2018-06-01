@@ -15,11 +15,17 @@
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
 {
     public sealed partial class WallpapersPage : Page
     {
+        public WallpapersPageViewModel ViewModel
+        {
+            get { return this.DataContext as WallpapersPageViewModel; }
+        }
+
         public WallpapersPage()
         {
             this.InitializeComponent();
@@ -27,17 +33,17 @@ namespace WinSteroid.App.Views
 
         private void OnImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
-
+            this.ViewModel.IsImageBusy = false;
         }
 
         private void OnImageOpened(object sender, RoutedEventArgs e)
         {
-
+            this.ViewModel.IsImageBusy = false;
         }
 
         private void OnImageDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
-
+            this.ViewModel.IsImageBusy = true;
         }
     }
 }

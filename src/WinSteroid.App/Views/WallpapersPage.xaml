@@ -23,7 +23,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding Wallpapers, Source={StaticResource Locator}}">
 
     <Grid>
         <Grid.ChildrenTransitions>
@@ -63,7 +64,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                       Width="48"
                                       Height="48"
                                       Foreground="{ThemeResource TextBoxBorderThemeBrush}"
-                                      IsActive="{x:Bind IsImageBusy, Mode=OneWay}" />
+                                      IsActive="{x:Bind ViewModel.IsImageBusy, Mode=OneWay}" />
                     </Grid>
                 </Border>
 
