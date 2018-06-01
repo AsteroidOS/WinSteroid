@@ -118,7 +118,7 @@
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
-    <Compile Include="Services\SecureConnectionsHelper.cs" />
+    <Compile Include="Factory\SecureConnectionsFactory.cs" />
     <Compile Include="ViewModels\ApplicationPageViewModel.cs" />
     <Compile Include="ViewModels\BasePageViewModel.cs" />
     <Compile Include="ViewModels\ApplicationsPageViewModel.cs" />

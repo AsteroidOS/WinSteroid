@@ -15,9 +15,9 @@
 
 using Renci.SshNet;
 
-namespace WinSteroid.Common.Helpers
+namespace WinSteroid.App.Factory
 {
-    public static class SecureConnectionsHelper
+    public static class SecureConnectionsFactory
     {        
         public static ScpClient CreateScpClient(string ip, string username, string password)
         {

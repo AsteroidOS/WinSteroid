@@ -21,6 +21,7 @@ using GalaSoft.MvvmLight.Views;
 using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.App.Controls;
+using WinSteroid.App.Factory;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
@@ -134,7 +135,7 @@ namespace WinSteroid.App.ViewModels
             
             try
             {
-                using (var scpClient = SecureConnectionsHelper.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
+                using (var scpClient = SecureConnectionsFactory.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
                 {
                     scpClient.ErrorOccurred += OnClientErrorOccured;
                     scpClient.Uploading += OnClientUploading;
