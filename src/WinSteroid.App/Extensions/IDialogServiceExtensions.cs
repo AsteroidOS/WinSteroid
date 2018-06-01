@@ -29,5 +29,10 @@ namespace GalaSoft.MvvmLight.Views
         {
             return dialogService.ShowError(message, title, null, () => { });
         }
+
+        public static Task<bool> ShowConfirmMessage(this IDialogService dialogService, string message, string title)
+        {
+            return dialogService.ShowMessage(message, title, null, null, b => { });
+        }
     }
 }

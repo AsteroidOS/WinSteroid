@@ -49,6 +49,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         Width="360"
                         HorizontalAlignment="Left">
 
+                <TextBlock Text="Install new wallpaper/background image"
+                           Style="{ThemeResource BaseTextBlockStyle}" />
+
                 <Border HorizontalAlignment="Left"
                         Width="240"
                         Height="240"
@@ -68,8 +71,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </Grid>
                 </Border>
 
-                <TextBlock Text="Install new wallpaper/background image"
-                           Style="{ThemeResource BaseTextBlockStyle}" />
+                <ToggleSwitch Header="Use round preview"
+                              OnContent="Yes"
+                              OffContent="No"
+                              IsOn="{x:Bind ViewModel.UseRoundPreview, Mode=TwoWay}" 
+                              Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
 
                 <TextBox Text="{x:Bind ViewModel.SelectedFileName, Mode=OneWay}"
                          IsReadOnly="True"

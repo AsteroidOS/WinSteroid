@@ -133,7 +133,9 @@ namespace WinSteroid.App.ViewModels
 
             if (imageProperties.Width != imageProperties.Height)
             {
-                //Square Crop required
+                var cropImageTaskAllowed = await this.DialogService.ShowConfirmMessage("The selected image doesn't seem to be squared. Do you want to crop it now?", "Unsupported image sizes");
+                if (!cropImageTaskAllowed) return;
+                
                 file = await ImageHelper.CropImageFileAsync(file, cropWidthPixels: DefaultImageSize, cropHeightPixels: DefaultImageSize, ellipticalCrop: false);
             }
 
