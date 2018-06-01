@@ -140,6 +140,9 @@
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WallpapersPage.xaml.cs">
+      <DependentUpon>WallpapersPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WatchFacePage.xaml.cs">
       <DependentUpon>WatchFacePage.xaml</DependentUpon>
     </Compile>
@@ -224,6 +227,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WallpapersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
