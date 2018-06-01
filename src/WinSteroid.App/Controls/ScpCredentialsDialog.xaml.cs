@@ -27,6 +27,8 @@ namespace WinSteroid.App.Controls
         
         public string Password { get; set; }
 
+        public bool RememberCredentials { get; set; }
+
         public string ValidationSummary { get; set; }
 
         public ScpCredentialsDialog()
@@ -72,7 +74,21 @@ namespace WinSteroid.App.Controls
                 this.ValidationSummary = string.Empty;
             }
 
+            if (validForm && this.RememberCredentials)
+            {
+                SettingsHelper.SaveScpCredentialsIntoVault(this.HostIP, this.Username, this.Password, overwriteIfExists: true);
+            }
+
             args.Cancel = !validForm;
+        }
+
+        private void OnHostIpTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var passwordCredential = SettingsHelper.GetScpCredentialsFromVault(this.HostIP);
+            if (passwordCredential == null) return;
+
+            this.Username = passwordCredential.UserName;
+            this.Password = passwordCredential.Password;
         }
     }
 }

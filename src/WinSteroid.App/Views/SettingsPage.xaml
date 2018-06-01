@@ -114,6 +114,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                      Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
                      Margin="0,12,0,0" />-->
 
+                <TextBlock Text="Secure connections"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="0,24,0,8" />
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Remove all remembered credentials"
+                            Padding="12,4"
+                            Command="{x:Bind ViewModel.ResetScpCredentialsCommand, Mode=OneWay}" />
+
+                    <SymbolIcon Symbol="Accept" 
+                                Margin="8,4"
+                                Visibility="{x:Bind ViewModel.ScpCredentialsRemoved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                </StackPanel>
+                
                 <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
                            Style="{ThemeResource BaseTextBlockStyle}"
                            Margin="0,24,0,8" />
