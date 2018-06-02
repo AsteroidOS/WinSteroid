@@ -116,5 +116,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </Grid>
             </StackPanel>
         </ScrollViewer>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="How to connect with USB"
+                              Command="{x:Bind ViewModel.UsbTutorialCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Help" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

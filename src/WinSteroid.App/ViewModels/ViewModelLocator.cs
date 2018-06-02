@@ -32,13 +32,14 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<SettingsPageViewModel>();
             SimpleIoc.Default.Register<ApplicationsPageViewModel>();
             SimpleIoc.Default.Register<ApplicationPageViewModel>();
+            SimpleIoc.Default.Register<TutorialsPageViewModel>();
+
+            SimpleIoc.Default.Register<Tutorial.UsbPageViewModel>();
 
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 SimpleIoc.Default.Register<WatchFacePageViewModel>();
                 SimpleIoc.Default.Register<WallpapersPageViewModel>();
-
-                SimpleIoc.Default.Register<Tutorial.UsbPageViewModel>();
             }
 
             SimpleIoc.Default.Register(InitializeNavigationService);
@@ -64,12 +65,14 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
             navigationService.Configure(nameof(Applications), typeof(Views.ApplicationsPage));
             navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
+            navigationService.Configure(nameof(Tutorials), typeof(Views.TutorialsPage));
+
+            navigationService.Configure(nameof(TutorialUsb), typeof(Views.Tutorials.UsbPage));
 
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
                 navigationService.Configure(nameof(WatchFace), typeof(Views.WatchFacePage));
                 navigationService.Configure(nameof(Wallpapers), typeof(Views.WallpapersPage));
-                navigationService.Configure(nameof(TutorialUsb), typeof(Views.Tutorials.UsbPage));
             }
 
             return navigationService;
@@ -93,6 +96,8 @@ namespace WinSteroid.App.ViewModels
                     return WatchFace;
                 case nameof(Wallpapers):
                     return Wallpapers;
+                case nameof(Tutorials):
+                    return Tutorials;
                 case nameof(TutorialUsb):
                     return TutorialUsb;
                 default:
@@ -151,15 +156,18 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
+        public static TutorialsPageViewModel Tutorials
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<TutorialsPageViewModel>();
+            }
+        }
+
         public static Tutorial.UsbPageViewModel TutorialUsb
         {
             get
             {
-                if (Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
-                {
-                    throw new PlatformNotSupportedException();
-                }
-
                 return ServiceLocator.Current.GetInstance<Tutorial.UsbPageViewModel>();
             }
         }

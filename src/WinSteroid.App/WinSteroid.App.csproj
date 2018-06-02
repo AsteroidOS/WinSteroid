@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\ApplicationsPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\TutorialsPageViewModel.cs" />
     <Compile Include="ViewModels\Tutorial\UsbPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WallpapersPageViewModel.cs" />
@@ -141,6 +142,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TutorialsPage.xaml.cs">
+      <DependentUpon>TutorialsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tutorials\UsbPage.xaml.cs">
       <DependentUpon>UsbPage.xaml</DependentUpon>
@@ -234,6 +238,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TutorialsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

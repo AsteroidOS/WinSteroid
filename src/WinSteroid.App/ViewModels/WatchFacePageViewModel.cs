@@ -205,6 +205,25 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
         }
 
+        private RelayCommand _usbTutorialCommand;
+        public RelayCommand UsbTutorialCommand
+        {
+            get
+            {
+                if (_usbTutorialCommand == null)
+                {
+                    _usbTutorialCommand = new RelayCommand(GoToUsbTutorial);
+                }
+
+                return _usbTutorialCommand;
+            }
+        }
+
+        private void GoToUsbTutorial()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialUsb));
+        }
+
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)
         {
             this.UploadProgress = Convert.ToInt32(((args.Size - args.Uploaded) * 100) / args.Size);

@@ -13,35 +13,28 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels.Tutorial;
+using WinSteroid.App.ViewModels;
 
-namespace WinSteroid.App.Views.Tutorials
+namespace WinSteroid.App.Views
 {
-    public sealed partial class UsbPage : Page
+    public sealed partial class TutorialsPage : Page
     {
-        public UsbPageViewModel ViewModel
+        public TutorialsPageViewModel ViewModel
         {
-            get { return this.DataContext as UsbPageViewModel; }
+            get { return this.DataContext as TutorialsPageViewModel; }
         }
 
-        public UsbPage()
+        public TutorialsPage()
         {
             this.InitializeComponent();
         }
 
-        private void OnNextPageClick(object sender, RoutedEventArgs e)
+        private void OnTutorialItemsListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var currentSelectedIndex = this.MainPivot.SelectedIndex;
-            if (currentSelectedIndex == this.MainPivot.Items.Count - 1)
-            {
-                this.MainPivot.SelectedIndex = 0;
-            }
-            else
-            {
-                this.MainPivot.SelectedIndex++;
-            }
+            if (!(sender is ListView listView)) return;
+
+            listView.SelectedIndex = -1;
         }
     }
 }
