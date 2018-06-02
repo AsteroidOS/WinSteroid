@@ -124,6 +124,7 @@ namespace WinSteroid.App.ViewModels
 
                 if (!ApiHelper.CheckIfIsSystemMobile())
                 {
+                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Type = MenuOptionType.Wallpapers });
                     menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Type = MenuOptionType.WatchFaces });
                 }
 
@@ -148,6 +149,9 @@ namespace WinSteroid.App.ViewModels
                         break;
                     case MenuOptionType.Screenshots:
                         this.TakeScreenshot();
+                        break;
+                    case MenuOptionType.Wallpapers:
+                        this.GoToWallpapers();
                         break;
                     case MenuOptionType.WatchFaces:
                         this.GoToWatchFaces();
@@ -215,6 +219,25 @@ namespace WinSteroid.App.ViewModels
             await this.DeviceService.TakeScreenshotAsync();
         }
 
+        private RelayCommand _wallpapersCommand;
+        public RelayCommand WallpapersCommand
+        {
+            get
+            {
+                if (_wallpapersCommand == null)
+                {
+                    _wallpapersCommand = new RelayCommand(GoToWallpapers);
+                }
+
+                return _wallpapersCommand;
+            }
+        }
+
+        private void GoToWallpapers()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Wallpapers));
+        }
+
         private RelayCommand _watchFacesCommand;
         public RelayCommand WatchFacesCommand
         {
@@ -280,6 +303,7 @@ namespace WinSteroid.App.ViewModels
     public enum MenuOptionType
     {
         Settings,
+        Wallpapers,
         WatchFaces,
         Screenshots
     }

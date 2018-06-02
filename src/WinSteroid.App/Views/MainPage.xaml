@@ -102,6 +102,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                 <Visibility>Collapsed</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="WallpapersButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Desktop">
@@ -110,6 +115,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="WatchFaceButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="WallpapersButton.Visibility">
                             <Setter.Value>
                                 <Visibility>Visible</Visibility>
                             </Setter.Value>
@@ -232,13 +242,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
+                <AppBarButton x:Name="WallpapersButton" 
+                              Command="{x:Bind ViewModel.WallpapersCommand, Mode=OneWay}"
+                              Label="Wallpapers">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="" 
+                                  FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <!--<AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
                               IsEnabled="False"
                               Label="Take screenshot">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Pictures" />
                     </AppBarButton.Icon>
-                </AppBarButton>
+                </AppBarButton>-->
                 <AppBarButton Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}" 
                               Label="Settings">
                     <AppBarButton.Icon>
