@@ -44,16 +44,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <FontIcon Glyph="❌"
                           FontFamily="Segoe UI Symbol"
                           FontWeight="Bold"
-                          FontSize="64"
-                          Canvas.Left="32" 
-                          Canvas.Top="52"
-                          Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                          FontSize="48"
+                          Canvas.Left="40" 
+                          Canvas.Top="64"
+                          Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"  
                           Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <Path Width="64" 
-                      Height="64" 
-                      Canvas.Left="32" 
-                      Canvas.Top="64" 
+                <Path Width="48" 
+                      Height="48" 
+                      Canvas.Left="40" 
+                      Canvas.Top="72" 
                       Stretch="Fill" 
                       Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
                       Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
@@ -91,15 +91,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{x:Bind ViewModel.PairCommand, Mode=OneWay}" />
 
-        <ProgressRing Grid.Row="0" 
-                      Grid.RowSpan="3"
+        <ProgressRing Grid.Row="1"
+                      Width="116"
+                      Height="116"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
-                      Width="240"
-                      Height="240"
-                      Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
-                      Style="{StaticResource LargeProgressRingStyle}"
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <Grid Grid.Row="3"
@@ -111,6 +108,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                        Padding="16,0"
                        Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                        Style="{ThemeResource BaseTextBlockStyle}" />
+            
             <TextBlock Text="{x:Bind ViewModel.ApplicationFooter, Mode=OneWay}" 
                        TextAlignment="Right"
                        VerticalAlignment="Center"
