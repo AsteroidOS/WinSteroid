@@ -13,14 +13,21 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.IO;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
 {
     public sealed partial class WallpapersPage : Page
     {
+        public static WallpapersPage Current;
+
         public WallpapersPageViewModel ViewModel
         {
             get { return this.DataContext as WallpapersPageViewModel; }
@@ -29,6 +36,30 @@ namespace WinSteroid.App.Views
         public WallpapersPage()
         {
             this.InitializeComponent();
+
+            Current = this;
+        }
+
+        public async void LoadImage(StorageFile storageFile)
+        {
+            this.ViewModel.IsImageBusy = true;
+
+            try
+            {
+                var bitmapImage = new BitmapImage();
+                bitmapImage.ImageFailed += OnImageFailed;
+                bitmapImage.ImageOpened += OnImageOpened;
+
+                this.WallpaperPreviewImage.Source = bitmapImage;
+
+                var stream = await storageFile.OpenStreamForReadAsync();
+
+                await bitmapImage.SetSourceAsync(stream.AsRandomAccessStream());
+            }
+            catch
+            {
+                this.LoadDefaultImage();
+            }
         }
 
         private void OnImageFailed(object sender, ExceptionRoutedEventArgs e)
@@ -36,14 +67,26 @@ namespace WinSteroid.App.Views
             this.ViewModel.IsImageBusy = false;
         }
 
+        private async void LoadDefaultImage()
+        {
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/default.png"));
+
+            this.LoadImage(storageFile);
+        }
+
         private void OnImageOpened(object sender, RoutedEventArgs e)
         {
             this.ViewModel.IsImageBusy = false;
         }
 
-        private void OnImageDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.ViewModel.IsImageBusy = true;
+            if (this.ViewModel.SelectedFile != null)
+            {
+                this.LoadImage(this.ViewModel.SelectedFile);
+            }
+
+            base.OnNavigatedTo(e);
         }
     }
 }

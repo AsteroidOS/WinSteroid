@@ -134,7 +134,11 @@ namespace WinSteroid.App.ViewModels
             if (imageProperties.Width != imageProperties.Height)
             {
                 var cropImageTaskAllowed = await this.DialogService.ShowConfirmMessage("The selected image doesn't seem to be squared. Do you want to crop it now?", "Unsupported image sizes");
-                if (!cropImageTaskAllowed) return;
+                if (!cropImageTaskAllowed)
+                {
+                    this.IsBusy = false;
+                    return;
+                }
                 
                 file = await ImageHelper.CropImageFileAsync(file, cropWidthPixels: DefaultImageSize, cropHeightPixels: DefaultImageSize, ellipticalCrop: false);
             }
@@ -142,6 +146,8 @@ namespace WinSteroid.App.ViewModels
             this.SelectedFile = file;
             this.SelectedFileName = file?.Name;
             this.IsBusy = false;
+            
+            Views.WallpapersPage.Current.LoadImage(file);
         }
 
         private RelayCommand _uploadCommand;

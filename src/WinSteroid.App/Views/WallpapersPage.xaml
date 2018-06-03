@@ -59,14 +59,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         CornerRadius="{x:Bind ViewModel.UseRoundPreview, Mode=OneWay, Converter={StaticResource BooleanToCornerRadiusConverter}}"
                         Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}">
                     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
-                        <Image DataContextChanged="OnImageDataContextChanged" 
-                               ImageOpened="OnImageOpened"
-                               ImageFailed="OnImageFailed" />
+                        <Image x:Name="WallpaperPreviewImage" />
+                        
                         <ProgressRing VerticalAlignment="Center"
                                       HorizontalAlignment="Center"
                                       Width="48"
                                       Height="48"
-                                      Foreground="{ThemeResource TextBoxBorderThemeBrush}"
+                                      Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                       IsActive="{x:Bind ViewModel.IsImageBusy, Mode=OneWay}" />
                     </Grid>
                 </Border>
