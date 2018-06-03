@@ -30,11 +30,11 @@ namespace WinSteroid.App.Views
             this.InitializeComponent();
         }
 
-        private void OnTutorialItemsListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnTutorialItemsClick(object sender, ItemClickEventArgs e)
         {
-            if (!(sender is ListView listView)) return;
+            if (!(e.ClickedItem is TutorialItem tutorialItem)) return;
 
-            listView.SelectedIndex = -1;
+            this.ViewModel.NavigateTo(tutorialItem.PageKey);
         }
     }
 }

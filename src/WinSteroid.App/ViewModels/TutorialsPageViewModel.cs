@@ -34,25 +34,16 @@ namespace WinSteroid.App.ViewModels
 
         }
 
-        private TutorialItem _selectedTutorialItem;
-        public TutorialItem SelectedTutorialItem
-        {
-            get { return _selectedTutorialItem; }
-            set
-            {
-                if (!Set(nameof(SelectedTutorialItem), ref _selectedTutorialItem, value)) return;
-
-                if (_selectedTutorialItem == null) return;
-
-                this.NavigationService.NavigateTo(_selectedTutorialItem.PageKey);
-            }
-        }
-
         private List<TutorialItem> _tutorialItems;
         public List<TutorialItem> TutorialItems
         {
             get { return _tutorialItems; }
             set { Set(nameof(TutorialItems), ref _tutorialItems, value); }
+        }
+
+        public void NavigateTo(string pageKey)
+        {
+            this.NavigationService.NavigateTo(pageKey);
         }
     }
 

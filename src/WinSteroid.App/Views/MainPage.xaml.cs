@@ -64,11 +64,11 @@ namespace WinSteroid.App.Views
             storyBoard.Begin();
         }
 
-        private void OnMenuListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnMenuOptionClick(object sender, ItemClickEventArgs e)
         {
-            if (!(sender is ListView listView)) return;
+            if (!(e.ClickedItem is MenuOptionViewModel menuOption)) return;
 
-            listView.SelectedIndex = -1;
+            this.ViewModel.ManageSelectedMenuOption(menuOption);
         }
     }
 }

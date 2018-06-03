@@ -119,7 +119,6 @@ namespace WinSteroid.App.ViewModels
                 var menuOptions = new List<MenuOptionViewModel>
                 {
                     new MenuOptionViewModel { Glyph = "", Label = "Settings", Type = MenuOptionType.Settings },
-                    new MenuOptionViewModel { Glyph = "", Label = "Screenshots", Type = MenuOptionType.Screenshots }
                 };
 
                 if (!ApiHelper.CheckIfIsSystemMobile())
@@ -128,38 +127,36 @@ namespace WinSteroid.App.ViewModels
                     menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Type = MenuOptionType.WatchFaces });
                 }
 
+                menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Type = MenuOptionType.Tutorials });
+
                 return menuOptions;
             }
         }
 
-        private MenuOptionViewModel _selectedMenuOption;
-        public MenuOptionViewModel SelectedMenuOption
+        public void ManageSelectedMenuOption(MenuOptionViewModel menuOption)
         {
-            get { return _selectedMenuOption; }
-            set
-            {
-                if (!Set(nameof(SelectedMenuOption), ref _selectedMenuOption, value)) return;
+            if (menuOption == null) return;
 
-                if (_selectedMenuOption == null) return;
-                
-                switch (_selectedMenuOption.Type)
-                {
-                    case MenuOptionType.Settings:
-                        this.GoToSettings();
-                        break;
-                    case MenuOptionType.Screenshots:
-                        this.TakeScreenshot();
-                        break;
-                    case MenuOptionType.Wallpapers:
-                        this.GoToWallpapers();
-                        break;
-                    case MenuOptionType.WatchFaces:
-                        this.GoToWatchFaces();
-                        break;
-                }
-                
-                this.IsMenuOpen = false;
+            switch (menuOption.Type)
+            {
+                case MenuOptionType.Settings:
+                    this.GoToSettings();
+                    break;
+                case MenuOptionType.Screenshots:
+                    this.TakeScreenshot();
+                    break;
+                case MenuOptionType.Wallpapers:
+                    this.GoToWallpapers();
+                    break;
+                case MenuOptionType.WatchFaces:
+                    this.GoToWatchFaces();
+                    break;
+                case MenuOptionType.Tutorials:
+                    this.GoToTutorials();
+                    break;
             }
+
+            this.IsMenuOpen = false;
         }
 
         private RelayCommand _menuCommand;
@@ -305,6 +302,7 @@ namespace WinSteroid.App.ViewModels
         Settings,
         Wallpapers,
         WatchFaces,
-        Screenshots
+        Screenshots,
+        Tutorials
     }
 }

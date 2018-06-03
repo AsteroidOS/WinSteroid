@@ -36,40 +36,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState x:Name="Narrow">
-                    <VisualState.StateTriggers>
-                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
-                        <Setter Target="MainCommandBar.Visibility">
-                            <Setter.Value>
-                                <Visibility>Visible</Visibility>
-                            </Setter.Value>
-                        </Setter>
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="Normal">
-                    <VisualState.StateTriggers>
-                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
-                        <Setter Target="MainSplitView.CompactPaneLength" Value="48" />
-                        <Setter Target="MainCommandBar.Visibility">
-                            <Setter.Value>
-                                <Visibility>Visible</Visibility>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Target="MainCommandBar.Visibility">
-                            <Setter.Value>
-                                <Visibility>Collapsed</Visibility>
-                            </Setter.Value>
-                        </Setter>
-                    </VisualState.Setters>
-                </VisualState>
                 <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
                         <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="1000" />
@@ -86,6 +52,40 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         <Setter Target="MainCommandBar.Visibility">
                             <Setter.Value>
                                 <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainSplitView.CompactPaneLength" Value="48" />
+                        <Setter Target="MenuButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
                             </Setter.Value>
                         </Setter>
                     </VisualState.Setters>
@@ -131,6 +131,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <SplitView Grid.Row="0" 
                    x:Name="MainSplitView"
+                   PaneBackground="{ThemeResource SystemControlAltMediumLowAcrylicWindowMediumBrush}"
                    IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
             <SplitView.Pane>
                 <StackPanel HorizontalAlignment="Stretch">
@@ -145,10 +146,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             Command="{x:Bind ViewModel.MenuCommand, Mode=OneWay}" />
                     
                     <ListView ItemsSource="{x:Bind ViewModel.MenuOptions}"
-                              SelectedItem="{x:Bind ViewModel.SelectedMenuOption, Mode=TwoWay}"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                               HorizontalAlignment="Stretch"
-                              SelectionChanged="OnMenuListViewSelectionChanged">
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="OnMenuOptionClick">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />

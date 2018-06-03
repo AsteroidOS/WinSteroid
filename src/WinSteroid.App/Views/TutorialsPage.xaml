@@ -46,8 +46,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <ListView Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.TutorialItems}"
-                  SelectedItem="{x:Bind ViewModel.SelectedTutorialItem, Mode=TwoWay}"
-                  SelectionChanged="OnTutorialItemsListViewSelectionChanged">
+                  IsItemClickEnabled="True"
+                  SelectionMode="None"
+                  ItemClick="OnTutorialItemsClick">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
