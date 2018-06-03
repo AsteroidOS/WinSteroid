@@ -22,8 +22,8 @@ namespace WinSteroid.Common
     public static class Asteroid
     {
         //Advertisement UUIDs
-        public static Guid AdvertisementUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
-        
+        public static Guid AdvertisementServiceUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
+
         private static BLEService _batteryService;
         public static BLEService BatteryService
         {

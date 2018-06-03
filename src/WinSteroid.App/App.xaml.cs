@@ -203,8 +203,8 @@ namespace WinSteroid.App
             if (deviceService.BluetoothDevice == null || deviceService.Current == null)
             {
                 var deviceId = deviceService.GetLastSavedDeviceId();
-                var connected = await deviceService.ConnectAsync(deviceId);
-                if (!connected) return;
+                var errorMessage = await deviceService.ConnectAsync(deviceId);
+                if (!string.IsNullOrWhiteSpace(errorMessage)) return;
             }
 
             var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];

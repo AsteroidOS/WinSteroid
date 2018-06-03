@@ -48,8 +48,7 @@ namespace WinSteroid.App.ViewModels
             var deviceId = this.DeviceService.GetLastSavedDeviceId();
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
-                this.DeviceId = deviceId;
-                this.Pair();
+                this.Pair(deviceId);
             }
             else
             {
@@ -61,8 +60,6 @@ namespace WinSteroid.App.ViewModels
 
         public override void Reset()
         {
-            this.DeviceId = string.Empty;
-            this.DeviceName = string.Empty;
             this.ShowConnectionOptions = true;
         }
 
@@ -78,20 +75,6 @@ namespace WinSteroid.App.ViewModels
         {
             get { return _connectionFailed; }
             set { Set(nameof(ConnectionFailed), ref _connectionFailed, value); }
-        }
-
-        private string _deviceId;
-        public string DeviceId
-        {
-            get { return _deviceId; }
-            set { Set(nameof(DeviceId), ref _deviceId, value); }
-        }
-
-        private string _deviceName;
-        public string DeviceName
-        {
-            get { return _deviceName; }
-            set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
 
         private bool _showConnectionOptions;
@@ -119,23 +102,22 @@ namespace WinSteroid.App.ViewModels
         {
             this.ConnectionFailed = false;
             this.ShowConnectionOptions = false;
-            if (!string.IsNullOrWhiteSpace(this.DeviceId))
+
+            var deviceId = this.DeviceService.GetLastSavedDeviceId();
+            if (!string.IsNullOrWhiteSpace(deviceId))
             {
-                this.Pair();
+                this.Pair(deviceId);
                 return;
             }
             
-            var result = await this.DeviceService.PickSingleDeviceAsync(Views.WelcomePage.Current);
-            if (!result)
+            var device = await this.DeviceService.PickSingleDeviceAsync(Views.WelcomePage.Current);
+            if (device == null)
             {
                 this.ShowConnectionOptions = true;
                 return;
             }
-
-            this.DeviceId = this.DeviceService.Current.Id;
-            this.DeviceName = this.DeviceService.Current.Name;
-
-            this.Pair();
+            
+            this.Pair(this.DeviceService.Current.Id);
         }
         
         private RelayCommand _pairCommand;
@@ -145,37 +127,40 @@ namespace WinSteroid.App.ViewModels
             {
                 if (_pairCommand == null)
                 {
-                    _pairCommand = new RelayCommand(Pair, CanPair);
+                    _pairCommand = new RelayCommand(Pair);
                 }
 
                 return _pairCommand;
             }
         }
 
-        private bool CanPair()
+        private void Pair()
         {
-            return !string.IsNullOrWhiteSpace(this.DeviceId) || this.DeviceService.Current != null;
+            if (this.DeviceService.Current != null)
+            {
+                this.Pair(this.DeviceService.Current.Id);
+            }
+            else
+            {
+                var deviceId = this.DeviceService.GetLastSavedDeviceId();
+
+                this.Pair(deviceId);
+            }
         }
 
-        private async void Pair()
+        private async void Pair(string deviceId)
         {
             this.IsBusy = true;
             this.BusyMessage = "Pairing";
             this.ConnectionFailed = false;
 
-            if (string.IsNullOrWhiteSpace(this.DeviceId) && this.DeviceService.Current != null)
-            {
-                this.DeviceId = this.DeviceService.Current.Id;
-                this.DeviceName = this.DeviceService.Current.Name;
-            }
-
-            var connected = await this.DeviceService.ConnectAsync(this.DeviceId);
-            if (!connected)
+            var errorMessage = await this.DeviceService.ConnectAsync(deviceId);
+            if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 this.IsBusy = false;
                 this.BusyMessage = string.Empty;
                 this.ConnectionFailed = true;
-                await this.DialogService.ShowMessage("I cannot connect to selected Bluetooth device", "Error");
+                await this.DialogService.ShowMessage(errorMessage, "Error");
                 return;
             }
 

@@ -59,22 +59,39 @@ namespace WinSteroid.App.Services
             SettingsHelper.SetValue(Constants.LastSavedDeviceNameSettingKey, this.Current?.Name ?? string.Empty);
         }
 
-        public async Task<bool> ConnectAsync(string deviceId)
+        public async Task<string> ConnectAsync(string deviceId)
         {
             try
             {
-                this.BluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
-                if (this.BluetoothDevice == null) return false;
+                var bluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
+                if (bluetoothDevice == null)
+                {
+                    //DISAPPEARED DEVICE
+                    return "I cannot connect to the selected Bluetooth device, seems to be disappeared";
+                }
+                
+                var timeServicesResult = await bluetoothDevice.GetGattServicesForUuidAsync(Asteroid.TimeServiceUuid);
+                if (timeServicesResult.Status != GattCommunicationStatus.Success 
+                    || (timeServicesResult.Status == GattCommunicationStatus.Success && timeServicesResult.Services.Count < 1))
+                {
+                    //WRONG DEVICE
+                    return "I cannot connect to the selected Bluetooth device, seems to not be an AsteroidOS device";
+                }
 
-                this.Current = BluetoothDevice.DeviceInformation;
+                this.BluetoothDevice = bluetoothDevice;
+                this.Current = bluetoothDevice.DeviceInformation;
             }
-            catch
+            catch (Exception exception)
             {
                 //ERROR
-                return false;
+#if DEBUG
+                return "An error occured. Exception: " + exception.ToString();
+#else
+                return "An error occured during connection";
+#endif
             }
 
-            return this.BluetoothDevice != null && this.Current != null;
+            return this.BluetoothDevice != null && this.Current != null ? string.Empty : "Connection failed";
         }
 
         public void AttachConnectionStatusChangedHandler(TypedEventHandler<BluetoothLEDevice, object> connectionStatusChangedHandler)
@@ -127,11 +144,8 @@ namespace WinSteroid.App.Services
 
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
-            }
-
-            if (this.Current != null)
-            {
                 this.Current = null;
+
                 this.UpdateLastSavedDeviceInfo();
             }
         }
@@ -231,7 +245,7 @@ namespace WinSteroid.App.Services
             return this.WriteByteArrayToCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid, utf8Bytes);
         }
 
-        public async Task<bool> PickSingleDeviceAsync(FrameworkElement element)
+        public IAsyncOperation<DeviceInformation> PickSingleDeviceAsync(FrameworkElement element)
         {
             var devicePicker = new DevicePicker();
             devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(false));
@@ -239,12 +253,7 @@ namespace WinSteroid.App.Services
 
             var rect = element.GetPickerRect();
 
-            var device = await devicePicker.PickSingleDeviceAsync(rect);
-            if (device == null) return false;
-
-            this.Current = device;
-
-            return true;
+            return devicePicker.PickSingleDeviceAsync(rect);
         }
         
         public async Task<bool> RegisterToScreenshotContentService()
