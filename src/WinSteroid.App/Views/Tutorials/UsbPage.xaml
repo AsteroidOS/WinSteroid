@@ -73,7 +73,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                   Width="108" 
                                   Height="162" 
                                   Stretch="Fill"
-                                  Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                                  Fill="{ThemeResource BackButtonDisabledForegroundThemeBrush}" 
                                   Data="M 224,160C 224,187.224 215.962,214.751 192,224L 183.018,256L 136.485,256L 128,224C 104.291,214.627 96,187.042 96,160C 96,132.958 104.291,105.373 128,96L 136.462,64L 183.022,64L 192,96C 215.963,105.249 224,132.776 224,160 Z M 160,108.8C 188.277,108.8 211.2,131.723 211.2,160C 211.2,188.277 188.277,211.2 160,211.2C 131.723,211.2 108.8,188.277 108.8,160C 108.8,131.723 131.723,108.8 160,108.8 Z "/>
 
                             <Path Grid.Column="1" 
@@ -87,7 +87,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                   Width="150" 
                                   Height="116" 
                                   Stretch="Fill" 
-                                  Fill="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                  Fill="{ThemeResource BackButtonDisabledForegroundThemeBrush}"
                                   Data="F1 M 114.982,203.823L 166.236,152.568L 320,152.568L 320,209.644L 114.982,209.644L 114.982,203.823 Z M 166.236,148.779L 166.236,54.5412L 320,54.5412L 320,60.1089L 171.979,60.1089L 171.979,142.458L 320,142.458L 320,148.779L 166.236,148.779 Z M 224.474,81.6446L 246.05,78.8192L 246.05,99.4129L 224.474,99.4129L 224.474,81.6446 Z M 246.05,122.545L 224.474,119.719L 224.474,101.951L 246.05,101.951L 246.05,122.545 Z M 277.779,74.6643L 277.779,99.4129L 248.588,99.4129L 248.588,78.4868L 277.779,74.6643 Z M 277.779,126.7L 248.588,122.877L 248.588,101.951L 277.779,101.951L 277.779,126.7 Z "/>
                         </Grid>
 
@@ -245,7 +245,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                               Width="108" 
                               Height="162" 
                               Stretch="Fill"
-                              Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                              Fill="{ThemeResource BackButtonDisabledForegroundThemeBrush}" 
                               Data="M 224,160C 224,187.224 215.962,214.751 192,224L 183.018,256L 136.485,256L 128,224C 104.291,214.627 96,187.042 96,160C 96,132.958 104.291,105.373 128,96L 136.462,64L 183.022,64L 192,96C 215.963,105.249 224,132.776 224,160 Z M 160,108.8C 188.277,108.8 211.2,131.723 211.2,160C 211.2,188.277 188.277,211.2 160,211.2C 131.723,211.2 108.8,188.277 108.8,160C 108.8,131.723 131.723,108.8 160,108.8 Z "/>
 
                         <ScrollViewer Grid.Row="1"

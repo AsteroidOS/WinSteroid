@@ -102,7 +102,6 @@
     </Compile>
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
     <Compile Include="Converters\BooleanToCornerRadiusConverter.cs" />
-    <Compile Include="Converters\BooleanToBrushConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
