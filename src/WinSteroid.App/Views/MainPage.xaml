@@ -131,7 +131,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <SplitView Grid.Row="0" 
                    x:Name="MainSplitView"
-                   PaneBackground="{ThemeResource SystemControlAltMediumLowAcrylicWindowMediumBrush}"
                    IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
             <SplitView.Pane>
                 <StackPanel HorizontalAlignment="Stretch">
