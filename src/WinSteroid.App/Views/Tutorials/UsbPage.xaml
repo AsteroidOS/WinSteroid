@@ -39,7 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="MinWidth" Value="0" />
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
             <Setter Property="FocusVisualMargin" Value="-3"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -114,7 +114,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="MinWidth" Value="180" />
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
             <Setter Property="FocusVisualMargin" Value="-3"/>
             <Setter Property="Template">
                 <Setter.Value>
