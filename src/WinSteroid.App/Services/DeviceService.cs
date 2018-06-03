@@ -49,14 +49,14 @@ namespace WinSteroid.App.Services
 
         public DeviceInformation Current { get; private set; }
 
-        public string GetLastSavedDeviceId() => SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
+        public string GetLastSavedDeviceId() => SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
 
-        public string GetLastSavedDeviceName() => SettingsHelper.GetValue("lastSavedDeviceName", string.Empty);
+        public string GetLastSavedDeviceName() => SettingsHelper.GetValue(Constants.LastSavedDeviceNameSettingKey, string.Empty);
 
         public void UpdateLastSavedDeviceInfo()
         {
-            SettingsHelper.SetValue("lastSavedDeviceId", this.Current?.Id ?? string.Empty);
-            SettingsHelper.SetValue("lastSavedDeviceName", this.Current?.Name ?? string.Empty);
+            SettingsHelper.SetValue(Constants.LastSavedDeviceIdSettingKey, this.Current?.Id ?? string.Empty);
+            SettingsHelper.SetValue(Constants.LastSavedDeviceNameSettingKey, this.Current?.Name ?? string.Empty);
         }
 
         public async Task<bool> ConnectAsync(string deviceId)

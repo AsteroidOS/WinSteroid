@@ -63,8 +63,8 @@ namespace WinSteroid.Common.Helpers
         {
             if (!SecondaryTile.Exists(BatteryTileId)) return;
 
-            var deviceId = SettingsHelper.GetValue("lastSavedDeviceId", string.Empty);
-            var deviceName = SettingsHelper.GetValue("lastSavedDeviceName", string.Empty);
+            var deviceId = SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
+            var deviceName = SettingsHelper.GetValue(Constants.LastSavedDeviceNameSettingKey, string.Empty);
 
             var tileVisual = new TileVisual
             {

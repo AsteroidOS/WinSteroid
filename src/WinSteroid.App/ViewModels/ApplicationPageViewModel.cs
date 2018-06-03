@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using WinSteroid.App.Services;
+using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
@@ -55,7 +56,7 @@ namespace WinSteroid.App.ViewModels
         {
             this.AvailableIcons = ApplicationIconExtensions.GetList();
 
-            var appId = SettingsHelper.GetValue("lastAppId", string.Empty);
+            var appId = SettingsHelper.GetValue(Constants.LastAppIdSettingKey, string.Empty);
 
             var application = this.ApplicationsService.GetApplicationPreferenceByAppId(appId);
 

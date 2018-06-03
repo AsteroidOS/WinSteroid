@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using WinSteroid.App.Services;
+using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
@@ -72,7 +73,7 @@ namespace WinSteroid.App.ViewModels
 
                 if (_selectedPreferences == null) return;
 
-                SettingsHelper.SetValue("lastAppId", _selectedPreferences.Id);
+                SettingsHelper.SetValue(Constants.LastAppIdSettingKey, _selectedPreferences.Id);
 
                 this.NavigationService.NavigateTo(nameof(ViewModelLocator.Application));
 

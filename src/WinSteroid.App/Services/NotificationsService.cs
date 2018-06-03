@@ -23,6 +23,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
 using Windows.UI.ViewManagement;
+using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.Services
@@ -69,12 +70,12 @@ namespace WinSteroid.App.Services
 
             var value = ids.Count() > 0 ? string.Join(";", ids) : string.Empty;
 
-            SettingsHelper.SetValue("lastNotificationIds", value);
+            SettingsHelper.SetValue(Constants.LastNotificationIdsSettingKey, value);
         }
 
         public IReadOnlyList<string> GetLastNotificationIds()
         {
-            var value = SettingsHelper.GetValue("lastNotificationIds", string.Empty);
+            var value = SettingsHelper.GetValue(Constants.LastNotificationIdsSettingKey, string.Empty);
             if (string.IsNullOrWhiteSpace(value)) return new string[0];
 
             return value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
