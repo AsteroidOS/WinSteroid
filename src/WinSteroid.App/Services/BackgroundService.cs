@@ -63,6 +63,7 @@ namespace WinSteroid.App.Services
             if (!canExecuteBackgroundTasks) return false;
 
             var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
+            if (characteristic == null) return false;
 
             var builder = new BackgroundTaskBuilder
             {
@@ -82,6 +83,7 @@ namespace WinSteroid.App.Services
             if (!canExecuteBackgroundTasks) return false;
 
             var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+            if (characteristic == null) return false;
 
             var builder = new BackgroundTaskBuilder
             {

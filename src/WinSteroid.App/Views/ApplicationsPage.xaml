@@ -95,5 +95,22 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Export"
+                              Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Save" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Import"
+                              Command="{x:Bind ViewModel.ImportCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Import" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

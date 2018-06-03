@@ -156,25 +156,13 @@ namespace WinSteroid.App.Services
             if (cachedCharacteristic != null) return cachedCharacteristic;
 
             var service = Asteroid.Services.FirstOrDefault(s => s.Characteristics.Any(c => c.Uuid == characteristicUuid));
-            if (service == null)
-            {
-                //ERRROR
-                throw new Exception();
-            }
+            if (service == null) return null;
 
             var serviceResult = await this.BluetoothDevice.GetGattServicesForUuidAsync(service.Uuid);
-            if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0)
-            {
-                //ERROR
-                throw new Exception();
-            }
+            if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0) return null;
 
             var characteristicResult = await serviceResult.Services[0].GetCharacteristicsForUuidAsync(characteristicUuid);
-            if (characteristicResult.Status != GattCommunicationStatus.Success || characteristicResult.Characteristics.Count == 0)
-            {
-                //ERROR
-                throw new Exception();
-            }
+            if (characteristicResult.Status != GattCommunicationStatus.Success || characteristicResult.Characteristics.Count == 0) return null;
 
             var characteristic = characteristicResult.Characteristics[0];
             if (this.CachedCharacteristics.All(gc => !Equals(characteristic.Uuid, gc.Uuid)))
@@ -188,6 +176,7 @@ namespace WinSteroid.App.Services
         private async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
         {
             var characteristic = await this.GetGattCharacteristicAsync(characteristicUuid);
+            if (characteristic == null) return false;
             
             var writeOperationResult = await characteristic.WriteValueAsync(bytes.AsBuffer());
 
@@ -199,13 +188,10 @@ namespace WinSteroid.App.Services
             if (this.BluetoothDevice == null) return 0;
 
             var characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
-            
+            if (characteristic == null) return 0;
+
             var valueResult = await characteristic.ReadValueAsync(BluetoothCacheMode.Uncached);
-            if (valueResult.Status != GattCommunicationStatus.Success)
-            {
-                //ERROR
-                throw new Exception();
-            }
+            if (valueResult.Status != GattCommunicationStatus.Success) return 0;
 
             return BatteryHelper.GetPercentage(valueResult.Value);
         }
@@ -259,17 +245,13 @@ namespace WinSteroid.App.Services
         public async Task<bool> RegisterToScreenshotContentService()
         {
             var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
-            if (characteristic != null)
-            {        
-                var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-                if (notifyResult == GattCommunicationStatus.Success)
-                {
-                    characteristic.ValueChanged += OnScreenshotContentCharacteristicValueChanged;
-                    return true;
-                }
-            }
+            if (characteristic == null) return false;
 
-            return false;
+            var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            if (notifyResult != GattCommunicationStatus.Success) return false;
+
+            characteristic.ValueChanged += OnScreenshotContentCharacteristicValueChanged;
+            return true;
         }
 
         public Task<bool> TakeScreenshotAsync()

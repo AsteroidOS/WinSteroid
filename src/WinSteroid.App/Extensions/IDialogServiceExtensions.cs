@@ -22,17 +22,17 @@ namespace GalaSoft.MvvmLight.Views
     {
         public static Task ShowError(this IDialogService dialogService, Exception exception, string title)
         {
-            return dialogService.ShowError(exception, title, null, () => { });
+            return dialogService.ShowError(exception, title, "OK", () => { });
         }
 
         public static Task ShowError(this IDialogService dialogService, string message, string title)
         {
-            return dialogService.ShowError(message, title, null, () => { });
+            return dialogService.ShowError(message, title, "OK", () => { });
         }
 
         public static Task<bool> ShowConfirmMessage(this IDialogService dialogService, string message, string title)
         {
-            return dialogService.ShowMessage(message, title, null, null, b => { });
+            return dialogService.ShowMessage(message, title, "OK", "Cancel", b => { });
         }
     }
 }

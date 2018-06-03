@@ -13,6 +13,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -103,7 +104,77 @@ namespace WinSteroid.App.ViewModels
             }
         }
 
-        private ApplicationViewModel ToApplicationViewModel(ApplicationPreference applicationPreference)
+        private RelayCommand _exportCommand;
+        public RelayCommand ExportCommand
+        {
+            get
+            {
+                if (_exportCommand == null)
+                {
+                    _exportCommand = new RelayCommand(Export);
+                }
+
+                return _exportCommand;
+            }
+        }
+
+        private async void Export()
+        {
+            var result = await this.ApplicationsService.ExportDataAsync();
+            if (result)
+            {
+                ToastsHelper.Show("Data successfully exported");
+            }
+        }
+
+        private RelayCommand _importCommand;
+        public RelayCommand ImportCommand
+        {
+            get
+            {
+                if (_importCommand == null)
+                {
+                    _importCommand = new RelayCommand(Import);
+                }
+
+                return _importCommand;
+            }
+        }
+
+        private async void Import()
+        {
+            try
+            {
+                var importedIconPreferences = await this.ApplicationsService.ImportDataAsync();
+                if (importedIconPreferences.IsNullOrEmpty()) return;
+
+                var overWriteExistingApplicationPreferences = false;
+                if (importedIconPreferences.Any(ap => this.IconPreferences.Any(i => i.Id == ap.AppId)))
+                {
+                    overWriteExistingApplicationPreferences = await this.DialogService.ShowConfirmMessage(
+                        "I found some conflicts. Do you want to overwrite existing application preferences when import them?", 
+                        "Found conflicts");
+                }
+
+                foreach (var importedIconPreference in importedIconPreferences)
+                {
+                    var iconPreferenceExists = this.IconPreferences.Any(i => i.Id == importedIconPreference.AppId);
+                    if (iconPreferenceExists && !overWriteExistingApplicationPreferences) continue;
+
+                    this.ApplicationsService.UpsertUserIcon(importedIconPreference);
+                }
+
+                ToastsHelper.Show("Data successfully imported");
+
+                this.RefreshIconsPreferences();
+            }
+            catch (Exception exception)
+            {
+                await this.DialogService.ShowError(exception.Message, "Error");
+            }
+        }
+
+        private static ApplicationViewModel ToApplicationViewModel(ApplicationPreference applicationPreference)
         {
             return new ApplicationViewModel
             {

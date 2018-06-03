@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.Notifications;
@@ -61,13 +62,18 @@ namespace WinSteroid.App.Services
 
         public ApplicationIcon GetDefaultApplicationIcon() => ApplicationIcon.Alert;
 
+        public void UpsertUserIcon(ApplicationPreference applicationPreference)
+        {
+            this.UpsertUserIcon(applicationPreference.AppId, applicationPreference.PackageName, applicationPreference.Icon, applicationPreference.Muted, applicationPreference.Vibration);
+        }
+
         public void UpsertUserIcon(string appId, string packageName, ApplicationIcon? icon = null, bool muted = false, VibrationLevel vibrationLevel = VibrationLevel.None)
         {
             var existingUserIcon = UserIcons.SingleOrDefault(ui => ui.AppId == appId);
             if (existingUserIcon != null && icon != null)
             {
                 existingUserIcon.PackageName = packageName;
-                existingUserIcon.Icon = icon ?? ApplicationIcon.Alert;
+                existingUserIcon.Icon = icon.GetValueOrDefault();
                 existingUserIcon.Muted = muted;
                 existingUserIcon.Vibration = muted ? VibrationLevel.None : vibrationLevel;
             }
@@ -125,12 +131,36 @@ namespace WinSteroid.App.Services
             }
         }
 
+        public async Task<ApplicationPreference[]> ImportDataAsync()
+        {
+            var file = await FilesHelper.PickFileAsync(".json");
+            if (file == null) return new ApplicationPreference[0];
+
+            var json = await FileIO.ReadTextAsync(file);
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                //EMPTY FILE
+                throw new ArgumentException("The selected file seems to be empty");
+            }
+
+            var applicationPreferences = JsonConvert.DeserializeObject<ApplicationPreference[]>(json);
+            if (applicationPreferences == null)
+            {
+                //INVALID FORMAT
+                throw new ArgumentException("The selected file data has an invalid format or wrong serialized data");
+            }
+
+            return applicationPreferences;
+        }
+
         public async Task<bool> ExportDataAsync()
         {
             var folder = await FilesHelper.PickFolderAsync("ExportFolderToken");
             if (folder == null) return false;
 
-            var fileName = $"userIcons_export_{DateTime.Now.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture)}.json";
+            var applicationName = Package.Current.DisplayName.Replace(" ", "_");
+
+            var fileName = $"{applicationName}_userIcons_export_{DateTime.Now.ToString("yyyyMMdd_HHmmss", CultureInfo.InvariantCulture)}.json";
 
             var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 
