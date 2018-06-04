@@ -39,8 +39,12 @@ namespace WinSteroid.App.Services
 
         public async Task<bool> RequestAccessAsync()
         {
-            var status = this.UserNotificationListener.GetAccessStatus();
-            if (status == UserNotificationListenerAccessStatus.Allowed) return true;
+            var status = UserNotificationListenerAccessStatus.Unspecified;
+            if (ApiHelper.CheckIfIsSystemMobile())
+            {
+                status = this.UserNotificationListener.GetAccessStatus();
+                if (status == UserNotificationListenerAccessStatus.Allowed) return true;
+            }
 
             status = await UserNotificationListener.RequestAccessAsync();
             return status == UserNotificationListenerAccessStatus.Allowed;
