@@ -26,158 +26,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding TutorialUsb, Source={StaticResource Locator}}">
-    <Page.Resources>
-        <Style x:Key="TutorialStepButtonMobileStyle" TargetType="Button">
-            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-            <Setter Property="Foreground" Value="{ThemeResource MediaTextThemeBrush}"/>
-            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="MinWidth" Value="0" />
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True"/>
-            <Setter Property="FocusVisualMargin" Value="-3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal">
-                                        <Storyboard>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="TutorialStepButtonDesktopStyle" TargetType="Button">
-            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-            <Setter Property="Foreground" Value="{ThemeResource MediaTextThemeBrush}"/>
-            <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="MinWidth" Value="180" />
-            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True"/>
-            <Setter Property="FocusVisualMargin" Value="-3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal">
-                                        <Storyboard>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPointerOver}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundPressed}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Background">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBackgroundDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonForegroundDisabled}"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-
     <Grid>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -267,18 +115,31 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                   Data="M 224,160C 224,187.224 215.962,214.751 192,224L 183.018,256L 136.485,256L 128,224C 104.291,214.627 96,187.042 96,160C 96,132.958 104.291,105.373 128,96L 136.462,64L 183.022,64L 192,96C 215.963,105.249 224,132.776 224,160 Z M 160,108.8C 188.277,108.8 211.2,131.723 211.2,160C 211.2,188.277 188.277,211.2 160,211.2C 131.723,211.2 108.8,188.277 108.8,160C 108.8,131.723 131.723,108.8 160,108.8 Z "/>
 
                             <Path Grid.Column="1" 
-                                  Width="72" 
-                                  Height="39" 
+                                  Width="36" 
+                                  Height="67" 
                                   Stretch="Fill" 
                                   Fill="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                  Data="M 104.998,129.032C 110.516,129.032 114.988,124.56 114.988,119.042C 114.988,113.525 110.516,109.052 104.998,109.052C 100.901,109.052 97.3807,111.518 95.8391,115.046L 85.9786,115.046C 81.2492,112.452 72.1532,100.67 65.0372,101.559L 65.0372,97.0636L 51.0508,97.0636L 51.0508,111.05L 65.0372,111.05L 65.0372,107.054C 71.8508,107.054 76.123,113.226 78.473,115.046L 47.0547,115.046L 47.0548,108.552L 33.0684,119.042L 47.0548,129.532L 47.0547,123.038L 84.4671,123.038C 82.269,124.741 78.389,130.251 72.3204,130.956C 71.1832,128.633 68.7964,127.034 66.0362,127.034C 62.174,127.034 59.043,130.165 59.043,134.027C 59.043,137.89 62.174,141.021 66.0362,141.021C 69.016,141.021 71.5606,139.157 72.5677,136.531C 79.4114,135.795 87.5775,125.449 91.9728,123.038L 95.8391,123.038C 97.3807,126.567 100.901,129.032 104.998,129.032 Z "/>
+                                  Data="M 245.792,150.01C 245.792,155.527 250.265,160 255.783,160C 261.3,160 265.773,155.527 265.773,150.01C 265.773,145.913 263.307,142.392 259.779,140.851L 259.779,130.99C 262.373,126.261 274.155,117.165 273.266,110.049L 277.761,110.049L 277.761,96.0625L 263.775,96.0625L 263.775,110.049L 267.771,110.049C 267.771,116.862 261.599,121.135 259.779,123.485L 259.779,92.0664L 266.273,92.0664L 255.783,78.08L 245.293,92.0664L 251.787,92.0664L 251.787,129.479C 250.084,127.281 244.574,123.401 243.869,117.332C 246.191,116.195 247.791,113.808 247.791,111.048C 247.791,107.186 244.66,104.055 240.797,104.055C 236.935,104.055 233.804,107.186 233.804,111.048C 233.804,114.028 235.668,116.572 238.293,117.579C 239.03,124.423 249.376,132.589 251.787,136.984L 251.787,140.851C 248.258,142.392 245.792,145.913 245.792,150.01 Z "/>
+                          
+                            <Canvas Grid.Column="2">
+                                <Path Canvas.Left="0" 
+                                      Canvas.Top="50" 
+                                      Width="150" 
+                                      Height="103" 
+                                      Stretch="Fill" 
+                                      Fill="{ThemeResource BackButtonDisabledForegroundThemeBrush}" 
+                                      Data="F1 M 282,214.64C 283.013,215.627 283.893,216.827 284.64,218.24C 285.387,219.653 286.007,221.153 286.5,222.74C 286.993,224.327 287.367,225.933 287.62,227.56C 287.873,229.187 288,230.667 288,232C 288,234.24 287.587,236.32 286.76,238.24C 285.933,240.16 284.787,241.847 283.32,243.3C 281.853,244.753 280.16,245.9 278.24,246.74C 276.32,247.58 274.24,248 272,248L 48,248C 45.76,248 43.68,247.58 41.76,246.74C 39.84,245.9 38.1533,244.753 36.7,243.3C 35.2467,241.847 34.1,240.16 33.26,238.24C 32.42,236.32 32,234.24 32,232C 32,230.667 32.1267,229.187 32.38,227.56C 32.6333,225.933 33.0067,224.327 33.5,222.74C 33.9933,221.153 34.62,219.653 35.38,218.24C 36.14,216.827 37.0133,215.627 38,214.64L 64,188.64L 64,72L 256,72L 256,188.64L 282,214.64 Z M 80,184L 240,184L 240,88L 80,88L 80,184 Z M 272,232C 272,231.093 271.833,229.907 271.5,228.44C 271.167,226.973 270.667,225.907 270,225.24L 244.64,200L 75.36,200L 50,225.24C 49.3333,225.907 48.8333,226.973 48.5,228.44C 48.1667,229.907 48,231.093 48,232L 272,232 Z "/>
 
-                            <Path Grid.Column="2" 
-                                  Width="150" 
-                                  Height="116" 
-                                  Stretch="Fill" 
-                                  Fill="{ThemeResource BackButtonDisabledForegroundThemeBrush}"
-                                  Data="F1 M 114.982,203.823L 166.236,152.568L 320,152.568L 320,209.644L 114.982,209.644L 114.982,203.823 Z M 166.236,148.779L 166.236,54.5412L 320,54.5412L 320,60.1089L 171.979,60.1089L 171.979,142.458L 320,142.458L 320,148.779L 166.236,148.779 Z M 224.474,81.6446L 246.05,78.8192L 246.05,99.4129L 224.474,99.4129L 224.474,81.6446 Z M 246.05,122.545L 224.474,119.719L 224.474,101.951L 246.05,101.951L 246.05,122.545 Z M 277.779,74.6643L 277.779,99.4129L 248.588,99.4129L 248.588,78.4868L 277.779,74.6643 Z M 277.779,126.7L 248.588,122.877L 248.588,101.951L 277.779,101.951L 277.779,126.7 Z "/>
+                                <Path Canvas.Left="60" 
+                                      Canvas.Top="70"
+                                      Width="32" 
+                                      Height="31" 
+                                      Stretch="Fill" 
+                                      Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                                      Data="M 101.348,124.963L 122.923,122.137L 122.923,142.731L 101.348,142.731L 101.348,124.963 Z M 122.923,165.863L 101.348,163.037L 101.348,145.269L 122.923,145.269L 122.923,165.863 Z M 154.652,117.982L 154.652,142.731L 125.462,142.731L 125.462,121.805L 154.652,117.982 Z M 154.652,170.018L 125.462,166.195L 125.462,145.269L 154.652,145.269L 154.652,170.018 Z "/>
+                            </Canvas>
+                            
+                            
                         </Grid>
 
                         <ScrollViewer Grid.Column="0"
@@ -415,12 +276,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <FontIcon Grid.Row="0"
-                                  Glyph=""
-                                  FontFamily="Segoe UI Symbol"
-                                  FontSize="36"
-                                  FontWeight="Bold"
-                                  Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                        <Path Grid.Row="0" 
+                              Width="42" 
+                              Height="42" 
+                              Stretch="Fill" 
+                              Fill="{ThemeResource SystemControlBackgroundAccentBrush}" 
+                              Data="M 160,24.2355L 295.764,160L 160,295.764L 24.2355,160L 160,24.2355 Z M 114.745,205.255L 160,250.51L 250.51,160L 227.882,137.373L 160,205.255L 137.373,182.627L 114.745,205.255 Z "/>
 
                         <Path Grid.Row="0" 
                               Width="108" 
