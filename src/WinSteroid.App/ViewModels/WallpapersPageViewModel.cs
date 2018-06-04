@@ -23,6 +23,7 @@ using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.App.Controls;
 using WinSteroid.App.Factory;
+using WinSteroid.App.Messeges;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels
@@ -146,8 +147,8 @@ namespace WinSteroid.App.ViewModels
             this.SelectedFile = file;
             this.SelectedFileName = file?.Name;
             this.IsBusy = false;
-            
-            Views.WallpapersPage.Current.LoadImage(file);
+
+            this.MessengerInstance.Send(file, nameof(ViewModelLocator.Wallpapers));
         }
 
         private RelayCommand _uploadCommand;

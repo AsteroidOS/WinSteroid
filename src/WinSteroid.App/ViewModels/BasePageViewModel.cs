@@ -15,6 +15,7 @@
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
@@ -30,8 +31,9 @@ namespace WinSteroid.App.ViewModels
         {
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            this.MessengerInstance = Messenger.Default;
         }
-
+        
         public abstract Task<bool> CanGoBack();
 
         public abstract void Initialize();

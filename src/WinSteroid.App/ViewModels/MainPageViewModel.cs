@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
+using WinSteroid.App.Messeges;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -64,7 +65,7 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
-            Views.MainPage.Current.UpdatePercentage(oldPercentage, newPercentage);
+            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Main));
 
             App.RemoveWelcomePageFromBackStack();
 

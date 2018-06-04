@@ -113,6 +113,7 @@
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
     <Compile Include="Extensions\IDialogServiceExtensions.cs" />
+    <Compile Include="Messeges\BatteryPercentageMessage.cs" />
     <Compile Include="Services\ApplicationsService.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />

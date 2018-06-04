@@ -13,6 +13,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.IO;
 using Windows.Storage;
@@ -26,8 +27,6 @@ namespace WinSteroid.App.Views
 {
     public sealed partial class WallpapersPage : Page
     {
-        public static WallpapersPage Current;
-
         public WallpapersPageViewModel ViewModel
         {
             get { return this.DataContext as WallpapersPageViewModel; }
@@ -36,10 +35,9 @@ namespace WinSteroid.App.Views
         public WallpapersPage()
         {
             this.InitializeComponent();
-
-            Current = this;
+            Messenger.Default.Register<StorageFile>(this, nameof(ViewModelLocator.Wallpapers), LoadImage);
         }
-
+        
         public async void LoadImage(StorageFile storageFile)
         {
             this.ViewModel.IsImageBusy = true;

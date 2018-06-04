@@ -13,20 +13,20 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using WinSteroid.App.Messeges;
 using WinSteroid.App.ViewModels;
 
 namespace WinSteroid.App.Views
 {
     public sealed partial class MainPage : Page
     {
-        public static MainPage Current;
-
         public MainPageViewModel ViewModel
         {
             get { return this.DataContext as MainPageViewModel; }
@@ -36,12 +36,12 @@ namespace WinSteroid.App.Views
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            Current = this;
+            Messenger.Default.Register<BatteryPercentageMessage>(this, nameof(ViewModelLocator.Main), UpdatePercentage);
         }
 
-        public void UpdatePercentage(int oldPercentage, int newPercentage)
+        public void UpdatePercentage(BatteryPercentageMessage message)
         {
-            var milliSeconds = Math.Abs(newPercentage - oldPercentage) * 10;
+            var milliSeconds = Math.Abs(message.NewPercentage - message.OldPercentage) * 10;
             if (milliSeconds < 100)
             {
                 milliSeconds = 100;
@@ -51,8 +51,8 @@ namespace WinSteroid.App.Views
 
             var doubleAnimation = new DoubleAnimation()
             {
-                From = oldPercentage,
-                To = newPercentage,
+                From = message.OldPercentage,
+                To = message.NewPercentage,
                 Duration = new Duration(TimeSpan.FromMilliseconds(milliSeconds)),
                 EnableDependentAnimation = true
             };
