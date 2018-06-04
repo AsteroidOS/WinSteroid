@@ -119,7 +119,26 @@ namespace WinSteroid.App.ViewModels
             
             this.Pair(this.DeviceService.Current.Id);
         }
-        
+
+        private RelayCommand _tutorialsCommand;
+        public RelayCommand TutorialsCommand
+        {
+            get
+            {
+                if (_tutorialsCommand == null)
+                {
+                    _tutorialsCommand = new RelayCommand(GoToTutorials);
+                }
+
+                return _tutorialsCommand;
+            }
+        }
+
+        private void GoToTutorials()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Tutorials));
+        }
+
         private RelayCommand _pairCommand;
         public RelayCommand PairCommand
         {

@@ -99,22 +99,33 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <Grid Grid.Row="3"
-              Height="48"
-              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-            <TextBlock Text="{x:Bind ViewModel.BusyMessage, Mode=OneWay}" 
-                       TextAlignment="Right"
-                       VerticalAlignment="Center"
-                       Padding="16,0"
-                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Style="{ThemeResource BaseTextBlockStyle}" />
-            
-            <TextBlock Text="{x:Bind ViewModel.ApplicationFooter, Mode=OneWay}" 
-                       TextAlignment="Right"
-                       VerticalAlignment="Center"
-                       Padding="16,0"
-                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
-                       Style="{ThemeResource BaseTextBlockStyle}" />
-        </Grid>
+        <CommandBar Grid.Row="3">
+            <CommandBar.Content>
+                <Grid Height="48">
+                    <TextBlock Text="{x:Bind ViewModel.BusyMessage, Mode=OneWay}" 
+                               TextAlignment="Right"
+                               VerticalAlignment="Center"
+                               Padding="16,0"
+                               Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Style="{ThemeResource BaseTextBlockStyle}" />
+
+                    <TextBlock Text="{x:Bind ViewModel.ApplicationFooter, Mode=OneWay}"
+                               TextAlignment="Right"
+                               VerticalAlignment="Center"
+                               Padding="16,0"
+                               Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                               Style="{ThemeResource BaseTextBlockStyle}" />
+                </Grid>
+            </CommandBar.Content>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Tutorials"
+                              Command="{x:Bind ViewModel.TutorialsCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph=""
+                                  FontFamily="Segoe MDL2 Assets" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>
