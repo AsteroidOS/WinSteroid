@@ -117,18 +117,21 @@ namespace WinSteroid.App.ViewModels
             get { return _enableUserNotifications; }
             set
             {
-                if (!this.CanEnableUserNotifications) return;
-
                 if (!Set(nameof(EnableUserNotifications), ref _enableUserNotifications, value)) return;
 
-                if (_enableUserNotifications)
-                {
-                    this.RegisterUserNotificationTask();
-                    return;
-                }
-
-                this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
+                this.ManageUserNotificationSelection();
             }
+        }
+
+        private void ManageUserNotificationSelection()
+        {
+            if (this.EnableUserNotifications)
+            {
+                this.RegisterUserNotificationTask();
+                return;
+            }
+
+            this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
         }
 
         private async void RegisterUserNotificationTask()
@@ -175,14 +178,19 @@ namespace WinSteroid.App.ViewModels
             {
                 if (!Set(nameof(UseBatteryLiveTile), ref _useBatteryLiveTile, value)) return;
 
-                if (_useBatteryLiveTile)
-                {
-                    this.PinBatteryTile();
-                    return;
-                }
-
-                this.UnpinBatteryTile();
+                this.ManageBatteryLiveTileSelection();
             }
+        }
+
+        private void ManageBatteryLiveTileSelection()
+        {
+            if (this.UseBatteryLiveTile)
+            {
+                this.PinBatteryTile();
+                return;
+            }
+
+            this.UnpinBatteryTile();
         }
 
         private async void PinBatteryTile()
