@@ -128,8 +128,8 @@
     <Compile Include="ViewModels\Tutorials\MainPageViewModel.cs" />
     <Compile Include="ViewModels\Tutorials\UsbPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Compile Include="ViewModels\WallpapersPageViewModel.cs" />
-    <Compile Include="ViewModels\WatchFacePageViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\WallpapersPageViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\WatchFacePageViewModel.cs" />
     <Compile Include="ViewModels\Home\WelcomePageViewModel.cs" />
     <Compile Include="Views\Settings\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
