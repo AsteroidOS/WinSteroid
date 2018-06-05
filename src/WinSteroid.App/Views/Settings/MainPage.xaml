@@ -144,7 +144,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <CommandBar Grid.Row="2"
                     x:Name="MainCommandBar">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="About">
+                <AppBarButton Label="About"
+                              Command="{x:Bind ViewModel.AboutCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Help" />
                     </AppBarButton.Icon>

@@ -307,6 +307,25 @@ namespace WinSteroid.App.ViewModels.Settings
             await this.DialogService.ShowError("I cannot be able to manually set time on your device", "Error");
         }
 
+        private RelayCommand _aboutCommand;
+        public RelayCommand AboutCommand
+        {
+            get
+            {
+                if (_aboutCommand == null)
+                {
+                    _aboutCommand = new RelayCommand(GoToAbout);
+                }
+
+                return _aboutCommand;
+            }
+        }
+
+        private void GoToAbout()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsAbout));
+        }
+
         private RelayCommand _resetScpCredentialsCommand;
         public RelayCommand ResetScpCredentialsCommand
         {

@@ -1,18 +1,18 @@
 ﻿<!-- 
-Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
@@ -161,18 +161,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" 
-                                               Height="{ThemeResource AppBarThemeCompactHeight}"
-                                               FontSize="21"
-                                               Padding="12"
-                                               TextAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                               Text="" />
+                                   Height="{ThemeResource AppBarThemeCompactHeight}"
+                                   FontSize="21"
+                                   Padding="12"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                   FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                   Text="" />
 
                         <TextBlock Grid.Column="1"
-                                               VerticalAlignment="Center"
-                                               Text="Home"
-                                               Style="{ThemeResource BodyTextBlockStyle}" />
+                                   VerticalAlignment="Center"
+                                   Text="Home"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                   Style="{ThemeResource BaseTextBlockStyle}" />
                     </Grid>
 
                     <ListView ItemsSource="{x:Bind ViewModel.MenuOptions}"
@@ -283,12 +285,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <!--<AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
-                              IsEnabled="False"
-                              Label="Take screenshot">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Pictures" />
-                    </AppBarButton.Icon>
-                </AppBarButton>-->
+                     IsEnabled="False"
+                     Label="Take screenshot">
+                     <AppBarButton.Icon>
+                     <SymbolIcon Symbol="Pictures" />
+                     </AppBarButton.Icon>
+                     </AppBarButton>-->
                 <AppBarButton Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}" 
                               Label="Settings">
                     <AppBarButton.Icon>

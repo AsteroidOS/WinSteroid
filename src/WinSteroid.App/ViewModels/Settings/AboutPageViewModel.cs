@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Views;
 using Windows.ApplicationModel;
 
@@ -9,6 +8,7 @@ namespace WinSteroid.App.ViewModels.Settings
     {
         public AboutPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
+            this.Initialize();
         }
 
         public override Task<bool> CanGoBack()
