@@ -14,27 +14,28 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels;
+using Windows.UI.Xaml.Navigation;
+using WinSteroid.App.ViewModels.Settings;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Settings
 {
-    public sealed partial class TutorialsPage : Page
+    public sealed partial class ApplicationsPage : Page
     {
-        public TutorialsPageViewModel ViewModel
+        public ApplicationsPageViewModel ViewModel
         {
-            get { return this.DataContext as TutorialsPageViewModel; }
+            get { return this.DataContext as ApplicationsPageViewModel; }
         }
 
-        public TutorialsPage()
+        public ApplicationsPage()
         {
             this.InitializeComponent();
         }
 
-        private void OnTutorialItemsClick(object sender, ItemClickEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!(e.ClickedItem is TutorialItem tutorialItem)) return;
+            this.ViewModel.RefreshIconsPreferences();
 
-            this.ViewModel.NavigateTo(tutorialItem.PageKey);
+            base.OnNavigatedTo(e);
         }
     }
 }

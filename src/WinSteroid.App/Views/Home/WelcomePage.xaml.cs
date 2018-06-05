@@ -14,9 +14,9 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels;
+using WinSteroid.App.ViewModels.Home;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Home
 {
     public sealed partial class WelcomePage : Page
     {
@@ -25,11 +25,8 @@ namespace WinSteroid.App.Views
             get { return this.DataContext as WelcomePageViewModel; }
         }
 
-        public static WelcomePage Current;
-
         public WelcomePage()
         {
-            Current = this;
             this.InitializeComponent();
         }
     }

@@ -24,7 +24,7 @@ using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Settings
 {
     public class ApplicationsPageViewModel : BasePageViewModel
     {
@@ -76,7 +76,7 @@ namespace WinSteroid.App.ViewModels
 
                 SettingsHelper.SetValue(Constants.LastAppIdSettingKey, _selectedPreferences.Id);
 
-                this.NavigationService.NavigateTo(nameof(ViewModelLocator.Application));
+                this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsApplication));
 
                 this.SelectedPreferences = null;
             }

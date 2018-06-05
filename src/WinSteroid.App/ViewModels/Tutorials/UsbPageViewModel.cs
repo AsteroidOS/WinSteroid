@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Views;
 
-namespace WinSteroid.App.ViewModels.Tutorial
+namespace WinSteroid.App.ViewModels.Tutorials
 {
     public class UsbPageViewModel : BasePageViewModel
     {

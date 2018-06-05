@@ -16,16 +16,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
-    x:Class="WinSteroid.App.Views.ApplicationsPage"
+    x:Class="WinSteroid.App.Views.Settings.ApplicationsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
-    xmlns:viewmodels="using:WinSteroid.App.ViewModels"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels.Settings"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="{Binding Applications, Source={StaticResource Locator}}">
+    DataContext="{Binding SettingsApplications, Source={StaticResource Locator}}">
 
     <Grid>
         <Grid.ChildrenTransitions>

@@ -47,7 +47,7 @@ namespace WinSteroid.App
         {
             if (!(Window.Current.Content is Frame rootFrame)) return;
 
-            var welcomePageStackEntries = rootFrame.BackStack.Where(p => p.SourcePageType == typeof(Views.WelcomePage)).ToArray();
+            var welcomePageStackEntries = rootFrame.BackStack.Where(p => p.SourcePageType == typeof(Views.Home.WelcomePage)).ToArray();
             if (welcomePageStackEntries == null || welcomePageStackEntries.Length == 0) return;
 
             foreach (var pageStackEntry in welcomePageStackEntries)
@@ -62,7 +62,7 @@ namespace WinSteroid.App
 
             rootFrame.BackStack.Clear();
 
-            rootFrame.Navigate(typeof(Views.WelcomePage), arguments);
+            rootFrame.Navigate(typeof(Views.Home.WelcomePage), arguments);
         }
 
         private async void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -150,7 +150,7 @@ namespace WinSteroid.App
 
             if (this.IsRunning)
             {
-                ViewModelLocator.Main.BatteryPercentage = percentage;
+                ViewModelLocator.Home.BatteryPercentage = percentage;
             }
 
             return Task.CompletedTask;
@@ -264,7 +264,7 @@ namespace WinSteroid.App
             {
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(Views.WelcomePage), e.Arguments);
+                    rootFrame.Navigate(typeof(Views.Home.WelcomePage), e.Arguments);
                 }
 
                 Window.Current.Activate();

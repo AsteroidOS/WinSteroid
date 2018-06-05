@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Views;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Tutorials
 {
-    public class TutorialsPageViewModel : BasePageViewModel
+    public class MainPageViewModel : BasePageViewModel
     {
-        public TutorialsPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
+        public MainPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
             this.Initialize();
         }
@@ -23,7 +23,7 @@ namespace WinSteroid.App.ViewModels
                 new TutorialItem
                 {
                     Title = "How to connect an AsteroidOS watch to PC",
-                    PageKey = nameof(ViewModelLocator.TutorialUsb),
+                    PageKey = nameof(ViewModelLocator.TutorialsUsb),
                     Glyph = ""
                 }
             };

@@ -25,7 +25,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="{Binding TutorialUsb, Source={StaticResource Locator}}">
+    DataContext="{Binding TutorialsUsb, Source={StaticResource Locator}}">
     <Grid>
         <Grid.ChildrenTransitions>
             <TransitionCollection>

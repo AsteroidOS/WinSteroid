@@ -16,14 +16,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
-    x:Class="WinSteroid.App.Views.WelcomePage"
+    x:Class="WinSteroid.App.Views.Home.WelcomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="{Binding Welcome, Source={StaticResource Locator}}">
+    DataContext="{Binding HomeWelcome, Source={StaticResource Locator}}">
 
     <Grid>
         <Grid.RowDefinitions>

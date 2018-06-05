@@ -22,8 +22,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.ViewModels;
+using WinSteroid.App.ViewModels.Transfers;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Transfers
 {
     public sealed partial class WallpapersPage : Page
     {
@@ -35,7 +36,7 @@ namespace WinSteroid.App.Views
         public WallpapersPage()
         {
             this.InitializeComponent();
-            Messenger.Default.Register<StorageFile>(this, nameof(ViewModelLocator.Wallpapers), LoadImage);
+            Messenger.Default.Register<StorageFile>(this, nameof(ViewModelLocator.TransfersWallpapers), LoadImage);
         }
         
         public async void LoadImage(StorageFile storageFile)

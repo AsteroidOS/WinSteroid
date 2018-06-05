@@ -21,16 +21,16 @@ using Windows.ApplicationModel;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Settings
 {
-    public class SettingsPageViewModel : BasePageViewModel
+    public class MainPageViewModel : BasePageViewModel
     {
         private readonly ApplicationsService ApplicationsService;
         private readonly DeviceService DeviceService;
         private readonly BackgroundService BackgroundService;
         private readonly NotificationsService NotificationsService;
 
-        public SettingsPageViewModel(
+        public MainPageViewModel(
             ApplicationsService applicationsService,
             DeviceService deviceService, 
             BackgroundService backgroundService,
@@ -54,7 +54,6 @@ namespace WinSteroid.App.ViewModels
         public override void Initialize()
         {
             this.ApplicationName = Package.Current.DisplayName;
-            this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
             this.CustomDate = DateTimeOffset.Now;
             this.CustomTime = DateTimeOffset.Now.TimeOfDay;
             this.DeviceName = this.DeviceService.Current.Name;
@@ -69,13 +68,6 @@ namespace WinSteroid.App.ViewModels
             this.DeviceName = string.Empty;
             this.UseBatteryLiveTile = false;
             this.EnableUserNotifications = false;
-        }
-
-        private string _applicationFooter;
-        public string ApplicationFooter
-        {
-            get { return _applicationFooter; }
-            set { Set(nameof(ApplicationFooter), ref _applicationFooter, value); }
         }
 
         private string _applicationName;
@@ -238,7 +230,7 @@ namespace WinSteroid.App.ViewModels
 
         private void GoToApplications()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Applications));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsApplications));
         }
 
         private RelayCommand _resetApplicationCommand;
@@ -383,8 +375,8 @@ namespace WinSteroid.App.ViewModels
                 }
             }
 
-            ViewModelLocator.Main.Reset();
-            ViewModelLocator.Welcome.Reset();
+            ViewModelLocator.Home.Reset();
+            ViewModelLocator.HomeWelcome.Reset();
             await this.DeviceService.DisconnectAsync();
             App.Reset();
         }

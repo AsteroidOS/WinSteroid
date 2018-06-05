@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
-    x:Class="WinSteroid.App.Views.SettingsPage"
+    x:Class="WinSteroid.App.Views.Settings.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -32,10 +32,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <controls:NavigationPageHeader Grid.Row="0" 
@@ -139,5 +140,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         Margin="0,8,0,0" />
             </StackPanel>
         </ScrollViewer>
+
+        <CommandBar Grid.Row="2"
+                    x:Name="MainCommandBar">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="About">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="Help" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

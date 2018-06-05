@@ -24,7 +24,7 @@ using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Settings
 {
     public class ApplicationPageViewModel : BasePageViewModel
     {

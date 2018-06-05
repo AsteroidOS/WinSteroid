@@ -24,7 +24,7 @@ using WinSteroid.App.Controls;
 using WinSteroid.App.Factory;
 using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Transfers
 {
     public class WatchFacePageViewModel : BasePageViewModel
     {
@@ -221,7 +221,7 @@ namespace WinSteroid.App.ViewModels
 
         private void GoToUsbTutorial()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialUsb));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialsUsb));
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)

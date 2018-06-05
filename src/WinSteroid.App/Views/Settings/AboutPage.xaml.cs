@@ -13,29 +13,21 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels;
+using WinSteroid.App.ViewModels.Settings;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Settings
 {
-    public sealed partial class ApplicationPage : Page
+    public sealed partial class AboutPage : Page
     {
-        public ApplicationPageViewModel ViewModel
+        public AboutPageViewModel ViewModel
         {
-            get { return this.DataContext as ApplicationPageViewModel; }
+            get { return this.DataContext as AboutPageViewModel; }
         }
 
-        public ApplicationPage()
+        public AboutPage()
         {
             this.InitializeComponent();
-
-            this.Unloaded += OnPageUnloaded;
-        }
-
-        private void OnPageUnloaded(object sender, RoutedEventArgs e)
-        {
-            ViewModelLocator.Clear<ApplicationPageViewModel>();
         }
     }
 }

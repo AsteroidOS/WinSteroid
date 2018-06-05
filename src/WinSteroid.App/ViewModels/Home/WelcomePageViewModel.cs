@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Home
 {
     public class WelcomePageViewModel : BasePageViewModel
     {
@@ -110,7 +110,7 @@ namespace WinSteroid.App.ViewModels
                 return;
             }
             
-            var device = await this.DeviceService.PickSingleDeviceAsync(Views.WelcomePage.Current);
+            var device = await this.DeviceService.PickSingleDeviceAsync();
             if (device == null)
             {
                 this.ShowConnectionOptions = true;
@@ -193,7 +193,7 @@ namespace WinSteroid.App.ViewModels
                 return;
             }
 
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Main));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Home));
         }
     }
 }

@@ -24,7 +24,7 @@ using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Home
 {
     public class MainPageViewModel : BasePageViewModel
     {
@@ -65,7 +65,7 @@ namespace WinSteroid.App.ViewModels
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
-            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Main));
+            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -233,7 +233,7 @@ namespace WinSteroid.App.ViewModels
 
         private void GoToWallpapers()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.Wallpapers));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TransfersWallpapers));
         }
 
         private RelayCommand _watchFacesCommand;
@@ -252,7 +252,7 @@ namespace WinSteroid.App.ViewModels
 
         private void GoToWatchFaces()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.WatchFace));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TransfersWatchFace));
         }
 
         private RelayCommand _tutorialsCommand;

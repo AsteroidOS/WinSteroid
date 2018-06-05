@@ -23,10 +23,9 @@ using Windows.Storage.FileProperties;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.App.Controls;
 using WinSteroid.App.Factory;
-using WinSteroid.App.Messeges;
 using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.App.ViewModels
+namespace WinSteroid.App.ViewModels.Transfers
 {
     public class WallpapersPageViewModel : BasePageViewModel
     {
@@ -148,7 +147,7 @@ namespace WinSteroid.App.ViewModels
             this.SelectedFileName = file?.Name;
             this.IsBusy = false;
 
-            this.MessengerInstance.Send(file, nameof(ViewModelLocator.Wallpapers));
+            this.MessengerInstance.Send(file, nameof(ViewModelLocator.TransfersWallpapers));
         }
 
         private RelayCommand _uploadCommand;
@@ -237,7 +236,7 @@ namespace WinSteroid.App.ViewModels
 
         private void GoToUsbTutorial()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialUsb));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialsUsb));
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)

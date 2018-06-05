@@ -119,43 +119,47 @@
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
     <Compile Include="Factory\SecureConnectionsFactory.cs" />
-    <Compile Include="ViewModels\ApplicationPageViewModel.cs" />
+    <Compile Include="ViewModels\Settings\ApplicationPageViewModel.cs" />
     <Compile Include="ViewModels\BasePageViewModel.cs" />
-    <Compile Include="ViewModels\ApplicationsPageViewModel.cs" />
-    <Compile Include="ViewModels\MainPageViewModel.cs" />
-    <Compile Include="ViewModels\SettingsPageViewModel.cs" />
-    <Compile Include="ViewModels\TutorialsPageViewModel.cs" />
-    <Compile Include="ViewModels\Tutorial\UsbPageViewModel.cs" />
+    <Compile Include="ViewModels\Settings\ApplicationsPageViewModel.cs" />
+    <Compile Include="ViewModels\Home\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\Settings\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\Settings\AboutPageViewModel.cs" />
+    <Compile Include="ViewModels\Tutorials\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\Tutorials\UsbPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WallpapersPageViewModel.cs" />
     <Compile Include="ViewModels\WatchFacePageViewModel.cs" />
-    <Compile Include="ViewModels\WelcomePageViewModel.cs" />
-    <Compile Include="Views\ApplicationPage.xaml.cs">
+    <Compile Include="ViewModels\Home\WelcomePageViewModel.cs" />
+    <Compile Include="Views\Settings\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\ApplicationPage.xaml.cs">
       <DependentUpon>ApplicationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ApplicationsPage.xaml.cs">
+    <Compile Include="Views\Settings\ApplicationsPage.xaml.cs">
       <DependentUpon>ApplicationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainPage.xaml.cs">
+    <Compile Include="Views\Home\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <Compile Include="Views\Settings\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TutorialsPage.xaml.cs">
-      <DependentUpon>TutorialsPage.xaml</DependentUpon>
+    <Compile Include="Views\Tutorials\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tutorials\UsbPage.xaml.cs">
       <DependentUpon>UsbPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WallpapersPage.xaml.cs">
+    <Compile Include="Views\Transfers\WallpapersPage.xaml.cs">
       <DependentUpon>WallpapersPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WatchFacePage.xaml.cs">
+    <Compile Include="Views\Transfers\WatchFacePage.xaml.cs">
       <DependentUpon>WatchFacePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WelcomePage.xaml.cs">
+    <Compile Include="Views\Home\WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -226,23 +230,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ApplicationPage.xaml">
+    <Page Include="Views\Settings\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ApplicationsPage.xaml">
+    <Page Include="Views\Settings\ApplicationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SettingsPage.xaml">
+    <Page Include="Views\Settings\ApplicationsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TutorialsPage.xaml">
+    <Page Include="Views\Home\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tutorials\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,15 +258,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WallpapersPage.xaml">
+    <Page Include="Views\Transfers\WallpapersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WatchFacePage.xaml">
+    <Page Include="Views\Transfers\WatchFacePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WelcomePage.xaml">
+    <Page Include="Views\Home\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -27,19 +27,21 @@ namespace WinSteroid.App.ViewModels
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<WelcomePageViewModel>();
-            SimpleIoc.Default.Register<MainPageViewModel>();
-            SimpleIoc.Default.Register<SettingsPageViewModel>();
-            SimpleIoc.Default.Register<ApplicationsPageViewModel>();
-            SimpleIoc.Default.Register<ApplicationPageViewModel>();
-            SimpleIoc.Default.Register<TutorialsPageViewModel>();
+            SimpleIoc.Default.Register<Home.WelcomePageViewModel>();
+            SimpleIoc.Default.Register<Home.MainPageViewModel>();
 
-            SimpleIoc.Default.Register<Tutorial.UsbPageViewModel>();
+            SimpleIoc.Default.Register<Settings.AboutPageViewModel>();
+            SimpleIoc.Default.Register<Settings.ApplicationPageViewModel>();
+            SimpleIoc.Default.Register<Settings.ApplicationsPageViewModel>();
+            SimpleIoc.Default.Register<Settings.MainPageViewModel>();
+
+            SimpleIoc.Default.Register<Tutorials.MainPageViewModel>();
+            SimpleIoc.Default.Register<Tutorials.UsbPageViewModel>();
 
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
-                SimpleIoc.Default.Register<WatchFacePageViewModel>();
-                SimpleIoc.Default.Register<WallpapersPageViewModel>();
+                SimpleIoc.Default.Register<Transfers.WatchFacePageViewModel>();
+                SimpleIoc.Default.Register<Transfers.WallpapersPageViewModel>();
             }
 
             SimpleIoc.Default.Register(InitializeNavigationService);
@@ -60,20 +62,22 @@ namespace WinSteroid.App.ViewModels
         {
             var navigationService = new NavigationService();
 
-            navigationService.Configure(nameof(Welcome), typeof(Views.WelcomePage));
-            navigationService.Configure(nameof(Main), typeof(Views.MainPage));
-            navigationService.Configure(nameof(Settings), typeof(Views.SettingsPage));
-            navigationService.Configure(nameof(Applications), typeof(Views.ApplicationsPage));
-            navigationService.Configure(nameof(Application), typeof(Views.ApplicationPage));
-            navigationService.Configure(nameof(Tutorials), typeof(Views.TutorialsPage));
+            navigationService.Configure(nameof(HomeWelcome), typeof(Views.Home.WelcomePage));
+            navigationService.Configure(nameof(Home), typeof(Views.Home.MainPage));
 
-            navigationService.Configure(nameof(TutorialUsb), typeof(Views.Tutorials.UsbPage));
+            navigationService.Configure(nameof(SettingsAbout), typeof(Views.Settings.AboutPage));
+            navigationService.Configure(nameof(Settings), typeof(Views.Settings.MainPage));
+            navigationService.Configure(nameof(SettingsApplications), typeof(Views.Settings.ApplicationsPage));
+            navigationService.Configure(nameof(SettingsApplication), typeof(Views.Settings.ApplicationPage));
 
             if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
             {
-                navigationService.Configure(nameof(WatchFace), typeof(Views.WatchFacePage));
-                navigationService.Configure(nameof(Wallpapers), typeof(Views.WallpapersPage));
+                navigationService.Configure(nameof(TransfersWatchFace), typeof(Views.Transfers.WatchFacePage));
+                navigationService.Configure(nameof(TransfersWallpapers), typeof(Views.Transfers.WallpapersPage));
             }
+
+            navigationService.Configure(nameof(Tutorials), typeof(Views.Tutorials.MainPage));
+            navigationService.Configure(nameof(TutorialsUsb), typeof(Views.Tutorials.UsbPage));
 
             return navigationService;
         }
@@ -82,93 +86,90 @@ namespace WinSteroid.App.ViewModels
         {
             switch (pageKey)
             {
-                case nameof(Welcome):
-                    return Welcome;
-                case nameof(Main):
-                    return Main;
+                case nameof(Home):
+                    return Home;
+                case nameof(HomeWelcome):
+                    return HomeWelcome;
                 case nameof(Settings):
                     return Settings;
-                case nameof(Applications):
-                    return Applications;
-                case nameof(Application):
-                    return Application;
-                case nameof(WatchFace):
-                    return WatchFace;
-                case nameof(Wallpapers):
-                    return Wallpapers;
+                case nameof(SettingsAbout):
+                    return SettingsAbout;
+                case nameof(SettingsApplication):
+                    return SettingsApplication;
+                case nameof(SettingsApplications):
+                    return SettingsApplications;
+                case nameof(TransfersWallpapers):
+                    return TransfersWallpapers;
+                case nameof(TransfersWatchFace):
+                    return TransfersWatchFace;
                 case nameof(Tutorials):
                     return Tutorials;
-                case nameof(TutorialUsb):
-                    return TutorialUsb;
+                case nameof(TutorialsUsb):
+                    return TutorialsUsb;
                 default:
                     throw new ArgumentException(nameof(pageKey));
             }
         }
 
-        public static WelcomePageViewModel Welcome
+        public static Home.MainPageViewModel Home
         {
-            get { return ServiceLocator.Current.GetInstance<WelcomePageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Home.MainPageViewModel>(); }
         }
 
-        public static MainPageViewModel Main
+        public static Home.WelcomePageViewModel HomeWelcome
         {
-            get { return ServiceLocator.Current.GetInstance<MainPageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Home.WelcomePageViewModel>(); }
         }
 
-        public static SettingsPageViewModel Settings
+        public static Settings.AboutPageViewModel SettingsAbout
         {
-            get { return ServiceLocator.Current.GetInstance<SettingsPageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Settings.AboutPageViewModel>(); }
         }
 
-        public static ApplicationsPageViewModel Applications
+        public static Settings.ApplicationPageViewModel SettingsApplication
         {
-            get { return ServiceLocator.Current.GetInstance<ApplicationsPageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Settings.ApplicationPageViewModel>(); }
         }
 
-        public static ApplicationPageViewModel Application
+        public static Settings.ApplicationsPageViewModel SettingsApplications
         {
-            get { return ServiceLocator.Current.GetInstance<ApplicationPageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Settings.ApplicationsPageViewModel>(); }
         }
 
-        public static WatchFacePageViewModel WatchFace
+        public static Settings.MainPageViewModel Settings
+        {
+            get { return ServiceLocator.Current.GetInstance<Settings.MainPageViewModel>(); }
+        }
+
+        public static Transfers.WatchFacePageViewModel TransfersWatchFace
         {
             get
             {
-                if (Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
-                {
-                    throw new PlatformNotSupportedException();
-                }
-
-                return ServiceLocator.Current.GetInstance<WatchFacePageViewModel>();
+                return ServiceLocator.Current.GetInstance<Transfers.WatchFacePageViewModel>();
             }
         }
 
-        public static WallpapersPageViewModel Wallpapers
+        public static Transfers.WallpapersPageViewModel TransfersWallpapers
         {
             get
             {
-                if (Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
-                {
-                    throw new PlatformNotSupportedException();
-                }
-
-                return ServiceLocator.Current.GetInstance<WallpapersPageViewModel>();
+                return ServiceLocator.Current.GetInstance<Transfers.WallpapersPageViewModel>();
             }
         }
 
-        public static TutorialsPageViewModel Tutorials
+        public static Tutorials.MainPageViewModel Tutorials
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<TutorialsPageViewModel>();
+                return ServiceLocator.Current.GetInstance<Tutorials.MainPageViewModel>();
             }
         }
 
-        public static Tutorial.UsbPageViewModel TutorialUsb
+        public static Tutorials.UsbPageViewModel TutorialsUsb
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<Tutorial.UsbPageViewModel>();
+                return ServiceLocator.Current.GetInstance<Tutorials.UsbPageViewModel>();
             }
         }
 

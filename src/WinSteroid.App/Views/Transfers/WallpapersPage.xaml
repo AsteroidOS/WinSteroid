@@ -16,7 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
-    x:Class="WinSteroid.App.Views.WallpapersPage"
+    x:Class="WinSteroid.App.Views.Transfers.WallpapersPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,7 +24,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:controls="using:WinSteroid.App.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="{Binding Wallpapers, Source={StaticResource Locator}}">
+    DataContext="{Binding TransfersWallpapers, Source={StaticResource Locator}}">
 
     <Grid>
         <Grid.ChildrenTransitions>
@@ -121,7 +121,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <AppBarButton Label="How to connect with USB"
                               Command="{x:Bind ViewModel.UsbTutorialCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Help" />
+                        <FontIcon Glyph=""
+                                  FontFamily="Segoe MDL2 Assets" />
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>

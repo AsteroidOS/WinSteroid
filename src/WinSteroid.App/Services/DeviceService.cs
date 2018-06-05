@@ -26,6 +26,7 @@ using Windows.Foundation;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -231,13 +232,18 @@ namespace WinSteroid.App.Services
             return this.WriteByteArrayToCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid, utf8Bytes);
         }
 
-        public IAsyncOperation<DeviceInformation> PickSingleDeviceAsync(FrameworkElement element)
+        public IAsyncOperation<DeviceInformation> PickSingleDeviceAsync()
         {
+            if (!(Window.Current.Content is Frame rootFrame))
+            {
+                throw new ArgumentException(nameof(rootFrame));
+            }
+
             var devicePicker = new DevicePicker();
             devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(false));
             devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(true));
 
-            var rect = element.GetPickerRect();
+            var rect = rootFrame.GetPickerRect();
 
             return devicePicker.PickSingleDeviceAsync(rect);
         }

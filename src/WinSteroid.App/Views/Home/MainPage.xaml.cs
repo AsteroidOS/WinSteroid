@@ -22,21 +22,22 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Messeges;
 using WinSteroid.App.ViewModels;
+using WinSteroid.App.ViewModels.Home;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Home
 {
     public sealed partial class MainPage : Page
     {
         public MainPageViewModel ViewModel
         {
-            get { return this.DataContext as MainPageViewModel; }
+            get { return this.DataContext as ViewModels.Home.MainPageViewModel; }
         }
 
         public MainPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            Messenger.Default.Register<BatteryPercentageMessage>(this, nameof(ViewModelLocator.Main), UpdatePercentage);
+            Messenger.Default.Register<BatteryPercentageMessage>(this, nameof(ViewModelLocator.Home), UpdatePercentage);
         }
 
         public void UpdatePercentage(BatteryPercentageMessage message)

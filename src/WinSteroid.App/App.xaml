@@ -252,6 +252,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="TutorialStepButtonMobileStyle" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
             <Setter Property="Foreground" Value="{ThemeResource MediaTextThemeBrush}"/>

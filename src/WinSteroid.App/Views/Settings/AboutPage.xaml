@@ -1,0 +1,74 @@
+﻿<!-- 
+Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Page
+    x:Class="WinSteroid.App.Views.Settings.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinSteroid.App.Controls"
+    xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding SettingsAbout, Source={StaticResource Locator}}">
+
+    <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <controls:NavigationPageHeader Grid.Row="0" 
+                                       ButtonGlyph="" 
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                                       TitleText="About" />
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Padding="12">
+                <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
+                           FontWeight="SemiBold"
+                           Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+                
+                <TextBlock Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
+                           FontWeight="SemiBold"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="0,12,0,0" />
+
+                <toolkitControls:MarkdownTextBlock Text="{x:Bind ViewModel.UsedSoftwares, Mode=OneWay}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <CommandBar Grid.Row="2">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Review">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="OutlineStar" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Grid>
+</Page>

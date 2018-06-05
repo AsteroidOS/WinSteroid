@@ -14,18 +14,18 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels;
+using WinSteroid.App.ViewModels.Transfers;
 
-namespace WinSteroid.App.Views
+namespace WinSteroid.App.Views.Transfers
 {
-    public sealed partial class SettingsPage : Page
+    public sealed partial class WatchFacePage : Page
     {
-        public SettingsPageViewModel ViewModel
+        public WatchFacePageViewModel ViewModel
         {
-            get { return this.DataContext as SettingsPageViewModel; }
+            get { return this.DataContext as WatchFacePageViewModel; }
         }
 
-        public SettingsPage()
+        public WatchFacePage()
         {
             this.InitializeComponent();
         }
