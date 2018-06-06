@@ -37,6 +37,31 @@ namespace WinSteroid.App.Services
             this.UserNotificationListener = UserNotificationListener.Current;
         }
 
+        private TypedEventHandler<UserNotificationListener, UserNotificationChangedEventArgs> NotificationChangedHandler = null;
+
+        public void RegisterNotificationsChangedHandler(TypedEventHandler<UserNotificationListener, UserNotificationChangedEventArgs> notificationChangedHandler)
+        {
+            if (this.NotificationChangedHandler != null) return;
+
+            this.NotificationChangedHandler = notificationChangedHandler;
+            this.UserNotificationListener.NotificationChanged += this.NotificationChangedHandler;
+        }
+
+        public void UnregisterNotificationsChangedHandler()
+        {
+            if (this.NotificationChangedHandler == null) return;
+
+            try
+            {
+                this.UserNotificationListener.NotificationChanged -= this.NotificationChangedHandler;
+                this.NotificationChangedHandler = null;
+            }
+            catch
+            {
+                //Code or nothing
+            }
+        }
+
         public async Task<bool> RequestAccessAsync()
         {
             var status = UserNotificationListenerAccessStatus.Unspecified;

@@ -218,49 +218,106 @@
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid VerticalAlignment="Center" 
-                      HorizontalAlignment="Center">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <controls:RadialProgressBar Grid.Row="0" 
-                                                x:Name="PercentageRadialProgressBar"
-                                                Thickness="12"
-                                                Minimum="0"
-                                                Maximum="100"
-                                                Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                                Width="240"
-                                                Height="240"
-                                                Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
-                    <ProgressRing Grid.Row="0" 
-                                  Width="240"
-                                  Height="240"
-                                  Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                  IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
-                                  Style="{StaticResource LargeProgressRingStyle}"
-                                  Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Grid Grid.Row="0" 
+                          VerticalAlignment="Center" 
+                          HorizontalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0"
-                               Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
-                               Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                               Style="{ThemeResource HeaderTextBlockStyle}"
-                               FontSize="80"
-                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                               FontWeight="Normal"
-                               TextAlignment="Center" 
-                               VerticalAlignment="Center" />
+                        <controls:RadialProgressBar Grid.Row="0" 
+                                                    x:Name="PercentageRadialProgressBar"
+                                                    Thickness="12"
+                                                    Minimum="0"
+                                                    Maximum="100"
+                                                    Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                                                    Width="240"
+                                                    Height="240"
+                                                    Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                        <ProgressRing Grid.Row="0" 
+                                      Width="240"
+                                      Height="240"
+                                      Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                      IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
+                                      Style="{StaticResource LargeProgressRingStyle}"
+                                      Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                    <TextBlock Grid.Row="1"
-                               TextAlignment="Center"
-                               Padding="12"
-                               FontSize="28">
-                        <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
-                             Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
-                        <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
-                             Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
-                    </TextBlock>
+                        <TextBlock Grid.Row="0"
+                                   Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
+                                   Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                                   Style="{ThemeResource HeaderTextBlockStyle}"
+                                   FontSize="80"
+                                   FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                   FontWeight="Normal"
+                                   TextAlignment="Center" 
+                                   VerticalAlignment="Center" />
+
+                        <TextBlock Grid.Row="1"
+                                   TextAlignment="Center"
+                                   Padding="12"
+                                   FontSize="28">
+                            <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
+                                 Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
+                            <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
+                                 Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                        </TextBlock>
+                    </Grid>
+
+                    <GridView Grid.Row="1"
+                              Visibility="{x:Bind ViewModel.ShowNotificationsList, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              ItemsSource="{x:Bind ViewModel.Notifications, Mode=OneWay}"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="OnNotificationClick">
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </GridView.ItemContainerStyle>
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:NotificationItemViewModel">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Source="{x:Bind PackageIcon}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="0"
+                                               Text="{x:Bind Title}"
+                                               Padding="12,4"
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               Style="{ThemeResource BaseTextBlockStyle}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="0"
+                                               Text="{x:Bind Body}"
+                                               Padding="12,4"
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"
+                                               Style="{ThemeResource BodyTextBlockStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
                 </Grid>
             </SplitView.Content>
         </SplitView>

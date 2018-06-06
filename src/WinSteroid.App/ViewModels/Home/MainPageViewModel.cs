@@ -17,8 +17,13 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
+using Windows.UI.Notifications;
+using Windows.UI.Notifications.Management;
+using Windows.UI.Xaml.Media.Imaging;
 using WinSteroid.App.Messeges;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
@@ -28,17 +33,23 @@ namespace WinSteroid.App.ViewModels.Home
 {
     public class MainPageViewModel : BasePageViewModel
     {
+        private readonly ApplicationsService ApplicationsService;
         private readonly BackgroundService BackgroundService;
         private readonly DeviceService DeviceService;
+        private readonly NotificationsService NotificationsService;
         
         public MainPageViewModel(
+            ApplicationsService applicationsService,
             BackgroundService backgroundService,
             DeviceService deviceService,
+            NotificationsService notificationsService,
             INavigationService navigationService,
             IDialogService dialogService) : base(dialogService, navigationService)
         {
+            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
             this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
             this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+            this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
 
             this.Initialize();
         }
@@ -55,6 +66,8 @@ namespace WinSteroid.App.ViewModels.Home
 
             this.DeviceName = this.DeviceService.Current.Name;
             this.DeviceService.AttachConnectionStatusChangedHandler(OnConnectionStatusChanged);
+
+            this.Notifications = new ObservableCollection<NotificationItemViewModel>();
 
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
@@ -113,6 +126,24 @@ namespace WinSteroid.App.ViewModels.Home
             set { Set(nameof(IsMenuOpen), ref _isMenuOpen, value); }
         }
 
+        private bool _showNotificationsList;
+        public bool ShowNotificationsList
+        {
+            get { return _showNotificationsList; }
+            set { Set(nameof(ShowNotificationsList), ref _showNotificationsList, value); }
+        }
+
+        private void ManageShowNotificationsListSelection()
+        {
+            if (this.ShowNotificationsList)
+            {
+                this.RegisterNotificationsHandlers();
+                return;
+            }
+
+            this.UnregisterNotificationsHandlers();
+        }
+
         public List<MenuOptionViewModel> MenuOptions
         {
             get
@@ -158,6 +189,13 @@ namespace WinSteroid.App.ViewModels.Home
             }
 
             this.IsMenuOpen = false;
+        }
+
+        private ObservableCollection<NotificationItemViewModel> _notifications;
+        public ObservableCollection<NotificationItemViewModel> Notifications
+        {
+            get { return _notifications; }
+            set { Set(nameof(Notifications), ref _notifications, value); }
         }
 
         private RelayCommand _menuCommand;
@@ -274,6 +312,18 @@ namespace WinSteroid.App.ViewModels.Home
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Tutorials));
         }
 
+        private void RegisterNotificationsHandlers()
+        {
+            if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
+
+            this.NotificationsService.RegisterNotificationsChangedHandler(OnNotificationChanged);
+        }
+
+        private void UnregisterNotificationsHandlers()
+        {
+            this.NotificationsService.UnregisterNotificationsChangedHandler();
+        }
+
         private async Task InizializeScreenshotContentHandlersAsync()
         {
             var result = await this.DeviceService.RegisterToScreenshotContentService();
@@ -286,6 +336,53 @@ namespace WinSteroid.App.ViewModels.Home
         private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
         {
             this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
+        }
+
+        private async void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)
+        {
+            if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
+
+            var notifications = await this.NotificationsService.RetriveNotificationsAsync();
+            if (notifications.IsNullOrEmpty())
+            {
+                this.Notifications.Clear();
+                return;
+            }
+
+            foreach (var notification in this.Notifications)
+            {
+                if (notifications.All(n => n.Id.ToString() != notification.Id))
+                {
+                    this.Notifications.Remove(notification);
+                }
+            }
+
+            foreach (var notification in notifications)
+            {
+                var existingNotification = this.Notifications.Any(n => n.Id == notification.Id.ToString());
+                if (existingNotification) return;
+
+                var application = this.ApplicationsService.GetApplicationPreferenceByAppId(notification.AppInfo.PackageFamilyName);
+
+                var packageIcon = await ImageHelper.ConvertToImageAsync(notification.AppInfo.DisplayInfo);
+
+                this.Notifications.Add(new NotificationItemViewModel
+                {
+                    Id = notification.Id.ToString(),
+                    AppId = notification.AppInfo.PackageFamilyName,
+                    PackageName = notification.AppInfo.DisplayInfo.DisplayName,
+                    Title = notification.GetTitle(),
+                    Body = notification.GetBody(),
+                    //LaunchUri = notification.GetLaunchUri(),
+                    Icon = (application?.Icon ?? ApplicationIcon.Alert).GetGlyph(),
+                    PackageIcon = packageIcon
+                });
+            }
+        }
+
+        public void UpdateNotificationsOptions()
+        {
+            this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
         }
     }
 
@@ -305,5 +402,24 @@ namespace WinSteroid.App.ViewModels.Home
         WatchFaces,
         Screenshots,
         Tutorials
+    }
+
+    public class NotificationItemViewModel
+    {
+        public string Id { get; set; }
+
+        public string AppId { get; set; }
+
+        public string PackageName { get; set; }
+
+        public string Title { get; set; }
+
+        public string Body { get; set; }
+
+        public string Icon { get; set; }
+
+        public Uri LaunchUri { get; set; }
+
+        public BitmapImage PackageIcon { get; set; }
     }
 }

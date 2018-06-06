@@ -16,6 +16,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -70,6 +71,26 @@ namespace WinSteroid.App.Views.Home
             if (!(e.ClickedItem is MenuOptionViewModel menuOption)) return;
 
             this.ViewModel.ManageSelectedMenuOption(menuOption);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            this.ViewModel.UpdateNotificationsOptions();
+        }
+
+        private async void OnNotificationClick(object sender, ItemClickEventArgs e)
+        {
+            if (!(e.ClickedItem is NotificationItemViewModel notification)) return;
+
+            if (notification.LaunchUri == null) return;
+            
+            var launcherOptions = new LauncherOptions
+            {
+                TreatAsUntrusted = false,
+                TargetApplicationPackageFamilyName = notification.AppId
+            };
+
+            await Launcher.LaunchUriAsync(notification.LaunchUri, launcherOptions);
         }
     }
 }

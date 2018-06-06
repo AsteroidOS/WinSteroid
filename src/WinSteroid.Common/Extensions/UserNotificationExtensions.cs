@@ -49,5 +49,10 @@ namespace Windows.UI.Notifications
 
             return textElements.FirstOrDefault()?.Text ?? userNotification.AppInfo.DisplayInfo.DisplayName;
         }
+
+        public static Uri GetLaunchUri(this UserNotification userNotification)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

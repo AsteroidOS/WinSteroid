@@ -207,8 +207,8 @@ namespace WinSteroid.App
                 if (!string.IsNullOrWhiteSpace(errorMessage)) return;
             }
 
-            var userNotifications = (await notificationService.RetriveNotificationsAsync())?.ToArray() ?? new UserNotification[0];
-            if (userNotifications.Length == 0)
+            var userNotifications = await notificationService.RetriveNotificationsAsync();
+            if (userNotifications.Count == 0)
             {
                 notificationService.SaveLastNotificationIds(new string[0]);
                 return;
