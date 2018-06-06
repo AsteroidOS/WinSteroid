@@ -13,7 +13,9 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.ViewModels;
 using WinSteroid.App.ViewModels.Settings;
 
@@ -36,6 +38,16 @@ namespace WinSteroid.App.Views.Settings
             if (!(e.ClickedItem is MenuOptionViewModel menuOption)) return;
 
             this.ViewModel.ManageSelectedMenuOption(menuOption);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (this.Content is Grid grid)
+            {
+                grid.UpdateLayout();
+            }
+
+            base.OnNavigatedTo(e);
         }
     }
 }

@@ -65,8 +65,6 @@ namespace WinSteroid.App.ViewModels.Settings
             this.SelectedIcon = this.AvailableIcons.FirstOrDefault(i => i == application.Icon);
             this.Muted = application.Muted;
             this.Vibration = application.Vibration;
-
-            this.Initialized = true;
         }
 
         public override void Reset()

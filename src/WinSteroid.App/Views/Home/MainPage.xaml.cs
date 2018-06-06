@@ -76,6 +76,13 @@ namespace WinSteroid.App.Views.Home
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.ViewModel.UpdateNotificationsOptions();
+
+            if (this.Content is Grid grid)
+            {
+                grid.UpdateLayout();
+            }
+
+            base.OnNavigatedTo(e);
         }
 
         private async void OnNotificationClick(object sender, ItemClickEventArgs e)

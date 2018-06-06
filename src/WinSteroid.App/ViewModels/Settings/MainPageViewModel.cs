@@ -16,7 +16,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
@@ -24,7 +24,7 @@ using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Settings
 {
-    public class MainPageViewModel : BasePageViewModel
+    public class MainPageViewModel : BaseMainPageViewModel
     {
         private readonly ApplicationsService ApplicationsService;
         private readonly DeviceService DeviceService;
@@ -60,8 +60,15 @@ namespace WinSteroid.App.ViewModels.Settings
             this.DeviceName = this.DeviceService.Current.Name;
             this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
             this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
+        }
 
-            this.Initialized = true;
+        public override void InitializeMenuOptions()
+        {
+            if (!this.MenuOptions.IsNullOrEmpty()) return;
+
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Home", Command = HomeCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "About", Command = AboutCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Applications", Command = ApplicationsCommand });
         }
 
         public override void Reset()
@@ -114,36 +121,6 @@ namespace WinSteroid.App.ViewModels.Settings
 
                 this.ManageUserNotificationSelection();
             }
-        }
-
-        private bool _isMenuOpen;
-        public bool IsMenuOpen
-        {
-            get { return _isMenuOpen; }
-            set { Set(nameof(IsMenuOpen), ref _isMenuOpen, value); }
-        }
-
-        public List<MenuOptionViewModel> MenuOptions
-        {
-            get
-            {
-                var menuOptions = new List<MenuOptionViewModel>
-                {
-                    new MenuOptionViewModel { Glyph = "", Label = "About", Command = AboutCommand },
-                    new MenuOptionViewModel { Glyph = "", Label = "Applications", Command = ApplicationsCommand }
-                };
-
-                return menuOptions;
-            }
-        }
-
-        public void ManageSelectedMenuOption(MenuOptionViewModel menuOption)
-        {
-            if (menuOption == null || menuOption.Command == null || !menuOption.Command.CanExecute(null)) return;
-
-            menuOption.Command.Execute(null);
-
-            this.IsMenuOpen = false;
         }
 
         private void ManageUserNotificationSelection()
@@ -243,25 +220,6 @@ namespace WinSteroid.App.ViewModels.Settings
             }
 
             this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
-        }
-
-        private RelayCommand _menuCommand;
-        public RelayCommand MenuCommand
-        {
-            get
-            {
-                if (_menuCommand == null)
-                {
-                    _menuCommand = new RelayCommand(ToggleMenu);
-                }
-
-                return _menuCommand;
-            }
-        }
-
-        private void ToggleMenu()
-        {
-            this.IsMenuOpen = !this.IsMenuOpen;
         }
 
         private RelayCommand _applicationsCommand;
@@ -374,6 +332,25 @@ namespace WinSteroid.App.ViewModels.Settings
         private void GoToAbout()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsAbout));
+        }
+
+        private RelayCommand _homeCommand;
+        public RelayCommand HomeCommand
+        {
+            get
+            {
+                if (_homeCommand == null)
+                {
+                    _homeCommand = new RelayCommand(GoToHome);
+                }
+
+                return _homeCommand;
+            }
+        }
+
+        private void GoToHome()
+        {
+            this.NavigationService.GoBack();
         }
 
         private RelayCommand _resetScpCredentialsCommand;

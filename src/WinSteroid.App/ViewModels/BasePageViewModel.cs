@@ -46,9 +46,7 @@ namespace WinSteroid.App.ViewModels
             get { return _busyMessage; }
             set { Set(nameof(BusyMessage), ref _busyMessage, value); }
         }
-
-        public bool Initialized { get; internal set; }
-
+        
         private bool _isBusy;
         public bool IsBusy
         {

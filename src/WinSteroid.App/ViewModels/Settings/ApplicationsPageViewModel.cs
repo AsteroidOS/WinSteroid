@@ -48,8 +48,6 @@ namespace WinSteroid.App.ViewModels.Settings
         public override void Initialize()
         {
             this.IconPreferences = new ObservableCollection<ApplicationViewModel>();
-
-            this.Initialized = true;
         }
 
         public override void Reset()

@@ -321,7 +321,7 @@
                 <AppBarButton Label="About"
                               Command="{x:Bind ViewModel.AboutCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="Help" />
+                        <FontIcon Glyph="" />
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>

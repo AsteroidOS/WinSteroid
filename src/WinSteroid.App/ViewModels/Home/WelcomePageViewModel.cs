@@ -49,13 +49,10 @@ namespace WinSteroid.App.ViewModels.Home
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
                 this.Pair(deviceId);
-            }
-            else
-            {
-                this.ShowConnectionOptions = true;
+                return;
             }
 
-            this.Initialized = true;
+            this.ShowConnectionOptions = true;
         }
 
         public override void Reset()

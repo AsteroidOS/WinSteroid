@@ -16,14 +16,12 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
-using Windows.UI.Xaml.Media.Imaging;
 using WinSteroid.App.Messeges;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
@@ -31,7 +29,7 @@ using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels.Home
 {
-    public class MainPageViewModel : BasePageViewModel
+    public class MainPageViewModel : BaseMainPageViewModel
     {
         private readonly ApplicationsService ApplicationsService;
         private readonly BackgroundService BackgroundService;
@@ -81,8 +79,6 @@ namespace WinSteroid.App.ViewModels.Home
             this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
 
             App.RemoveWelcomePageFromBackStack();
-
-            this.Initialized = true;
         }
 
         public override void Reset()
@@ -119,13 +115,6 @@ namespace WinSteroid.App.ViewModels.Home
             set { Set(nameof(IsDeviceConnected), ref _isDeviceConnected, value); }
         }
 
-        private bool _isMenuOpen;
-        public bool IsMenuOpen
-        {
-            get { return _isMenuOpen; }
-            set { Set(nameof(IsMenuOpen), ref _isMenuOpen, value); }
-        }
-
         private bool _showNotificationsList;
         public bool ShowNotificationsList
         {
@@ -144,34 +133,19 @@ namespace WinSteroid.App.ViewModels.Home
             this.UnregisterNotificationsHandlers();
         }
 
-        public List<MenuOptionViewModel> MenuOptions
+        public override void InitializeMenuOptions()
         {
-            get
+            if (!this.MenuOptions.IsNullOrEmpty()) return;
+
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand });
+
+            if (!ApiHelper.CheckIfIsSystemMobile())
             {
-                var menuOptions = new List<MenuOptionViewModel>
-                {
-                    new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand },
-                };
-
-                if (!ApiHelper.CheckIfIsSystemMobile())
-                {
-                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
-                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
-                }
-
-                menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
-
-                return menuOptions;
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
             }
-        }
 
-        public void ManageSelectedMenuOption(MenuOptionViewModel menuOption)
-        {
-            if (menuOption == null || menuOption.Command == null || !menuOption.Command.CanExecute(null)) return;
-
-            menuOption.Command.Execute(null);
-
-            this.IsMenuOpen = false;
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
         }
 
         private ObservableCollection<NotificationItemViewModel> _notifications;
@@ -179,25 +153,6 @@ namespace WinSteroid.App.ViewModels.Home
         {
             get { return _notifications; }
             set { Set(nameof(Notifications), ref _notifications, value); }
-        }
-
-        private RelayCommand _menuCommand;
-        public RelayCommand MenuCommand
-        {
-            get
-            {
-                if (_menuCommand == null)
-                {
-                    _menuCommand = new RelayCommand(ToggleMenu);
-                }
-
-                return _menuCommand;
-            }
-        }
-
-        private void ToggleMenu()
-        {
-            this.IsMenuOpen = !this.IsMenuOpen;
         }
 
         private RelayCommand _settingsCommand;
