@@ -16,6 +16,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
@@ -115,6 +116,36 @@ namespace WinSteroid.App.ViewModels.Settings
             }
         }
 
+        private bool _isMenuOpen;
+        public bool IsMenuOpen
+        {
+            get { return _isMenuOpen; }
+            set { Set(nameof(IsMenuOpen), ref _isMenuOpen, value); }
+        }
+
+        public List<MenuOptionViewModel> MenuOptions
+        {
+            get
+            {
+                var menuOptions = new List<MenuOptionViewModel>
+                {
+                    new MenuOptionViewModel { Glyph = "", Label = "About", Command = AboutCommand },
+                    new MenuOptionViewModel { Glyph = "", Label = "Applications", Command = ApplicationsCommand }
+                };
+
+                return menuOptions;
+            }
+        }
+
+        public void ManageSelectedMenuOption(MenuOptionViewModel menuOption)
+        {
+            if (menuOption == null || menuOption.Command == null || !menuOption.Command.CanExecute(null)) return;
+
+            menuOption.Command.Execute(null);
+
+            this.IsMenuOpen = false;
+        }
+
         private void ManageUserNotificationSelection()
         {
             if (this.EnableUserNotifications)
@@ -212,6 +243,25 @@ namespace WinSteroid.App.ViewModels.Settings
             }
 
             this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+        }
+
+        private RelayCommand _menuCommand;
+        public RelayCommand MenuCommand
+        {
+            get
+            {
+                if (_menuCommand == null)
+                {
+                    _menuCommand = new RelayCommand(ToggleMenu);
+                }
+
+                return _menuCommand;
+            }
+        }
+
+        private void ToggleMenu()
+        {
+            this.IsMenuOpen = !this.IsMenuOpen;
         }
 
         private RelayCommand _applicationsCommand;

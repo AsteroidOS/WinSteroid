@@ -14,6 +14,7 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using Windows.UI.Xaml.Controls;
+using WinSteroid.App.ViewModels;
 using WinSteroid.App.ViewModels.Settings;
 
 namespace WinSteroid.App.Views.Settings
@@ -28,6 +29,13 @@ namespace WinSteroid.App.Views.Settings
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private void OnMenuOptionClick(object sender, ItemClickEventArgs e)
+        {
+            if (!(e.ClickedItem is MenuOptionViewModel menuOption)) return;
+
+            this.ViewModel.ManageSelectedMenuOption(menuOption);
         }
     }
 }

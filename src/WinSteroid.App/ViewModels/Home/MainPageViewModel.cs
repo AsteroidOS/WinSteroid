@@ -150,16 +150,16 @@ namespace WinSteroid.App.ViewModels.Home
             {
                 var menuOptions = new List<MenuOptionViewModel>
                 {
-                    new MenuOptionViewModel { Glyph = "", Label = "Settings", Type = MenuOptionType.Settings },
+                    new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand },
                 };
 
                 if (!ApiHelper.CheckIfIsSystemMobile())
                 {
-                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Type = MenuOptionType.Wallpapers });
-                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Type = MenuOptionType.WatchFaces });
+                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
+                    menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
                 }
 
-                menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Type = MenuOptionType.Tutorials });
+                menuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
 
                 return menuOptions;
             }
@@ -167,26 +167,9 @@ namespace WinSteroid.App.ViewModels.Home
 
         public void ManageSelectedMenuOption(MenuOptionViewModel menuOption)
         {
-            if (menuOption == null) return;
+            if (menuOption == null || menuOption.Command == null || !menuOption.Command.CanExecute(null)) return;
 
-            switch (menuOption.Type)
-            {
-                case MenuOptionType.Settings:
-                    this.GoToSettings();
-                    break;
-                case MenuOptionType.Screenshots:
-                    this.TakeScreenshot();
-                    break;
-                case MenuOptionType.Wallpapers:
-                    this.GoToWallpapers();
-                    break;
-                case MenuOptionType.WatchFaces:
-                    this.GoToWatchFaces();
-                    break;
-                case MenuOptionType.Tutorials:
-                    this.GoToTutorials();
-                    break;
-            }
+            menuOption.Command.Execute(null);
 
             this.IsMenuOpen = false;
         }
@@ -384,42 +367,5 @@ namespace WinSteroid.App.ViewModels.Home
         {
             this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
         }
-    }
-
-    public class MenuOptionViewModel
-    {
-        public string Glyph { get; set; }
-
-        public string Label { get; set; }
-
-        public MenuOptionType Type { get; set; }
-    }
-
-    public enum MenuOptionType
-    {
-        Settings,
-        Wallpapers,
-        WatchFaces,
-        Screenshots,
-        Tutorials
-    }
-
-    public class NotificationItemViewModel
-    {
-        public string Id { get; set; }
-
-        public string AppId { get; set; }
-
-        public string PackageName { get; set; }
-
-        public string Title { get; set; }
-
-        public string Body { get; set; }
-
-        public string Icon { get; set; }
-
-        public Uri LaunchUri { get; set; }
-
-        public BitmapImage PackageIcon { get; set; }
     }
 }

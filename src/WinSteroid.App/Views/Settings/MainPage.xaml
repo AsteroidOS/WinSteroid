@@ -1,18 +1,18 @@
 ﻿<!-- 
-Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
@@ -22,6 +22,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
+    xmlns:viewmodels="using:WinSteroid.App.ViewModels"
+    xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings, Source={StaticResource Locator}}">
@@ -34,114 +36,286 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </Grid.ChildrenTransitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <controls:NavigationPageHeader Grid.Row="0" 
-                                       ButtonGlyph="" 
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="Settings" />
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="1000" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
+                        <Setter Target="MainSplitView.CompactPaneLength" Value="{ThemeResource SplitViewOpenPaneThemeLength}" />
+                        <Setter Target="MenuButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MenuHeaderGrid.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainNavigationPageHeader.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainSplitView.CompactPaneLength" Value="{ThemeResource SplitViewCompactPaneThemeLength}" />
+                        <Setter Target="MenuButton.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MenuHeaderGrid.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainNavigationPageHeader.Visibility">
+                            <Setter.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="MainCommandBar.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="MainNavigationPageHeader.Visibility">
+                            <Setter.Value>
+                                <Visibility>Visible</Visibility>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Padding="12,8">
-                <TextBlock Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
-                           FontWeight="SemiBold"
-                           Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
-                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+        <SplitView Grid.Row="0"
+                   x:Name="MainSplitView"
+                   IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
+            <SplitView.Pane>
+                <StackPanel HorizontalAlignment="Stretch">
+                    <Button x:Name="MenuButton" 
+                            Padding="16,12"
+                            Height="{ThemeResource AppBarThemeCompactHeight}"
+                            Width="{ThemeResource SplitViewCompactPaneThemeLength}"
+                            VerticalAlignment="Stretch"
+                            Content=""
+                            Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                            Style="{ThemeResource NavigationBackButtonNormalStyle}"
+                            Command="{x:Bind ViewModel.MenuCommand, Mode=OneWay}" />
 
-                <TextBlock Text="Battery"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,12,0,8" />
+                    <Grid x:Name="MenuHeaderGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{ThemeResource SplitViewCompactPaneThemeLength}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                <ToggleSwitch Header="Use Live Tile to show current device battery level" 
-                              OffContent="No"
-                              OnContent="Yes"
-                              IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
+                        <TextBlock Grid.Column="0" 
+                                   Height="{ThemeResource AppBarThemeCompactHeight}"
+                                   FontSize="21"
+                                   Padding="12"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                   FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                   Text="" />
 
-                <TextBlock Text="Notifications"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,24,0,8" />
+                        <TextBlock Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   Text="Settings"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                   Style="{ThemeResource BaseTextBlockStyle}" />
+                    </Grid>
 
-                <ToggleSwitch Header="Show system notifications on AsteroidOS" 
-                              OffContent="No"
-                              OnContent="Yes"
-                              IsEnabled="{x:Bind ViewModel.CanEnableUserNotifications}"
-                              IsHitTestVisible="{x:Bind ViewModel.CanEnableUserNotifications}"
-                              IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
+                    <ListView ItemsSource="{x:Bind ViewModel.MenuOptions}"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              HorizontalAlignment="Stretch"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="OnMenuOptionClick">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:MenuOptionViewModel">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{ThemeResource SplitViewCompactPaneThemeLength}" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                <Button Content="Set icons preferences"
-                        Padding="12,4"
-                        Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}"
-                        IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
+                                    <TextBlock Grid.Column="0" 
+                                               Height="{ThemeResource AppBarThemeCompactHeight}"
+                                               FontSize="21"
+                                               Padding="12"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                               Text="{x:Bind Glyph, Mode=OneWay}" />
 
-                <TextBlock Text="Time"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,24,0,8" />
-
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Sync now"
-                            Padding="12,4"
-                            Command="{x:Bind ViewModel.SyncDateCommand, Mode=OneWay}"
-                            IsEnabled="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
-                            Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}" />
-
-                    <SymbolIcon Symbol="Accept" 
-                                Margin="8,4"
-                                Visibility="{x:Bind ViewModel.TimeSetSuccessfully, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Text="{x:Bind Label, Mode=OneWay}"
+                                               Style="{ThemeResource BodyTextBlockStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                <!--<ToggleSwitch Header="Use custom date" 
-                     OffContent="No"
-                     OnContent="Yes"
-                     IsOn="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=TwoWay}"
-                     Margin="0,8,0,0" />
-                     
-                     <DatePicker Header="Date" 
-                     Date="{x:Bind ViewModel.CustomDate, Mode=TwoWay}"
-                     Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                     
-                     <TimePicker Header="Time" 
-                     Time="{x:Bind ViewModel.CustomTime, Mode=TwoWay}"
-                     Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Margin="0,8,0,0" />
-                     
-                     <Button Content="Set date and time"
-                     Padding="12,4"
-                     Command="{x:Bind ViewModel.ManuallySyncDateCommand, Mode=OneWay}"
-                     IsEnabled="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay}" 
-                     Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                     Margin="0,12,0,0" />-->
+                    <controls:NavigationPageHeader Grid.Row="0" 
+                                                   x:Name="MainNavigationPageHeader"
+                                                   ButtonGlyph="" 
+                                                   ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
+                                                   TitleText="Settings" />
 
-                <TextBlock Text="Secure connections"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,24,0,8" />
+                    <ScrollViewer Grid.Row="1">
+                        <StackPanel Padding="12,8">
+                            <TextBlock Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
+                                       FontWeight="SemiBold"
+                                       Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
+                                       Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Remove all remembered credentials"
-                            Padding="12,4"
-                            Command="{x:Bind ViewModel.ResetScpCredentialsCommand, Mode=OneWay}" />
+                            <TextBlock Text="Battery"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,12,0,8" />
 
-                    <SymbolIcon Symbol="Accept" 
-                                Margin="8,4"
-                                Visibility="{x:Bind ViewModel.ScpCredentialsRemoved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                </StackPanel>
+                            <ToggleSwitch Header="Use Live Tile to show current device battery level" 
+                                          OffContent="No"
+                                          OnContent="Yes"
+                                          IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
 
-                <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,24,0,8" />
+                            <TextBlock Text="Notifications"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,24,0,8" />
 
-                <Button Content="Reset application"
-                        Padding="12,4"
-                        Command="{x:Bind ViewModel.ResetApplicationCommand, Mode=OneWay}"
-                        Margin="0,8,0,0" />
-            </StackPanel>
-        </ScrollViewer>
+                            <ToggleSwitch Header="Show system notifications on AsteroidOS" 
+                                          OffContent="No"
+                                          OnContent="Yes"
+                                          IsEnabled="{x:Bind ViewModel.CanEnableUserNotifications}"
+                                          IsHitTestVisible="{x:Bind ViewModel.CanEnableUserNotifications}"
+                                          IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
 
-        <CommandBar Grid.Row="2"
+                            <Button Content="Set icons preferences"
+                                    Padding="12,4"
+                                    Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
+
+                            <TextBlock Text="Time"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,24,0,8" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Sync now"
+                                        Padding="12,4"
+                                        Command="{x:Bind ViewModel.SyncDateCommand, Mode=OneWay}"
+                                        IsEnabled="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                                        Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}" />
+
+                                <SymbolIcon Symbol="Accept" 
+                                            Margin="8,4"
+                                            Visibility="{x:Bind ViewModel.TimeSetSuccessfully, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            </StackPanel>
+
+                            <!--<ToggleSwitch Header="Use custom date" 
+                                 OffContent="No"
+                                 OnContent="Yes"
+                                 IsOn="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=TwoWay}"
+                                 Margin="0,8,0,0" />
+                                 
+                                 <DatePicker Header="Date" 
+                                 Date="{x:Bind ViewModel.CustomDate, Mode=TwoWay}"
+                                 Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                 
+                                 <TimePicker Header="Time" 
+                                 Time="{x:Bind ViewModel.CustomTime, Mode=TwoWay}"
+                                 Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 Margin="0,8,0,0" />
+                                 
+                                 <Button Content="Set date and time"
+                                 Padding="12,4"
+                                 Command="{x:Bind ViewModel.ManuallySyncDateCommand, Mode=OneWay}"
+                                 IsEnabled="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay}" 
+                                 Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                 Margin="0,12,0,0" />-->
+
+                            <TextBlock Text="Secure connections"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,24,0,8" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Remove all remembered credentials"
+                                        Padding="12,4"
+                                        Command="{x:Bind ViewModel.ResetScpCredentialsCommand, Mode=OneWay}" />
+
+                                <SymbolIcon Symbol="Accept" 
+                                            Margin="8,4"
+                                            Visibility="{x:Bind ViewModel.ScpCredentialsRemoved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            </StackPanel>
+
+                            <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
+                                       Style="{ThemeResource BaseTextBlockStyle}"
+                                       Margin="0,24,0,8" />
+
+                            <Button Content="Reset application"
+                                    Padding="12,4"
+                                    Command="{x:Bind ViewModel.ResetApplicationCommand, Mode=OneWay}"
+                                    Margin="0,8,0,0" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+
+        <CommandBar Grid.Row="1"
                     x:Name="MainCommandBar">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="About"
