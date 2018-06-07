@@ -30,7 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="48" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Viewbox Grid.Row="0"
@@ -99,7 +99,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-        <CommandBar Grid.Row="3" ClosedDisplayMode="Minimal">
+        <CommandBar Grid.Row="3">
             <CommandBar.Content>
                 <Grid Height="{Binding ActualHeight, Source={RelativeSource TemplatedParent}}">
                     <TextBlock Text="{x:Bind ViewModel.BusyMessage, Mode=OneWay}" 
