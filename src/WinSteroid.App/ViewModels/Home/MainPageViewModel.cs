@@ -14,12 +14,14 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
 using WinSteroid.App.Messeges;
@@ -73,18 +75,35 @@ namespace WinSteroid.App.ViewModels.Home
             this.BatteryPercentage = newPercentage;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
+            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
+
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
-            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
-
             App.RemoveWelcomePageFromBackStack();
+
+            this.InitializeBatteryLevelHandlersAsync();
         }
 
         public override void Reset()
         {
             this.BatteryLevel = BatteryLevel.Dead;
             this.BatteryPercentage = 0;
+        }
+
+        public override void InitializeMenuOptions()
+        {
+            if (!this.MenuOptions.IsNullOrEmpty()) return;
+
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand });
+
+            if (!ApiHelper.CheckIfIsSystemMobile())
+            {
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
+            }
+
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
         }
 
         private BatteryLevel _batteryLevel;
@@ -131,21 +150,6 @@ namespace WinSteroid.App.ViewModels.Home
             }
 
             this.UnregisterNotificationsHandlers();
-        }
-
-        public override void InitializeMenuOptions()
-        {
-            if (!this.MenuOptions.IsNullOrEmpty()) return;
-
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand });
-
-            if (!ApiHelper.CheckIfIsSystemMobile())
-            {
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
-            }
-
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
         }
 
         private ObservableCollection<NotificationItemViewModel> _notifications;
@@ -269,6 +273,39 @@ namespace WinSteroid.App.ViewModels.Home
             {
                 await this.DialogService.ShowMessage("I cannot be able to finish screenshot content handlers registration!", "Error");
             }
+        }
+
+        private async void InitializeBatteryLevelHandlersAsync()
+        {
+            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+            if (characteristic == null) return;
+
+            var result = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            if (result != GattCommunicationStatus.Success) return;
+
+            characteristic.ValueChanged += OnBatteryLevelValueChanged;
+        }
+
+        private async void OnBatteryLevelValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            await DispatcherHelper.RunAsync(() =>
+            {
+                var newPercentage = BatteryHelper.GetPercentage(args.CharacteristicValue);
+                if (newPercentage > 0)
+                {
+                    TilesHelper.UpdateBatteryTile(newPercentage);
+                }
+                else
+                {
+                    TilesHelper.ResetBatteryTile();
+                }
+
+                var oldPercentage = this.BatteryPercentage;
+                this.BatteryPercentage = newPercentage;
+                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+
+                this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
+            });
         }
 
         private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)

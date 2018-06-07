@@ -147,12 +147,7 @@ namespace WinSteroid.App
             {
                 TilesHelper.ResetBatteryTile();
             }
-
-            if (this.IsRunning)
-            {
-                ViewModelLocator.Home.BatteryPercentage = percentage;
-            }
-
+            
             return Task.CompletedTask;
         }
 
