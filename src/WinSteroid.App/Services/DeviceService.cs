@@ -85,11 +85,14 @@ namespace WinSteroid.App.Services
             catch (Exception exception)
             {
                 //ERROR
-#if DEBUG
-                return "An error occured. Exception: " + exception.ToString();
-#else
-                return "An error occured during connection";
-#endif
+                var message = "An error occured while connecting.";
+                
+                if (App.InDebugMode)
+                {
+                    message += " Exception: " + exception.ToString();
+                }
+
+                return message;
             }
 
             return this.BluetoothDevice != null && this.Current != null ? string.Empty : "Connection failed";

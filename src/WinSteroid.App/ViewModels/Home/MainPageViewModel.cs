@@ -72,17 +72,17 @@ namespace WinSteroid.App.ViewModels.Home
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
 
+            this.InitializeBatteryLevelHandlersAsync();
+
             this.BatteryPercentage = newPercentage;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
             this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
 
-            this.IsBusy = false;
-            this.BusyMessage = string.Empty;
-
             App.RemoveWelcomePageFromBackStack();
 
-            this.InitializeBatteryLevelHandlersAsync();
+            this.IsBusy = false;
+            this.BusyMessage = string.Empty;
         }
 
         public override void Reset()
@@ -341,7 +341,7 @@ namespace WinSteroid.App.ViewModels.Home
 
                 var packageIcon = await ImageHelper.ConvertToImageAsync(notification.AppInfo.DisplayInfo);
 
-                this.Notifications.Add(new NotificationItemViewModel
+                this.Notifications.Insert(0, new NotificationItemViewModel
                 {
                     Id = notification.Id.ToString(),
                     AppId = notification.AppInfo.PackageFamilyName,

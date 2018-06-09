@@ -59,6 +59,11 @@
                                 <Visibility>Collapsed</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[0].Width" Value="2*" />
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="*" />
+                        <Setter Target="NotificationsListView.(Grid.Column)" Value="1" />
+                        <Setter Target="NotificationsListView.(Grid.Row)" Value="0" />
+                        <Setter Target="NotificationsListView.(Grid.RowSpan)" Value="2" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Normal">
@@ -84,6 +89,11 @@
                                 <Visibility>Collapsed</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[0].Width" Value="*" />
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="Auto" />
+                        <Setter Target="NotificationsListView.(Grid.Column)" Value="0" />
+                        <Setter Target="NotificationsListView.(Grid.Row)" Value="1" />
+                        <Setter Target="NotificationsListView.(Grid.RowSpan)" Value="1" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -98,6 +108,11 @@
                                 <Visibility>Visible</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[0].Width" Value="*" />
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="Auto" />
+                        <Setter Target="NotificationsListView.(Grid.Column)" Value="0" />
+                        <Setter Target="NotificationsListView.(Grid.Row)" Value="1" />
+                        <Setter Target="NotificationsListView.(Grid.RowSpan)" Value="1" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -218,15 +233,22 @@
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid>
+                <Grid x:Name="SplitViewContentGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" MaxWidth="436" />
+                    </Grid.ColumnDefinitions>
+                    
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="2*" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" 
-                          VerticalAlignment="Center" 
-                          HorizontalAlignment="Center">
+                    <Grid Grid.Column="0" 
+                          Grid.Row="0"
+                          x:Name="BatteryLevelGrid"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
@@ -270,20 +292,27 @@
                         </TextBlock>
                     </Grid>
 
-                    <GridView Grid.Row="1"
+
+                    <ListView Grid.Column="0"
+                              Grid.Row="1"
+                              x:Name="NotificationsListView"
+                              Header="Notifications"
                               Visibility="{x:Bind ViewModel.ShowNotificationsList, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                               ItemsSource="{x:Bind ViewModel.Notifications, Mode=OneWay}"
                               SelectionMode="None"
                               IsItemClickEnabled="True"
-                              ItemClick="OnNotificationClick">
-                        <GridView.ItemContainerStyle>
-                            <Style TargetType="GridViewItem">
+                              ItemClick="OnNotificationClick"
+                              Margin="12,0">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="4" />
                             </Style>
-                        </GridView.ItemContainerStyle>
-                        <GridView.ItemTemplate>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
                             <DataTemplate x:DataType="viewmodels:NotificationItemViewModel">
-                                <Grid>
+                                <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -294,10 +323,12 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <Image Grid.Column="0"
-                                           Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Source="{x:Bind PackageIcon}" />
+                                    <Grid Grid.Column="0"
+                                          Grid.Row="0"
+                                          Grid.RowSpan="2"
+                                          Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+                                        <Image Source="{x:Bind PackageIcon}" />
+                                    </Grid>
 
                                     <TextBlock Grid.Column="1"
                                                Grid.Row="0"
@@ -308,7 +339,7 @@
                                                Style="{ThemeResource BaseTextBlockStyle}" />
 
                                     <TextBlock Grid.Column="1"
-                                               Grid.Row="0"
+                                               Grid.Row="1"
                                                Text="{x:Bind Body}"
                                                Padding="12,4"
                                                TextWrapping="NoWrap"
@@ -316,8 +347,8 @@
                                                Style="{ThemeResource BodyTextBlockStyle}" />
                                 </Grid>
                             </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </SplitView.Content>
         </SplitView>

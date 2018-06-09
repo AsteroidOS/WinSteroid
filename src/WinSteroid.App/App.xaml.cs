@@ -43,6 +43,18 @@ namespace WinSteroid.App
 
         private bool IsRunning { get; set; }
 
+        public static bool InDebugMode
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
+
         public static void RemoveWelcomePageFromBackStack()
         {
             if (!(Window.Current.Content is Frame rootFrame)) return;

@@ -122,11 +122,9 @@ namespace WinSteroid.App.ViewModels.Transfers
             catch (Exception exception)
             {
                 //Corrupted image? Or file isn't an image after all...
-#if DEBUG
-                await this.DialogService.ShowError(exception, "Error");
-#else
-                await this.DialogService.ShowError("The selected file seems corrupted or an invalid file.", "Error");
-#endif
+                var message = App.InDebugMode ? exception.ToString() : "The selected file seems corrupted or an invalid file.";
+
+                await this.DialogService.ShowError(message, "Error");
             }
 
             if (imageProperties == null) return;
