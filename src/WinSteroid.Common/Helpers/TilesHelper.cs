@@ -84,6 +84,26 @@ namespace WinSteroid.Common.Helpers
             TileUpdateManager.CreateTileUpdaterForSecondaryTile(BatteryTileId).Update(tileNotification);
         }
 
+        private static string GetPercentageText(int percentage)
+        {
+            return percentage > 99 ? "Full charged" : percentage + "%";
+        }
+
+        private static AdaptiveTextStyle GetPercentageAdaptiveTextStyle(int percentage)
+        {
+            return percentage > 99 ? AdaptiveTextStyle.Subtitle : AdaptiveTextStyle.Header;
+        }
+
+        private static bool WrapPercentageText(int percentage)
+        {
+            return percentage > 99;
+        }
+
+        private static int GetHintMaxLines(int percentage)
+        {
+            return percentage > 99 ? 2 : 1;
+        }
+
         private static TileBinding CreateMediumTileBinding(int percentage, string deviceName)
         {
             return new TileBinding
@@ -95,9 +115,11 @@ namespace WinSteroid.Common.Helpers
                         {
                             new AdaptiveText
                             {
-                                Text = percentage > 99 ? percentage.ToString() : percentage + "%",
-                                HintStyle = AdaptiveTextStyle.Header,
-                                HintAlign = AdaptiveTextAlign.Center
+                                Text = GetPercentageText(percentage),
+                                HintStyle = GetPercentageAdaptiveTextStyle(percentage),
+                                HintAlign = AdaptiveTextAlign.Center,
+                                HintWrap = WrapPercentageText(percentage),
+                                HintMaxLines = GetHintMaxLines(percentage)
                             },
                             new AdaptiveText
                             {
@@ -129,9 +151,11 @@ namespace WinSteroid.Common.Helpers
                                     {
                                         new AdaptiveText
                                         {
-                                            Text = percentage + "%",
-                                            HintStyle = AdaptiveTextStyle.Header,
-                                            HintAlign = AdaptiveTextAlign.Left
+                                            Text = GetPercentageText(percentage),
+                                            HintStyle = GetPercentageAdaptiveTextStyle(percentage),
+                                            HintAlign = AdaptiveTextAlign.Left,
+                                            HintWrap = WrapPercentageText(percentage),
+                                            HintMaxLines = GetHintMaxLines(percentage)
                                         }
                                     }
                                 },
@@ -179,9 +203,11 @@ namespace WinSteroid.Common.Helpers
                                     {
                                         new AdaptiveText
                                         {
-                                            Text = percentage + "%",
-                                            HintStyle = AdaptiveTextStyle.Header,
-                                            HintAlign = AdaptiveTextAlign.Center
+                                            Text = GetPercentageText(percentage),
+                                            HintStyle = GetPercentageAdaptiveTextStyle(percentage),
+                                            HintAlign = AdaptiveTextAlign.Center,
+                                            HintWrap = WrapPercentageText(percentage),
+                                            HintMaxLines = GetHintMaxLines(percentage)
                                         }
                                     }
                                 },

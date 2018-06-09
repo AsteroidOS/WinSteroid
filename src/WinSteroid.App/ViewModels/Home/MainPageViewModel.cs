@@ -141,6 +141,13 @@ namespace WinSteroid.App.ViewModels.Home
             set { Set(nameof(ShowNotificationsList), ref _showNotificationsList, value); }
         }
 
+        private bool _showEmptyNotificationsText;
+        public bool ShowEmptyNotificationsText
+        {
+            get { return _showEmptyNotificationsText; }
+            set { Set(nameof(ShowEmptyNotificationsText), ref _showEmptyNotificationsText, value); }
+        }
+
         private void ManageShowNotificationsListSelection()
         {
             if (this.ShowNotificationsList)
@@ -321,6 +328,7 @@ namespace WinSteroid.App.ViewModels.Home
             if (notifications.IsNullOrEmpty())
             {
                 this.Notifications.Clear();
+                this.ShowEmptyNotificationsText = true;
                 return;
             }
 
@@ -353,11 +361,14 @@ namespace WinSteroid.App.ViewModels.Home
                     PackageIcon = packageIcon
                 });
             }
+
+            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
         }
 
         public void UpdateNotificationsOptions()
         {
             this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
+            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
         }
     }
 }

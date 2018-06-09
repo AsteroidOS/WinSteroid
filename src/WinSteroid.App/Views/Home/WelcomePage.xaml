@@ -117,15 +117,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                Style="{ThemeResource BaseTextBlockStyle}" />
                 </Grid>
             </CommandBar.Content>
-            <CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Tutorials"
-                              Command="{x:Bind ViewModel.TutorialsCommand, Mode=OneWay}">
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph=""
-                                  FontFamily="Segoe MDL2 Assets" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar.PrimaryCommands>
+                              Command="{x:Bind ViewModel.TutorialsCommand, Mode=OneWay}" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>
