@@ -103,7 +103,6 @@
     <Compile Include="Converters\BatteryLevelToColorConverter.cs" />
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
     <Compile Include="Converters\BatteryLevelToVisibilityConverter.cs" />
-    <Compile Include="Converters\BatteryPercentageToOffsetConverter.cs" />
     <Compile Include="Converters\BooleanToCornerRadiusConverter.cs" />
     <Compile Include="Converters\BooleanToGridLengthConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />

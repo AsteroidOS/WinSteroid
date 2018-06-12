@@ -109,6 +109,7 @@
     <Compile Include="Asteroid.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\ApplicationIconExtensions.cs" />
+    <Compile Include="Extensions\BatteryLevelExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\IRandomAccessStreamExtensions.cs" />

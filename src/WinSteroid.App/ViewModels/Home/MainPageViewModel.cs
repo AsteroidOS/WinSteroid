@@ -36,7 +36,7 @@ namespace WinSteroid.App.ViewModels.Home
         private readonly BackgroundService BackgroundService;
         private readonly DeviceService DeviceService;
         private readonly NotificationsService NotificationsService;
-        
+
         public MainPageViewModel(
             ApplicationsService applicationsService,
             BackgroundService backgroundService,
@@ -74,6 +74,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.InitializeBatteryLevelHandlersAsync();
 
             this.BatteryPercentage = newPercentage;
+            this.BatteryOffset = .5d;//(100d - newPercentage) / 100;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
             App.RemoveWelcomePageFromBackStack();
@@ -115,6 +116,13 @@ namespace WinSteroid.App.ViewModels.Home
         {
             get { return _batteryPercentage; }
             set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
+        }
+
+        private double _batteryOffset;
+        public double BatteryOffset
+        {
+            get { return _batteryOffset; }
+            set { Set(nameof(BatteryOffset), ref _batteryOffset, value); }
         }
 
         private string _deviceName;
@@ -306,6 +314,7 @@ namespace WinSteroid.App.ViewModels.Home
 
                 var oldPercentage = this.BatteryPercentage;
                 this.BatteryPercentage = newPercentage;
+                this.BatteryOffset = .5d; //(100d - newPercentage) / 100;
                 this.BatteryLevel = BatteryHelper.Parse(newPercentage);
             });
         }

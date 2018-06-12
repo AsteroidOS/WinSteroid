@@ -14,10 +14,8 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Converters
@@ -28,18 +26,7 @@ namespace WinSteroid.App.Converters
         {
             if (value is BatteryLevel batteryLevel)
             {
-                switch (batteryLevel)
-                {
-                    case BatteryLevel.Good:
-                    case BatteryLevel.Discrete:
-                        return Colors.Green;
-                    case BatteryLevel.Bad:
-                        return Colors.Orange;
-                    case BatteryLevel.Critic:
-                        return Colors.Red;
-                    case BatteryLevel.Dead:
-                        return (Application.Current.Resources["SystemControlBackgroundChromeMediumBrush"] as SolidColorBrush).Color;
-                }
+                return batteryLevel.GetColor();
             }
 
             return value;

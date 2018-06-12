@@ -31,8 +31,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         
         <converters:BatteryLevelToVisibilityConverter x:Key="BatteryLevelToVisibilityConverter" />
         
-        <converters:BatteryPercentageToOffsetConverter x:Key="BatteryPercentageToOffsetConverter" />
-        
         <converters:BooleanToCornerRadiusConverter x:Key="BooleanToCornerRadiusConverter" />
 
         <converters:BooleanToGridLengthConverter x:Key="BooleanToGridLengthConverter" />
