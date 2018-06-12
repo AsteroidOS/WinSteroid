@@ -21,7 +21,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:viewmodels="using:WinSteroid.App.ViewModels"
     xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
@@ -60,7 +59,7 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[0].Width" Value="1.5*" />
-                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="*" />
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="{x:Bind ViewModel.ShowNotificationsList, Mode=OneWay, Converter={StaticResource BooleanToGridLengthConverter}, ConverterParameter='*'}" />
                         <Setter Target="SplitViewContentGrid.(Grid.RowDefinitions)[0].Height" Value="*" />
                         <Setter Target="SplitViewContentGrid.(Grid.RowDefinitions)[1].Height" Value="Auto" />
                         <Setter Target="NotificationsPanel.(Grid.Column)" Value="1" />
@@ -93,7 +92,7 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[0].Width" Value="1.5*" />
-                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="*" />
+                        <Setter Target="SplitViewContentGrid.(Grid.ColumnDefinitions)[1].Width" Value="{x:Bind ViewModel.ShowNotificationsList, Mode=OneWay, Converter={StaticResource BooleanToGridLengthConverter}, ConverterParameter='*'}" />
                         <Setter Target="SplitViewContentGrid.(Grid.RowDefinitions)[0].Height" Value="*" />
                         <Setter Target="SplitViewContentGrid.(Grid.RowDefinitions)[1].Height" Value="Auto" />
                         <Setter Target="NotificationsPanel.(Grid.Column)" Value="1" />
@@ -262,16 +261,6 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-
-                        <!--<controls:RadialProgressBar Grid.Row="0" 
-                                                    x:Name="PercentageRadialProgressBar"
-                                                    Thickness="12"
-                                                    Minimum="0"
-                                                    Maximum="100"
-                                                    Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                                    Width="240"
-                                                    Height="240"
-                                                    Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />-->
 
                         <Path Grid.Row="0" 
                               Width="240" 

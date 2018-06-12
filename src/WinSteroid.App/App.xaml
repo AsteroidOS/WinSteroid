@@ -24,20 +24,37 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:viewmodels="using:WinSteroid.App.ViewModels">
     <Application.Resources>
         <viewmodels:ViewModelLocator x:Key="Locator" />
+        
         <converters:BatteryLevelToBrushConverter x:Key="BatteryLevelToBrushConverter" />
+        
         <converters:BatteryLevelToColorConverter x:Key="BatteryLevelToColorConverter" />
+        
         <converters:BatteryLevelToVisibilityConverter x:Key="BatteryLevelToVisibilityConverter" />
+        
         <converters:BatteryPercentageToOffsetConverter x:Key="BatteryPercentageToOffsetConverter" />
+        
         <converters:BooleanToCornerRadiusConverter x:Key="BooleanToCornerRadiusConverter" />
+
+        <converters:BooleanToGridLengthConverter x:Key="BooleanToGridLengthConverter" />
+
         <converters:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
+        
         <converters:BooleanToOppositeVisibilityConverter x:Key="BooleanToOppositeVisibilityConverter" />
+        
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
         <converters:ApplicationIconToGlyphConverter x:Key="ApplicationIconToGlyphConverter" />
+        
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        
         <converters:NumberToBatteryIconConverter x:Key="NumberToBatteryIconConverter" />
+        
         <converters:NumberToPercentageTextConverter x:Key="NumberToPercentageTextConverter" />
+        
         <converters:NumberToVibrationLevelStringConverter x:Key="NumberToVibrationLevelStringConverter" />
+        
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        
         <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />
 
         <Style TargetType="controls:NavigationPageHeader">
