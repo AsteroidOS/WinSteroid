@@ -100,7 +100,10 @@
     <Compile Include="Controls\ScpCredentialsDialog.xaml.cs">
       <DependentUpon>ScpCredentialsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BatteryLevelToColorConverter.cs" />
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
+    <Compile Include="Converters\BatteryLevelToVisibilityConverter.cs" />
+    <Compile Include="Converters\BatteryPercentageToOffsetConverter.cs" />
     <Compile Include="Converters\BooleanToCornerRadiusConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeBooleanConverter.cs" />
     <Compile Include="Converters\BooleanToOppositeVisibilityConverter.cs" />
@@ -113,7 +116,6 @@
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
     <Compile Include="Extensions\IDialogServiceExtensions.cs" />
-    <Compile Include="Messeges\BatteryPercentageMessage.cs" />
     <Compile Include="Services\ApplicationsService.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
@@ -326,7 +328,9 @@
       <Name>WinSteroid.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Messeges\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

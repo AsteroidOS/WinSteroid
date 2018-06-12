@@ -263,7 +263,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <controls:RadialProgressBar Grid.Row="0" 
+                        <!--<controls:RadialProgressBar Grid.Row="0" 
                                                     x:Name="PercentageRadialProgressBar"
                                                     Thickness="12"
                                                     Minimum="0"
@@ -271,24 +271,82 @@
                                                     Outline="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                                     Width="240"
                                                     Height="240"
-                                                    Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                                                    Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />-->
+
+                        <Path Grid.Row="0" 
+                              Width="240" 
+                              Height="240" 
+                              Stretch="Fill" 
+                              Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z ">
+                            <Path.Fill>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <GradientStopCollection>
+                                        <GradientStop Offset="0" Color="{ThemeResource SystemChromeMediumColor}" />
+                                        <GradientStop Offset="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToOffsetConverter}}" Color="{ThemeResource SystemChromeMediumColor}" />
+                                        <GradientStop Offset="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToOffsetConverter}}" Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
+                                        <GradientStop Offset="1" Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
+                                    </GradientStopCollection>
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+
+                        <Path Grid.Row="0" 
+                              Width="72" 
+                              Height="72" 
+                              Stretch="Fill" 
+                              Data="M 123.916,151.215L 127.884,147.247L 125.588,144.951L 144.71,125.828L 147.007,128.124L 151.069,124.062L 196.197,169.189L 169.044,196.342L 123.916,151.215 Z M 133.773,152.658L 167.319,186.204L 185.964,167.559L 152.439,133.971L 133.773,152.658 Z ">
+                            <Path.Fill>
+                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                    <GradientStopCollection>
+                                        <GradientStop Offset="0" Color="{ThemeResource SystemChromeMediumColor}" />
+                                        <GradientStop Offset="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToOffsetConverter}}" Color="{ThemeResource SystemChromeMediumColor}" />
+                                        <GradientStop Offset="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToOffsetConverter}}" Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
+                                        <GradientStop Offset="1" Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
+                                    </GradientStopCollection>
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+
+                        <Canvas Grid.Row="0" 
+                                Width="320"
+                                Height="320"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                            <Path Width="31.36" 
+                                  Height="15.6734" 
+                                  Canvas.Left="151.489" 
+                                  Canvas.Top="167.441" 
+                                  Stretch="Fill" 
+                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" 
+                                  Visibility="{x:Bind ViewModel.BatteryLevel, Mode=OneWay,Converter={StaticResource BatteryLevelToVisibilityConverter}, ConverterParameter=1}"
+                                  Data="M 182.849,167.441L 151.489,167.441L 167.213,183.115L 182.849,167.441 Z "/>
+
+                            <Path Width="41.1733" 
+                                  Height="11.2" 
+                                  Canvas.Left="138.689" 
+                                  Canvas.Top="154.321" 
+                                  Stretch="Fill" 
+                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" 
+                                  Visibility="{x:Bind ViewModel.BatteryLevel, Mode=OneWay,Converter={StaticResource BatteryLevelToVisibilityConverter}, ConverterParameter=2}"
+                                  Data="M 138.689,154.321L 169.835,154.321L 179.862,165.521L 149.889,165.521L 138.689,154.321 Z "/>
+
+                            <Path Width="31.36" 
+                                  Height="15.6734" 
+                                  Canvas.Left="136.769" 
+                                  Canvas.Top="137.045" 
+                                  Stretch="Fill" 
+                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" 
+                                  Visibility="{x:Bind ViewModel.BatteryLevel, Mode=OneWay,Converter={StaticResource BatteryLevelToVisibilityConverter}, ConverterParameter=3}"
+                                  Data="M 136.769,152.718L 168.129,152.718L 152.404,137.045L 136.769,152.718 Z "/>
+                        </Canvas>
+
                         <ProgressRing Grid.Row="0" 
-                                      Width="240"
-                                      Height="240"
+                                      Width="264"
+                                      Height="264"
                                       Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
                                       Style="{StaticResource LargeProgressRingStyle}"
                                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                        <TextBlock Grid.Row="0"
-                                   Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToBatteryIconConverter}}" 
-                                   Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                                   Style="{ThemeResource HeaderTextBlockStyle}"
-                                   FontSize="80"
-                                   FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                   FontWeight="Normal"
-                                   TextAlignment="Center" 
-                                   VerticalAlignment="Center" />
 
                         <TextBlock Grid.Row="1"
                                    TextAlignment="Center"

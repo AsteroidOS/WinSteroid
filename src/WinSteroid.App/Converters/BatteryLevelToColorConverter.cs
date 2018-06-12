@@ -22,7 +22,7 @@ using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Converters
 {
-    class BatteryLevelToBrushConverter : DependencyObject, IValueConverter
+    class BatteryLevelToColorConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -32,13 +32,13 @@ namespace WinSteroid.App.Converters
                 {
                     case BatteryLevel.Good:
                     case BatteryLevel.Discrete:
-                        return new SolidColorBrush(Colors.Green);
+                        return Colors.Green;
                     case BatteryLevel.Bad:
-                        return new SolidColorBrush(Colors.Orange);
+                        return Colors.Orange;
                     case BatteryLevel.Critic:
-                        return new SolidColorBrush(Colors.Red);
+                        return Colors.Red;
                     case BatteryLevel.Dead:
-                        return Application.Current.Resources["SystemControlBackgroundChromeMediumBrush"] as SolidColorBrush;
+                        return (Application.Current.Resources["SystemControlBackgroundChromeMediumBrush"] as SolidColorBrush).Color;
                 }
             }
 

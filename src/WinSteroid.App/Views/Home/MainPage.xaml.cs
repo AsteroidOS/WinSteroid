@@ -13,15 +13,10 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using Windows.System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using WinSteroid.App.Messeges;
 using WinSteroid.App.ViewModels;
 using WinSteroid.App.ViewModels.Home;
 
@@ -38,32 +33,6 @@ namespace WinSteroid.App.Views.Home
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            Messenger.Default.Register<BatteryPercentageMessage>(this, nameof(ViewModelLocator.Home), UpdatePercentage);
-        }
-
-        public void UpdatePercentage(BatteryPercentageMessage message)
-        {
-            var milliSeconds = Math.Abs(message.NewPercentage - message.OldPercentage) * 10;
-            if (milliSeconds < 100)
-            {
-                milliSeconds = 100;
-            }
-
-            var storyBoard = new Storyboard();
-
-            var doubleAnimation = new DoubleAnimation()
-            {
-                From = message.OldPercentage,
-                To = message.NewPercentage,
-                Duration = new Duration(TimeSpan.FromMilliseconds(milliSeconds)),
-                EnableDependentAnimation = true
-            };
-
-            Storyboard.SetTarget(doubleAnimation, PercentageRadialProgressBar);
-            Storyboard.SetTargetProperty(doubleAnimation, nameof(RadialProgressBar.Value));
-
-            storyBoard.Children.Add(doubleAnimation);
-            storyBoard.Begin();
         }
 
         private void OnMenuOptionClick(object sender, ItemClickEventArgs e)

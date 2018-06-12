@@ -24,7 +24,6 @@ using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
-using WinSteroid.App.Messeges;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -76,8 +75,6 @@ namespace WinSteroid.App.ViewModels.Home
 
             this.BatteryPercentage = newPercentage;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-            this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
 
             App.RemoveWelcomePageFromBackStack();
 
@@ -310,8 +307,6 @@ namespace WinSteroid.App.ViewModels.Home
                 var oldPercentage = this.BatteryPercentage;
                 this.BatteryPercentage = newPercentage;
                 this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-                this.MessengerInstance.Send(BatteryPercentageMessage.Create(newPercentage, oldPercentage), nameof(ViewModelLocator.Home));
             });
         }
 

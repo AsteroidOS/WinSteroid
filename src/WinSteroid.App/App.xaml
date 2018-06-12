@@ -25,6 +25,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     <Application.Resources>
         <viewmodels:ViewModelLocator x:Key="Locator" />
         <converters:BatteryLevelToBrushConverter x:Key="BatteryLevelToBrushConverter" />
+        <converters:BatteryLevelToColorConverter x:Key="BatteryLevelToColorConverter" />
+        <converters:BatteryLevelToVisibilityConverter x:Key="BatteryLevelToVisibilityConverter" />
+        <converters:BatteryPercentageToOffsetConverter x:Key="BatteryPercentageToOffsetConverter" />
         <converters:BooleanToCornerRadiusConverter x:Key="BooleanToCornerRadiusConverter" />
         <converters:BooleanToOppositeBooleanConverter x:Key="BooleanToOppositeBooleanConverter" />
         <converters:BooleanToOppositeVisibilityConverter x:Key="BooleanToOppositeVisibilityConverter" />
