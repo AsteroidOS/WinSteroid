@@ -74,7 +74,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.InitializeBatteryLevelHandlersAsync();
 
             this.BatteryPercentage = newPercentage;
-            this.BatteryOffset = .5d;//(100d - newPercentage) / 100;
+            this.BatteryOffset = (100d - newPercentage) / 100;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
             App.RemoveWelcomePageFromBackStack();
@@ -314,7 +314,7 @@ namespace WinSteroid.App.ViewModels.Home
 
                 var oldPercentage = this.BatteryPercentage;
                 this.BatteryPercentage = newPercentage;
-                this.BatteryOffset = .5d; //(100d - newPercentage) / 100;
+                this.BatteryOffset = (100d - newPercentage) / 100;
                 this.BatteryLevel = BatteryHelper.Parse(newPercentage);
             });
         }
