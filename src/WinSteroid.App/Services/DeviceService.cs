@@ -46,8 +46,6 @@ namespace WinSteroid.App.Services
 
         public BluetoothLEDevice BluetoothDevice { get; private set; }
 
-        private TypedEventHandler<BluetoothLEDevice, object> ConnectionStatusChangedEventHandler { get; set; }
-
         public DeviceInformation Current { get; private set; }
 
         public string GetLastSavedDeviceId() => SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
@@ -98,12 +96,6 @@ namespace WinSteroid.App.Services
             return this.BluetoothDevice != null && this.Current != null ? string.Empty : "Connection failed";
         }
 
-        public void AttachConnectionStatusChangedHandler(TypedEventHandler<BluetoothLEDevice, object> connectionStatusChangedHandler)
-        {
-            this.ConnectionStatusChangedEventHandler = connectionStatusChangedHandler;
-            this.BluetoothDevice.ConnectionStatusChanged += this.ConnectionStatusChangedEventHandler;
-        }
-
         public async Task<PairingResult> PairAsync()
         {
             if (this.Current.Pairing.IsPaired)
@@ -140,12 +132,6 @@ namespace WinSteroid.App.Services
 
             if (this.BluetoothDevice != null)
             {
-                if (this.ConnectionStatusChangedEventHandler != null)
-                {
-                    this.BluetoothDevice.ConnectionStatusChanged -= ConnectionStatusChangedEventHandler;
-                    this.ConnectionStatusChangedEventHandler = null;
-                }
-
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
                 this.Current = null;

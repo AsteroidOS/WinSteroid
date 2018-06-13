@@ -64,7 +64,6 @@ namespace WinSteroid.App.ViewModels.Home
             this.BusyMessage = "Initializing";
 
             this.DeviceName = this.DeviceService.Current.Name;
-            this.DeviceService.AttachConnectionStatusChangedHandler(OnConnectionStatusChanged);
 
             this.Notifications = new ObservableCollection<NotificationItemViewModel>();
 
@@ -74,7 +73,6 @@ namespace WinSteroid.App.ViewModels.Home
             this.InitializeBatteryLevelHandlersAsync();
 
             this.BatteryPercentage = newPercentage;
-            this.BatteryOffset = (100d - newPercentage) / 100;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
 
             App.RemoveWelcomePageFromBackStack();
@@ -117,26 +115,12 @@ namespace WinSteroid.App.ViewModels.Home
             get { return _batteryPercentage; }
             set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
         }
-
-        private double _batteryOffset;
-        public double BatteryOffset
-        {
-            get { return _batteryOffset; }
-            set { Set(nameof(BatteryOffset), ref _batteryOffset, value); }
-        }
-
+        
         private string _deviceName;
         public string DeviceName
         {
             get { return _deviceName; }
             set { Set(nameof(DeviceName), ref _deviceName, value); }
-        }
-
-        private bool _isDeviceConnected;
-        public bool IsDeviceConnected
-        {
-            get { return _isDeviceConnected; }
-            set { Set(nameof(IsDeviceConnected), ref _isDeviceConnected, value); }
         }
 
         private bool _showNotificationsList;
@@ -314,14 +298,8 @@ namespace WinSteroid.App.ViewModels.Home
 
                 var oldPercentage = this.BatteryPercentage;
                 this.BatteryPercentage = newPercentage;
-                this.BatteryOffset = (100d - newPercentage) / 100;
                 this.BatteryLevel = BatteryHelper.Parse(newPercentage);
             });
-        }
-
-        private void OnConnectionStatusChanged(BluetoothLEDevice sender, object args)
-        {
-            this.IsDeviceConnected = this.DeviceService.BluetoothDevice.ConnectionStatus == BluetoothConnectionStatus.Connected;
         }
 
         private async void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)

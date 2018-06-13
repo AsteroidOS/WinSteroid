@@ -30,7 +30,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <converters:BatteryLevelToColorConverter x:Key="BatteryLevelToColorConverter" />
         
         <converters:BatteryLevelToVisibilityConverter x:Key="BatteryLevelToVisibilityConverter" />
-        
+
+        <converters:BatteryPercentageToHeightConverter x:Key="BatteryPercentageToHeightConverter" />
+
         <converters:BooleanToCornerRadiusConverter x:Key="BooleanToCornerRadiusConverter" />
 
         <converters:BooleanToGridLengthConverter x:Key="BooleanToGridLengthConverter" />

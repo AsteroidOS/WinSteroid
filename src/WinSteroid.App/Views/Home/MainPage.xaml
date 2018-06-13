@@ -262,45 +262,55 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Path Grid.Row="0" 
-                              Width="240" 
-                              Height="240" 
-                              Stretch="Fill" 
-                              Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z ">
-                            <Path.Fill>
-                                <LinearGradientBrush StartPoint=".5 0" 
-                                                     EndPoint=".5 1">
-                                    <GradientStop Offset="0" 
-                                                  Color="{ThemeResource SystemChromeMediumColor}" />
-                                    <GradientStop Offset="{x:Bind ViewModel.BatteryOffset, Mode=OneWay}" 
-                                                  Color="{ThemeResource SystemChromeMediumColor}" />
-                                    <GradientStop Offset="{x:Bind ViewModel.BatteryOffset, Mode=OneWay}" 
-                                                  Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
-                                    <GradientStop Offset="1" 
-                                                  Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
-                                </LinearGradientBrush>
-                            </Path.Fill>
-                        </Path>
+                        <Canvas Grid.Row="0"
+                                Width="240" 
+                                Height="240">
+                            <Path Width="240" 
+                                  Height="240" 
+                                  Stretch="Fill"
+                                  Canvas.Top="0"
+                                  Canvas.Left="0"
+                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                                  Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z " />
 
-                        <Path Grid.Row="0"
-                              Width="72" 
-                              Height="72" 
-                              Stretch="Fill"
-                              Data="M 123.915,151.214L 127.883,147.246L 125.586,144.949L 144.709,125.827L 147.006,128.123L 151.068,124.061L 196.196,169.188L 169.043,196.341L 123.915,151.214 Z M 133.772,152.657L 167.318,186.203L 185.963,167.558L 152.438,133.97L 133.772,152.657 Z M 138.109,152.817L 152.817,138.109L 181.891,167.183L 167.183,181.891L 138.109,152.817 Z ">
-                            <Path.Fill>
-                                <LinearGradientBrush StartPoint=".5 0" 
-                                                     EndPoint=".5 1">
-                                    <GradientStop Offset="0" 
-                                                  Color="{ThemeResource SystemChromeMediumColor}" />
-                                    <GradientStop Offset="{x:Bind ViewModel.BatteryOffset, Mode=OneWay}" 
-                                                  Color="{ThemeResource SystemChromeMediumColor}" />
-                                    <GradientStop Offset="{x:Bind ViewModel.BatteryOffset, Mode=OneWay}" 
-                                                  Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
-                                    <GradientStop Offset="1" 
-                                                  Color="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToColorConverter}}" />
-                                </LinearGradientBrush>
-                            </Path.Fill>
-                        </Path>
+                            <Path Width="72" 
+                                  Height="72" 
+                                  Stretch="Fill"
+                                  Canvas.Top="84"
+                                  Canvas.Left="84"
+                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                                  Data="M 123.915,151.214L 127.883,147.246L 125.586,144.949L 144.709,125.827L 147.006,128.123L 151.068,124.061L 196.196,169.188L 169.043,196.341L 123.915,151.214 Z M 133.772,152.657L 167.318,186.203L 185.963,167.558L 152.438,133.97L 133.772,152.657 Z M 138.109,152.817L 152.817,138.109L 181.891,167.183L 167.183,181.891L 138.109,152.817 Z " />
+
+                            <Path Width="240" 
+                                  Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=0}" 
+                                  Stretch="UniformToFill"
+                                  Canvas.Top="0"
+                                  Canvas.Left="0"
+                                  StrokeThickness="2"
+                                  Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z ">
+                                <Path.Fill>
+                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                </Path.Fill>
+                                <Path.Stroke>
+                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                </Path.Stroke>
+                            </Path>
+
+                            <Path Width="72" 
+                                  Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=1}" 
+                                  Stretch="UniformToFill"
+                                  Canvas.Top="84"
+                                  Canvas.Left="84"
+                                  StrokeThickness="1"
+                                  Data="M 123.915,151.214L 127.883,147.246L 125.586,144.949L 144.709,125.827L 147.006,128.123L 151.068,124.061L 196.196,169.188L 169.043,196.341L 123.915,151.214 Z M 133.772,152.657L 167.318,186.203L 185.963,167.558L 152.438,133.97L 133.772,152.657 Z M 138.109,152.817L 152.817,138.109L 181.891,167.183L 167.183,181.891L 138.109,152.817 Z ">
+                                <Path.Fill>
+                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                </Path.Fill>
+                                <Path.Stroke>
+                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                </Path.Stroke>
+                            </Path>
+                        </Canvas>
 
                         <ProgressRing Grid.Row="0" 
                                       Width="264"

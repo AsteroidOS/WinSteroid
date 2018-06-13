@@ -16,20 +16,30 @@
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Converters
 {
-    public class BatteryLevelToColorConverter : DependencyObject, IValueConverter
+    public class BatteryPercentageToHeightConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is BatteryLevel batteryLevel)
+            if (value is int newPercentage)
             {
-                return batteryLevel.GetColor();
+                int.TryParse(parameter.ToString(), out int elementIndex);
+                if (elementIndex >= 0)
+                {
+                    var diff = 100 - newPercentage;
+                    switch (elementIndex)
+                    {
+                        case 0:
+                            return (diff * 240) / 100d;
+                        case 1:
+                            return (diff * 72) / 100d;
+                    }
+                }
             }
 
-            return value;
+            return 0.0d;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

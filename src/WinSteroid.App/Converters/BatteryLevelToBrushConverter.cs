@@ -22,7 +22,7 @@ using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.Converters
 {
-    class BatteryLevelToBrushConverter : DependencyObject, IValueConverter
+    public class BatteryLevelToBrushConverter : DependencyObject, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
