@@ -115,7 +115,7 @@ namespace WinSteroid.App.ViewModels.Home
             get { return _batteryPercentage; }
             set { Set(nameof(BatteryPercentage), ref _batteryPercentage, value); }
         }
-        
+
         private string _deviceName;
         public string DeviceName
         {
@@ -306,51 +306,58 @@ namespace WinSteroid.App.ViewModels.Home
         {
             if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
 
-            var notifications = await this.NotificationsService.RetriveNotificationsAsync();
-            if (notifications.IsNullOrEmpty())
+            await DispatcherHelper.RunAsync(async () =>
             {
-                this.Notifications.Clear();
-                this.ShowEmptyNotificationsText = true;
-                return;
-            }
-
-            foreach (var notification in this.Notifications)
-            {
-                if (notifications.All(n => n.Id.ToString() != notification.Id))
+                var notifications = await this.NotificationsService.RetriveNotificationsAsync();
+                if (notifications.IsNullOrEmpty())
                 {
-                    this.Notifications.Remove(notification);
+                    this.Notifications.Clear();
+                    this.ShowEmptyNotificationsText = true;
+                    return;
                 }
-            }
 
-            foreach (var notification in notifications)
-            {
-                var existingNotification = this.Notifications.Any(n => n.Id == notification.Id.ToString());
-                if (existingNotification) return;
-
-                var application = this.ApplicationsService.GetApplicationPreferenceByAppId(notification.AppInfo.PackageFamilyName);
-
-                var packageIcon = await ImageHelper.ConvertToImageAsync(notification.AppInfo.DisplayInfo);
-
-                this.Notifications.Insert(0, new NotificationItemViewModel
+                foreach (var notification in this.Notifications)
                 {
-                    Id = notification.Id.ToString(),
-                    AppId = notification.AppInfo.PackageFamilyName,
-                    PackageName = notification.AppInfo.DisplayInfo.DisplayName,
-                    Title = notification.GetTitle(),
-                    Body = notification.GetBody(),
-                    //LaunchUri = notification.GetLaunchUri(),
-                    Icon = (application?.Icon ?? ApplicationIcon.Alert).GetGlyph(),
-                    PackageIcon = packageIcon
-                });
-            }
+                    if (notifications.All(n => n.Id.ToString() != notification.Id))
+                    {
+                        this.Notifications.Remove(notification);
+                    }
+                }
 
-            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
+                foreach (var notification in notifications)
+                {
+                    var existingNotification = this.Notifications.Any(n => n.Id == notification.Id.ToString());
+                    if (existingNotification) continue;
+
+                    var application = this.ApplicationsService.GetApplicationPreferenceByAppId(notification.AppInfo.PackageFamilyName);
+
+                    var packageIcon = await ImageHelper.ConvertToImageAsync(notification.AppInfo.DisplayInfo);
+
+                    this.Notifications.Insert(0, new NotificationItemViewModel
+                    {
+                        Id = notification.Id.ToString(),
+                        AppId = notification.AppInfo.PackageFamilyName,
+                        PackageName = notification.AppInfo.DisplayInfo.DisplayName,
+                        Title = notification.GetTitle(),
+                        Body = notification.GetBody(),
+                        //LaunchUri = notification.GetLaunchUri(),
+                        Icon = (application?.Icon ?? ApplicationIcon.Alert).GetGlyph(),
+                        PackageIcon = packageIcon
+                    });
+                }
+
+                this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
+            });
         }
 
         public void UpdateNotificationsOptions()
         {
-            this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
-            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
+            this.ShowNotificationsList = false;
+
+            //this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
+            //this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
+
+            //this.ManageShowNotificationsListSelection();
         }
     }
 }

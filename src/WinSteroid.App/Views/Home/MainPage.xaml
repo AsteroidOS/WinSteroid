@@ -351,14 +351,14 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NotificationItemViewModel">
-                                    <Grid Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="{ThemeResource AppBarThemeCompactHeight}" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
