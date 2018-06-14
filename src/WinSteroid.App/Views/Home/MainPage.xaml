@@ -351,39 +351,37 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NotificationItemViewModel">
-                                    <Grid>
+                                    <Grid Height="{ThemeResource AppBarThemeCompactHeight}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="{ThemeResource SplitViewCompactPaneThemeLength}" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{ThemeResource AppBarThemeCompactHeight}" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-
                                         <Grid Grid.Column="0"
-                                              Grid.Row="0"
-                                              Grid.RowSpan="2"
                                               Background="{ThemeResource SystemControlBackgroundAccentBrush}">
                                             <Image Source="{x:Bind PackageIcon}" />
                                         </Grid>
 
-                                        <TextBlock Grid.Column="1"
-                                                   Grid.Row="0"
-                                                   Text="{x:Bind Title}"
-                                                   Padding="12,4"
-                                                   TextWrapping="NoWrap"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Style="{ThemeResource BaseTextBlockStyle}" />
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Column="1"
-                                                   Grid.Row="1"
-                                                   Text="{x:Bind Body}"
-                                                   Padding="12,4"
-                                                   TextWrapping="NoWrap"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Style="{ThemeResource BodyTextBlockStyle}" />
+                                            <TextBlock Grid.Row="0"
+                                                       Text="{x:Bind Title}"
+                                                       Padding="12,4"
+                                                       TextWrapping="NoWrap"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Style="{ThemeResource BaseTextBlockStyle}" />
+
+                                            <TextBlock Grid.Row="1"
+                                                       Text="{x:Bind Body}"
+                                                       Padding="12,4"
+                                                       TextWrapping="NoWrap"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Style="{ThemeResource BodyTextBlockStyle}" />
+                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

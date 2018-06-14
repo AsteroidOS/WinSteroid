@@ -302,7 +302,12 @@ namespace WinSteroid.App.ViewModels.Home
             });
         }
 
-        private async void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)
+        private void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)
+        {
+            this.UpdateNotificationsList();
+        }
+
+        private async void UpdateNotificationsList()
         {
             if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
 
@@ -352,12 +357,12 @@ namespace WinSteroid.App.ViewModels.Home
 
         public void UpdateNotificationsOptions()
         {
-            this.ShowNotificationsList = false;
+            this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
+            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
 
-            //this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
-            //this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
+            this.ManageShowNotificationsListSelection();
 
-            //this.ManageShowNotificationsListSelection();
+            this.UpdateNotificationsList();
         }
     }
 }
