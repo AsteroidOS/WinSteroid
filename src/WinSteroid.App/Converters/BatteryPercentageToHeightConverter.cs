@@ -32,7 +32,7 @@ namespace WinSteroid.App.Converters
                     switch (elementIndex)
                     {
                         case 0:
-                            return (diff * 240) / 100d;
+                            return (diff * 288) / 100d;
                         case 1:
                             return (diff * 72) / 100d;
                     }

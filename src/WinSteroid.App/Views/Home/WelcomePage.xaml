@@ -96,6 +96,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                       Height="116"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center"
+                      Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 

@@ -262,62 +262,56 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Canvas Grid.Row="0"
-                                Width="240" 
-                                Height="240">
-                            <Path Width="240" 
-                                  Height="240" 
-                                  Stretch="Fill"
-                                  Canvas.Top="0"
-                                  Canvas.Left="0"
-                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                                  Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z " />
+                        <Viewbox Grid.Row="0"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 Width="192" 
+                                 Height="288">
+                            <Canvas Width="192"
+                                    Height="288">
+                                <Path Width="72" 
+                                      Height="72" 
+                                      Canvas.Left="60" 
+                                      Canvas.Top="108"  
+                                      Stretch="Fill" 
+                                      Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                                      Data="F1 M 32,96.0371L 47.6826,80.3174L 47.9811,80.0182L 48.0056,79.9937L 48.0559,79.9432L 63.9623,64L 79.8687,79.9432L 79.9251,79.9995L 79.9814,80.0557L 80.0925,80.1671L 96,96.1119L 80.0936,112.056C 71.3446,120.825 64.1191,128 64.0362,128L 63.9977,127.971L 63.984,127.982L 63.9615,128L 60.6491,124.696L 48.2958,112.372L 48.0163,112.093L 47.9899,112.066L 47.979,112.056L 36.3345,100.384L 32.0726,96.1362L 32.0849,96.1239L 32.0726,96.1119L 32,96.0371 Z M 76.6414,89.7956L 70.3404,83.4791L 67.2628,86.5609L 67.2254,86.5978L 64.111,89.7174L 67.1515,92.767L 67.4855,93.1029L 70.4128,96.0391L 70.4869,96.1132L 64.1113,102.505L 57.8087,108.823L 57.8091,108.824L 63.9971,115.027L 73.4897,105.589L 73.5271,105.551L 80.3411,98.7205L 82.9306,96.1014L 76.6414,89.7956 Z M 60.6981,86.5999L 57.5868,83.4797L 57.5847,83.479L 54.5072,86.5609L 54.4706,86.5978L 51.3554,89.7173L 54.4318,92.8038L 57.6188,95.9233L 59.444,94.096L 63.809,89.7209L 60.6981,86.5999 Z "/>
 
-                            <Path Width="72" 
-                                  Height="72" 
-                                  Stretch="Fill"
-                                  Canvas.Top="84"
-                                  Canvas.Left="84"
-                                  Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
-                                  Data="M 123.915,151.214L 127.883,147.246L 125.586,144.949L 144.709,125.827L 147.006,128.123L 151.068,124.061L 196.196,169.188L 169.043,196.341L 123.915,151.214 Z M 133.772,152.657L 167.318,186.203L 185.963,167.558L 152.438,133.97L 133.772,152.657 Z M 138.109,152.817L 152.817,138.109L 181.891,167.183L 167.183,181.891L 138.109,152.817 Z " />
+                                <Path Width="192" 
+                                      Height="288" 
+                                      Stretch="Fill"
+                                      Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
+                                      Data="M 224,160C 224,187.224 215.962,214.751 192,224L 183.018,256L 136.485,256L 128,224C 104.291,214.627 96,187.042 96,160C 96,132.958 104.291,105.373 128,96L 136.462,64L 183.022,64L 192,96C 215.963,105.249 224,132.776 224,160 Z M 160,108.8C 188.277,108.8 211.2,131.723 211.2,160C 211.2,188.277 188.277,211.2 160,211.2C 131.723,211.2 108.8,188.277 108.8,160C 108.8,131.723 131.723,108.8 160,108.8 Z "/>
 
-                            <Path Width="240" 
-                                  Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=0}" 
-                                  Stretch="UniformToFill"
-                                  Canvas.Top="0"
-                                  Canvas.Left="0"
-                                  StrokeThickness="2"
-                                  Data="F1 M 32,160.148L 159.849,32L 288,160.448L 160.145,288L 159.991,287.882L 159.936,287.926L 159.846,288L 32.2904,160.545L 32.3394,160.496L 32.2904,160.448L 32,160.148 Z M 160,84.4037L 83.6839,160L 159.988,236.107L 235.722,160.406L 160,84.4037 Z ">
-                                <Path.Fill>
-                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
-                                </Path.Fill>
-                                <Path.Stroke>
-                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
-                                </Path.Stroke>
-                            </Path>
+                                <Path Width="72" 
+                                      Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=1}" 
+                                      Canvas.Left="60" 
+                                      Canvas.Top="108" 
+                                      Stretch="UniformToFill" 
+                                      Data="F1 M 32,96.0371L 47.6826,80.3174L 47.9811,80.0182L 48.0056,79.9937L 48.0559,79.9432L 63.9623,64L 79.8687,79.9432L 79.9251,79.9995L 79.9814,80.0557L 80.0925,80.1671L 96,96.1119L 80.0936,112.056C 71.3446,120.825 64.1191,128 64.0362,128L 63.9977,127.971L 63.984,127.982L 63.9615,128L 60.6491,124.696L 48.2958,112.372L 48.0163,112.093L 47.9899,112.066L 47.979,112.056L 36.3345,100.384L 32.0726,96.1362L 32.0849,96.1239L 32.0726,96.1119L 32,96.0371 Z M 76.6414,89.7956L 70.3404,83.4791L 67.2628,86.5609L 67.2254,86.5978L 64.111,89.7174L 67.1515,92.767L 67.4855,93.1029L 70.4128,96.0391L 70.4869,96.1132L 64.1113,102.505L 57.8087,108.823L 57.8091,108.824L 63.9971,115.027L 73.4897,105.589L 73.5271,105.551L 80.3411,98.7205L 82.9306,96.1014L 76.6414,89.7956 Z M 60.6981,86.5999L 57.5868,83.4797L 57.5847,83.479L 54.5072,86.5609L 54.4706,86.5978L 51.3554,89.7173L 54.4318,92.8038L 57.6188,95.9233L 59.444,94.096L 63.809,89.7209L 60.6981,86.5999 Z ">
+                                    <Path.Fill>
+                                        <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                    </Path.Fill>
+                                </Path>
 
-                            <Path Width="72" 
-                                  Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=1}" 
-                                  Stretch="UniformToFill"
-                                  Canvas.Top="84"
-                                  Canvas.Left="84"
-                                  StrokeThickness="1"
-                                  Data="M 123.915,151.214L 127.883,147.246L 125.586,144.949L 144.709,125.827L 147.006,128.123L 151.068,124.061L 196.196,169.188L 169.043,196.341L 123.915,151.214 Z M 133.772,152.657L 167.318,186.203L 185.963,167.558L 152.438,133.97L 133.772,152.657 Z M 138.109,152.817L 152.817,138.109L 181.891,167.183L 167.183,181.891L 138.109,152.817 Z ">
-                                <Path.Fill>
-                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
-                                </Path.Fill>
-                                <Path.Stroke>
-                                    <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
-                                </Path.Stroke>
-                            </Path>
-                        </Canvas>
-
-                        <ProgressRing Grid.Row="0" 
-                                      Width="264"
-                                      Height="264"
+                                <Path Width="192" 
+                                      Height="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource BatteryPercentageToHeightConverter}, ConverterParameter=0}" 
+                                      Stretch="UniformToFill"
+                                      Data="M 224,160C 224,187.224 215.962,214.751 192,224L 183.018,256L 136.485,256L 128,224C 104.291,214.627 96,187.042 96,160C 96,132.958 104.291,105.373 128,96L 136.462,64L 183.022,64L 192,96C 215.963,105.249 224,132.776 224,160 Z M 160,108.8C 188.277,108.8 211.2,131.723 211.2,160C 211.2,188.277 188.277,211.2 160,211.2C 131.723,211.2 108.8,188.277 108.8,160C 108.8,131.723 131.723,108.8 160,108.8 Z ">
+                                    <Path.Fill>
+                                        <SolidColorBrush Color="{ThemeResource SystemChromeMediumColor}" />
+                                    </Path.Fill>
+                                </Path>
+                            </Canvas>
+                        </Viewbox>
+                        
+                        <ProgressRing Grid.Row="0"
+                                      Width="116"
+                                      Height="116"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
                                       Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                       IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
-                                      Style="{StaticResource LargeProgressRingStyle}"
                                       Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                         <TextBlock Grid.Row="1"
