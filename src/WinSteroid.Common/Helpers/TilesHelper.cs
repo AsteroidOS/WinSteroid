@@ -86,7 +86,7 @@ namespace WinSteroid.Common.Helpers
 
         private static string GetPercentageText(int percentage)
         {
-            return percentage > 99 ? "Full charged" : percentage + "%";
+            return percentage > 99 ? "Fully charged" : percentage + "%";
         }
 
         private static AdaptiveTextStyle GetPercentageAdaptiveTextStyle(int percentage)
