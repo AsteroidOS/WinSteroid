@@ -173,6 +173,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="CommonBuild.props" />
     <None Include="WinSteroid.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
