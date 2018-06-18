@@ -54,6 +54,11 @@ namespace WinSteroid.App
             }
         }
 
+        private void UpdateAcrylicThemeResources()
+        {
+            this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/FluentDictionary.xaml") });
+        }
+
         public static void RemoveWelcomePageFromBackStack()
         {
             if (!(Window.Current.Content is Frame rootFrame)) return;
@@ -231,6 +236,11 @@ namespace WinSteroid.App
         {
             if (!(Window.Current.Content is Frame rootFrame))
             {
+                if (ApiHelper.SupportAcrylicBrushes())
+                {
+                    UpdateAcrylicThemeResources();
+                }
+
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;

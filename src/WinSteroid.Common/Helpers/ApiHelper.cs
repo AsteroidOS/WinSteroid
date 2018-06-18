@@ -33,5 +33,10 @@ namespace WinSteroid.Common.Helpers
         {
             return ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
         }
+
+        public static bool SupportAcrylicBrushes()
+        {
+            return ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.AcrylicBrush");
+        }
     }
 }

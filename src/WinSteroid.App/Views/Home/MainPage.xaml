@@ -164,6 +164,7 @@
 
         <SplitView Grid.Row="0" 
                    x:Name="MainSplitView"
+                   PaneBackground="{StaticResource DefaultPaneBackground}"
                    IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
             <SplitView.Pane>
                 <StackPanel HorizontalAlignment="Stretch">
