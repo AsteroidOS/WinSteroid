@@ -25,7 +25,6 @@
     xmlns:viewmodels="using:WinSteroid.App.ViewModels"
     xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding Settings, Source={StaticResource Locator}}">
     
     <Grid>
@@ -124,8 +123,11 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
+        <controls:AcrylicGrid Grid.Row="0" />
+
         <SplitView Grid.Row="0"
                    x:Name="MainSplitView"
+                   PaneBackground="{ThemeResource DefaultPaneBackground}"
                    IsPaneOpen="{x:Bind ViewModel.IsMenuOpen, Mode=OneWay}">
             <SplitView.Pane>
                 <StackPanel HorizontalAlignment="Stretch">
@@ -210,6 +212,7 @@
                     </Grid.RowDefinitions>
 
                     <controls:NavigationPageHeader Grid.Row="0" 
+                                                   Background="{ThemeResource DefaultPaneBackground}"
                                                    x:Name="MainNavigationPageHeader"
                                                    ButtonGlyph="" 
                                                    ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
@@ -316,7 +319,8 @@
         </SplitView>
 
         <CommandBar Grid.Row="1"
-                    x:Name="MainCommandBar">
+                    x:Name="MainCommandBar"
+                    Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="About"
                               Command="{x:Bind ViewModel.AboutCommand, Mode=OneWay}">

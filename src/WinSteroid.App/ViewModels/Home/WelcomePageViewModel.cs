@@ -114,7 +114,7 @@ namespace WinSteroid.App.ViewModels.Home
                 return;
             }
             
-            this.Pair(this.DeviceService.Current.Id);
+            this.Pair(device.Id);
         }
 
         private RelayCommand _tutorialsCommand;

@@ -56,6 +56,8 @@ namespace WinSteroid.App
 
         private void UpdateAcrylicThemeResources()
         {
+            if (!ApiHelper.SupportAcrylicBrushes()) return;
+ 
             this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/FluentDictionary.xaml") });
         }
 
@@ -236,10 +238,7 @@ namespace WinSteroid.App
         {
             if (!(Window.Current.Content is Frame rootFrame))
             {
-                if (ApiHelper.SupportAcrylicBrushes())
-                {
-                    UpdateAcrylicThemeResources();
-                }
+                this.UpdateAcrylicThemeResources();
 
                 rootFrame = new Frame();
 

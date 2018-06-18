@@ -24,7 +24,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:controls="using:WinSteroid.App.Controls"
     xmlns:viewmodels="using:WinSteroid.App.ViewModels.Settings"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding SettingsApplications, Source={StaticResource Locator}}">
 
     <Grid>
@@ -39,6 +38,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0"
                                        ButtonGlyph=""
@@ -96,7 +97,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </ListView.ItemTemplate>
         </ListView>
 
-        <CommandBar Grid.Row="2">
+        <CommandBar Grid.Row="2"
+                    Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="Export"
                               Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}">

@@ -23,7 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding TransfersWallpapers, Source={StaticResource Locator}}">
 
     <Grid>
@@ -39,7 +38,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <controls:AcrylicGrid Grid.Row="1" />
+
         <controls:NavigationPageHeader Grid.Row="0"
+                                       Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph=""
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
                                        TitleText="Wallpapers" />
@@ -116,7 +118,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </StackPanel>
         </ScrollViewer>
 
-        <CommandBar Grid.Row="2">
+        <CommandBar Grid.Row="2"
+                    Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="How to connect with USB"
                               Command="{x:Bind ViewModel.UsbTutorialCommand, Mode=OneWay}">

@@ -24,7 +24,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:controls="using:WinSteroid.App.Controls"
     xmlns:models="using:WinSteroid.Common.Models"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     DataContext="{Binding SettingsApplication, Source={StaticResource Locator}}">
 
     <Grid>
@@ -40,7 +39,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <controls:AcrylicGrid Grid.Row="1" />
+
         <controls:NavigationPageHeader Grid.Row="0"
+                                       Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph="{x:Bind ViewModel.SelectedIcon, Converter={StaticResource ApplicationIconToGlyphConverter}}"
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
                                        TitleText="{x:Bind ViewModel.Name, Mode=OneWay}" />
@@ -92,7 +94,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     ThumbToolTipValueConverter="{StaticResource NumberToVibrationLevelStringConverter}" />
         </StackPanel>
 
-        <CommandBar Grid.Row="2">
+        <CommandBar Grid.Row="2"
+                    Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="Save"
                               Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}">
