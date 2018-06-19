@@ -54,11 +54,17 @@ namespace WinSteroid.App
             }
         }
 
-        private void UpdateAcrylicThemeResources()
+        private void UpdateResourcesDictionaries()
         {
-            if (!ApiHelper.SupportAcrylicBrushes()) return;
- 
-            this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/FluentDictionary.xaml") });
+            if (ApiHelper.CheckIfIsSystemMobile())
+            {
+                this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/MobileDictionary.xaml") });
+            }
+
+            if (ApiHelper.SupportAcrylicBrushes())
+            {
+                this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/FluentDictionary.xaml") });
+            }
         }
 
         public static void RemoveWelcomePageFromBackStack()
@@ -238,7 +244,7 @@ namespace WinSteroid.App
         {
             if (!(Window.Current.Content is Frame rootFrame))
             {
-                this.UpdateAcrylicThemeResources();
+                this.UpdateResourcesDictionaries();
 
                 rootFrame = new Frame();
 
