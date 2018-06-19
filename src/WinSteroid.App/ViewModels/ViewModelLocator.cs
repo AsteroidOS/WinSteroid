@@ -55,6 +55,7 @@ namespace WinSteroid.App.ViewModels
             if (!Common.Helpers.TilesHelper.BatteryTileExists())
             {
                 backgroundService.Unregister(Services.BackgroundService.BatteryLevelTaskName);
+                backgroundService.Unregister(Services.BackgroundService.TimeBatteryLevelTaskName);
             }
         }
 

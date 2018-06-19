@@ -52,8 +52,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <TextBlock Text="Preferences" 
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <ComboBox x:Name="IconComboBox"
-                      HorizontalAlignment="Stretch" 
+            <ComboBox HorizontalAlignment="Stretch" 
                       Header="Icon"
                       Margin="0,24,0,0"
                       ItemsSource="{x:Bind ViewModel.AvailableIcons}"

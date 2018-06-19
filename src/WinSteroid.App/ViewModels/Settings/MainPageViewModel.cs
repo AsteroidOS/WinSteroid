@@ -16,10 +16,12 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
+using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Settings
@@ -60,6 +62,9 @@ namespace WinSteroid.App.ViewModels.Settings
             this.DeviceName = this.DeviceService.Current.Name;
             this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
             this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
+
+            var lastSavedBatteryTaskFrequency = SettingsHelper.GetValue(Constants.LastSavedBatteryTaskFrequencySettingKey, (uint)15);
+            this.BatteryCheckFrequency = this.AvailableBatteryCheckFrequencies.FirstOrDefault(bf => bf.Minutes == lastSavedBatteryTaskFrequency);
         }
 
         public override void InitializeMenuOptions()
@@ -83,6 +88,54 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             get { return _applicationName; }
             set { Set(nameof(ApplicationName), ref _applicationName, value); }
+        }
+
+        private List<BatteryFrequency> _availableBatteryCheckFrequencies;
+        public List<BatteryFrequency> AvailableBatteryCheckFrequencies
+        {
+            get
+            {
+                if (_availableBatteryCheckFrequencies == null)
+                {
+                    _availableBatteryCheckFrequencies = new List<BatteryFrequency>
+                    {
+                        new BatteryFrequency { Label = "Every 15 minutes", Minutes = 15 },
+                        new BatteryFrequency { Label = "Every 30 minutes", Minutes = 30 },
+                        new BatteryFrequency { Label = "Every 60 minutes", Minutes = 60 },
+                        new BatteryFrequency { Label = "Always", Minutes = 0 }
+                    };
+                }
+
+                return _availableBatteryCheckFrequencies;
+            }
+        }
+
+        private BatteryFrequency _batteryCheckFrequency;
+        public BatteryFrequency BatteryCheckFrequency
+        {
+            get { return _batteryCheckFrequency; }
+            set
+            {
+                if (!Set(nameof(BatteryCheckFrequency), ref _batteryCheckFrequency, value)) return;
+
+                if (_batteryCheckFrequency == null) return;
+
+                if (!TilesHelper.BatteryTileExists()) return;
+
+                this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+                this.BackgroundService.Unregister(BackgroundService.TimeBatteryLevelTaskName);
+
+                SettingsHelper.SetValue(Constants.LastSavedBatteryTaskFrequencySettingKey, _batteryCheckFrequency.Minutes);
+
+                this.RegisterBatteryTask();
+            }
+        }
+
+        private bool _showBatteryCheckWarning;
+        public bool ShowBatteryCheckWarning
+        {
+            get { return _showBatteryCheckWarning; }
+            private set { Set(nameof(ShowBatteryCheckWarning), ref _showBatteryCheckWarning, value); }
         }
 
         public bool CanEnableUserNotifications
@@ -203,11 +256,25 @@ namespace WinSteroid.App.ViewModels.Settings
                 this.UseBatteryLiveTile = false;
                 return;
             }
-            
-            await this.BackgroundService.RegisterBatteryLevelTask();
+
+            this.RegisterBatteryTask();
 
             var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             TilesHelper.UpdateBatteryTile(batteryPercentage);
+        }
+
+        private async void RegisterBatteryTask()
+        {
+            this.ShowBatteryCheckWarning = this.BatteryCheckFrequency.Minutes < 15;
+
+            if (this.BatteryCheckFrequency.Minutes < 15)
+            {
+                await this.BackgroundService.RegisterBatteryLevelTask();
+            }
+            else
+            {
+                await this.BackgroundService.RegisterTimeBatteryLevelTask(this.BatteryCheckFrequency.Minutes);
+            }
         }
 
         private async void UnpinBatteryTile()
@@ -426,5 +493,12 @@ namespace WinSteroid.App.ViewModels.Settings
             await this.DeviceService.DisconnectAsync();
             App.Reset();
         }
+    }
+
+    public class BatteryFrequency
+    {
+        public uint Minutes { get; set; }
+
+        public string Label { get; set; }
     }
 }

@@ -22,6 +22,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
+    xmlns:settings="using:WinSteroid.App.ViewModels.Settings"
     xmlns:viewmodels="using:WinSteroid.App.ViewModels"
     xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
@@ -234,6 +235,26 @@
                                           OnContent="Yes"
                                           IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
 
+                            <ComboBox HorizontalAlignment="Stretch" 
+                                      Header="Battery check frequency"
+                                      Margin="0,24,0,0"
+                                      Visibility="{x:Bind ViewModel.UseBatteryLiveTile, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      ItemsSource="{x:Bind ViewModel.AvailableBatteryCheckFrequencies}"
+                                      SelectedItem="{x:Bind ViewModel.BatteryCheckFrequency, Mode=TwoWay}"
+                                      PlaceholderText="{x:Bind ViewModel.BatteryCheckFrequency.Label, Mode=OneWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="settings:BatteryFrequency">
+                                        <TextBlock Text="{x:Bind Label}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBlock Text="Preview: due to UWP platform limitations, the real time background task that check current battery level stops after a reboot. You need to start WinSteroid on next boot to register it again."
+                                       TextWrapping="Wrap"
+                                       Foreground="Red"
+                                       Visibility="{x:Bind ViewModel.ShowBatteryCheckWarning, Mode=OneWay}"
+                                       Style="{ThemeResource BodyTextBlockStyle}" 
+                                       Margin="0,8,0,0" />
+
                             <TextBlock Text="Notifications"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,24,0,8" />
@@ -267,7 +288,7 @@
                                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             </StackPanel>
 
-                            <!--<ToggleSwitch Header="Use custom date" 
+                            <!--<ToggleSwitch Header="Set custom date" 
                                  OffContent="No"
                                  OnContent="Yes"
                                  IsOn="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=TwoWay}"

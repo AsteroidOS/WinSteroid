@@ -21,5 +21,6 @@ namespace WinSteroid.Common
         public const string LastNotificationIdsSettingKey = "lastNotificationIds";
         public const string LastSavedDeviceIdSettingKey = "lastSavedDeviceId";
         public const string LastSavedDeviceNameSettingKey = "lastSavedDeviceName";
+        public const string LastSavedBatteryTaskFrequencySettingKey = "lastSavedBatteryTaskFrequencyName";
     }
 }

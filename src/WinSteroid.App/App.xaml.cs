@@ -137,6 +137,11 @@ namespace WinSteroid.App
                         await this.OnBatteryLevelBackgroundTaskActivated(args.TaskInstance);
                         break;
                     }
+                case BackgroundService.TimeBatteryLevelTaskName:
+                    {
+                        await this.OnTimeBatteryLevelBackgroundTaskActivated(args.TaskInstance);
+                        break;
+                    }
                 case BackgroundService.UserNotificationsTaskName:
                     {
                         await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
@@ -175,6 +180,42 @@ namespace WinSteroid.App
             }
 
             return Task.CompletedTask;
+        }
+
+        private async Task OnTimeBatteryLevelBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
+        {
+            if (!TilesHelper.BatteryTileExists()) return;
+
+            ApplicationsService applicationsService = null;
+            DeviceService deviceService = null;
+
+            if (this.IsRunning)
+            {
+                applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
+                deviceService = SimpleIoc.Default.GetInstance<DeviceService>();
+            }
+            else
+            {
+                applicationsService = new ApplicationsService();
+                deviceService = new DeviceService(applicationsService);
+            }
+
+            if (deviceService.BluetoothDevice == null || deviceService.Current == null)
+            {
+                var deviceId = deviceService.GetLastSavedDeviceId();
+                var errorMessage = await deviceService.ConnectAsync(deviceId);
+                if (!string.IsNullOrWhiteSpace(errorMessage)) return;
+            }
+
+            var percentage = await deviceService.GetBatteryPercentageAsync();
+            if (percentage > 0)
+            {
+                TilesHelper.UpdateBatteryTile(percentage);
+            }
+            else
+            {
+                TilesHelper.ResetBatteryTile();
+            }
         }
 
         private async Task OnUserNotificationsBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
