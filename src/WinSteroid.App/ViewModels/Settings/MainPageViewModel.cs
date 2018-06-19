@@ -87,7 +87,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
         public bool CanEnableUserNotifications
         {
-            get { return ApiHelper.CheckIfSystemSupportNotificationListener(); }
+            get { return ApiHelper.IsNotificationListenerSupported(); }
         }
 
         private DateTimeOffset _customDate;

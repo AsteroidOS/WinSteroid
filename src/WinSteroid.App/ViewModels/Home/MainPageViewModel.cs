@@ -93,7 +93,7 @@ namespace WinSteroid.App.ViewModels.Home
 
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand });
 
-            if (!ApiHelper.CheckIfIsSystemMobile())
+            if (!ApiHelper.IsMobileSystem())
             {
                 this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
                 this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });

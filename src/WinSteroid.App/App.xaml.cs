@@ -56,12 +56,12 @@ namespace WinSteroid.App
 
         private void UpdateResourcesDictionaries()
         {
-            if (ApiHelper.CheckIfIsSystemMobile())
+            if (ApiHelper.IsMobileSystem())
             {
                 this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/MobileDictionary.xaml") });
             }
 
-            if (ApiHelper.SupportAcrylicBrushes())
+            if (ApiHelper.SupportsAcrylicBrushes())
             {
                 this.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("ms-appx:///Themes/FluentDictionary.xaml") });
             }

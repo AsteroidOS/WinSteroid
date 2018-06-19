@@ -65,7 +65,7 @@ namespace WinSteroid.App.Services
         public async Task<bool> RequestAccessAsync()
         {
             var status = UserNotificationListenerAccessStatus.Unspecified;
-            if (ApiHelper.CheckIfIsSystemMobile())
+            if (ApiHelper.IsMobileSystem())
             {
                 status = this.UserNotificationListener.GetAccessStatus();
                 if (status == UserNotificationListenerAccessStatus.Allowed) return true;
@@ -125,7 +125,7 @@ namespace WinSteroid.App.Services
 
         public Task ShowBusySystemTrayAsync(string text)
         {
-            if (!ApiHelper.CheckIfIsSystemTrayPresent()) return Task.CompletedTask;
+            if (!ApiHelper.IsSystemTrayAvailable()) return Task.CompletedTask;
 
             var statusBar = StatusBar.GetForCurrentView();
             statusBar.ProgressIndicator.Text = text;
@@ -134,7 +134,7 @@ namespace WinSteroid.App.Services
 
         public Task HideBusySystemTrayAsync()
         {
-            if (!ApiHelper.CheckIfIsSystemTrayPresent()) return Task.CompletedTask;
+            if (!ApiHelper.IsSystemTrayAvailable()) return Task.CompletedTask;
 
             var statusBar = StatusBar.GetForCurrentView();
             statusBar.ProgressIndicator.Text = string.Empty;

@@ -19,22 +19,22 @@ namespace WinSteroid.Common.Helpers
 {
     public static class ApiHelper
     {
-        public static bool CheckIfSystemSupportNotificationListener()
+        public static bool IsNotificationListenerSupported()
         {
             return ApiInformation.IsTypePresent("Windows.UI.Notifications.Management.UserNotificationListener");
         }
 
-        public static bool CheckIfIsSystemMobile()
+        public static bool IsMobileSystem()
         {
             return ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons");
         }
 
-        public static bool CheckIfIsSystemTrayPresent()
+        public static bool IsSystemTrayAvailable()
         {
             return ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar");
         }
 
-        public static bool SupportAcrylicBrushes()
+        public static bool SupportsAcrylicBrushes()
         {
             return ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.AcrylicBrush");
         }

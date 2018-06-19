@@ -38,7 +38,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<Tutorials.MainPageViewModel>();
             SimpleIoc.Default.Register<Tutorials.UsbPageViewModel>();
 
-            if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
+            if (!Common.Helpers.ApiHelper.IsMobileSystem())
             {
                 SimpleIoc.Default.Register<Transfers.WatchFacePageViewModel>();
                 SimpleIoc.Default.Register<Transfers.WallpapersPageViewModel>();
@@ -70,7 +70,7 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(SettingsApplications), typeof(Views.Settings.ApplicationsPage));
             navigationService.Configure(nameof(SettingsApplication), typeof(Views.Settings.ApplicationPage));
 
-            if (!Common.Helpers.ApiHelper.CheckIfIsSystemMobile())
+            if (!Common.Helpers.ApiHelper.IsMobileSystem())
             {
                 navigationService.Configure(nameof(TransfersWatchFace), typeof(Views.Transfers.WatchFacePage));
                 navigationService.Configure(nameof(TransfersWallpapers), typeof(Views.Transfers.WallpapersPage));
