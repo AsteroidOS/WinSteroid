@@ -84,7 +84,7 @@ namespace WinSteroid.Common.Helpers
             TileUpdateManager.CreateTileUpdaterForSecondaryTile(BatteryTileId).Update(tileNotification);
         }
 
-        private static string GetPercentageText(int percentage) => percentage + "%";
+        private static string GetPercentageText(int percentage) => percentage > 99 ? percentage.ToString() : percentage + "%";
 
         private static AdaptiveTextStyle GetPercentageAdaptiveTextStyle(int percentage) => AdaptiveTextStyle.Header;
 
