@@ -72,9 +72,9 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             if (!this.MenuOptions.IsNullOrEmpty()) return;
 
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Home", Command = HomeCommand });
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "About", Command = AboutCommand });
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Applications", Command = ApplicationsCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainHomeItemLabel"), Command = HomeCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainAboutItemLabel"), Command = AboutCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainApplicationsItemLabel"), Command = ApplicationsCommand });
         }
 
         public override void Reset()
@@ -98,11 +98,13 @@ namespace WinSteroid.App.ViewModels.Settings
             {
                 if (_availableBatteryCheckFrequencies == null)
                 {
+                    var labelFormat = ResourcesHelper.GetLocalizedString("SettingsMainBatteryCheckFrequencyMinutesFormat");
+
                     _availableBatteryCheckFrequencies = new List<BatteryFrequency>
                     {
-                        new BatteryFrequency { Label = "Every 15 minutes", Minutes = 15 },
-                        new BatteryFrequency { Label = "Every 30 minutes", Minutes = 30 },
-                        new BatteryFrequency { Label = "Every 60 minutes", Minutes = 60 },
+                        new BatteryFrequency { Label = string.Format(labelFormat, 15), Minutes = 15 },
+                        new BatteryFrequency { Label = string.Format(labelFormat, 30), Minutes = 30 },
+                        new BatteryFrequency { Label = string.Format(labelFormat, 60), Minutes = 60 },
                         //new BatteryFrequency { Label = "Always", Minutes = 0 }
                     };
                 }
@@ -326,10 +328,10 @@ namespace WinSteroid.App.ViewModels.Settings
         private async void ResetApplication()
         {
             await this.DialogService.ShowMessage(
-                message: "Are you sure do you want to disconnect your device and reset the application?",
-                title: $"Reset {this.ApplicationName}",
-                buttonConfirmText: "Yes, I'm sure",
-                buttonCancelText: "Mmm nope",
+                message: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationMessage"),
+                title: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationTitle"),
+                buttonConfirmText: ResourcesHelper.GetLocalizedString("SharedYesMessage"),
+                buttonCancelText: ResourcesHelper.GetLocalizedString("SharedNoMessage"),
                 afterHideCallback: ManageResetMessageResult);
         }
 
@@ -354,7 +356,9 @@ namespace WinSteroid.App.ViewModels.Settings
 
             if (dateSynced) return;
 
-            await this.DialogService.ShowError("I cannot be able to automatically set time on your device", "Error");
+            await this.DialogService.ShowError(
+                ResourcesHelper.GetLocalizedString("SettingsMainSetTimeErrorMessage"), 
+                ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
         }
 
         private RelayCommand _manuallySyncDateCommand;
@@ -380,7 +384,9 @@ namespace WinSteroid.App.ViewModels.Settings
 
             if (dateSynced) return;
 
-            await this.DialogService.ShowError("I cannot be able to manually set time on your device", "Error");
+            await this.DialogService.ShowError(
+                ResourcesHelper.GetLocalizedString("SettingsMainSetTimeErrorMessage"), 
+                ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
         }
 
         private RelayCommand _aboutCommand;
@@ -447,10 +453,10 @@ namespace WinSteroid.App.ViewModels.Settings
             if (!confirmed) return;
 
             await this.DialogService.ShowMessage(
-                message: "Do you want to keep the current icon preferences for another device?",
-                title: "Keep icons preferences",
-                buttonConfirmText: "Yes",
-                buttonCancelText: "No",
+                message: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationKeepIconPreferencesMessage"),
+                title: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationKeepIconPreferencesTitle"),
+                buttonConfirmText: ResourcesHelper.GetLocalizedString("SharedYesMessage"),
+                buttonCancelText: ResourcesHelper.GetLocalizedString("SharedNoMessage"),
                 afterHideCallback: ManageKeepPreferencesMessageResult);
         }
 
@@ -465,10 +471,10 @@ namespace WinSteroid.App.ViewModels.Settings
             }
 
             await this.DialogService.ShowMessage(
-                message: $"Do you want to save a copy of icon preferences as file (to be imported in other {this.ApplicationName} installations?",
-                title: "Export data",
-                buttonConfirmText: "Yes",
-                buttonCancelText: "No",
+                message: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationExportDataMessage"),
+                title: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationExportDataTitle"),
+                buttonConfirmText: ResourcesHelper.GetLocalizedString("SharedYesMessage"),
+                buttonCancelText: ResourcesHelper.GetLocalizedString("SharedNoMessage"),
                 afterHideCallback: ManageExportIconPreferencesMessageResult);
         }
 
@@ -480,10 +486,10 @@ namespace WinSteroid.App.ViewModels.Settings
                 if (!result)
                 {
                     await this.DialogService.ShowMessage(
-                        message: $"Export failed or canceled. Do you want to retry?",
-                        title: "Export data",
-                        buttonConfirmText: "Yes",
-                        buttonCancelText: "No",
+                        message: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationExportDataFailedOrCanceledMessage"),
+                        title: ResourcesHelper.GetLocalizedString("SettingsMainResetApplicationExportDataTitle"),
+                        buttonConfirmText: ResourcesHelper.GetLocalizedString("SharedYesMessage"),
+                        buttonCancelText: ResourcesHelper.GetLocalizedString("SharedNoMessage"),
                         afterHideCallback: ManageExportIconPreferencesMessageResult);
                     return;
                 }

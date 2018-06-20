@@ -127,6 +127,7 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Extensions\PackageExtensions.cs" />
     <Compile Include="Helpers\IPHelper.cs" />
+    <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\TilesHelper.cs" />
     <Compile Include="Helpers\ToastsHelper.cs" />

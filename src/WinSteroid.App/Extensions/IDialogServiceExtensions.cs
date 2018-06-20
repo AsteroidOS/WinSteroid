@@ -15,6 +15,7 @@
 
 using System;
 using System.Threading.Tasks;
+using WinSteroid.Common.Helpers;
 
 namespace GalaSoft.MvvmLight.Views
 {
@@ -22,17 +23,22 @@ namespace GalaSoft.MvvmLight.Views
     {
         public static Task ShowError(this IDialogService dialogService, Exception exception, string title)
         {
-            return dialogService.ShowError(exception, title, "OK", () => { });
+            return dialogService.ShowError(exception, title, ResourcesHelper.GetLocalizedString("SharedOkMessage"), () => { });
         }
 
         public static Task ShowError(this IDialogService dialogService, string message, string title)
         {
-            return dialogService.ShowError(message, title, "OK", () => { });
+            return dialogService.ShowError(message, title, ResourcesHelper.GetLocalizedString("SharedOkMessage"), () => { });
         }
 
         public static Task<bool> ShowConfirmMessage(this IDialogService dialogService, string message, string title)
         {
-            return dialogService.ShowMessage(message, title, "OK", "Cancel", b => { });
+            return dialogService.ShowMessage(
+                message, 
+                title,
+                buttonConfirmText: ResourcesHelper.GetLocalizedString("SharedYesMessage"),
+                buttonCancelText: ResourcesHelper.GetLocalizedString("SharedNoMessage"), 
+                afterHideCallback: b => { });
         }
     }
 }

@@ -20,7 +20,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
@@ -61,7 +60,7 @@ namespace WinSteroid.App.ViewModels.Home
         public override async void Initialize()
         {
             this.IsBusy = true;
-            this.BusyMessage = "Initializing";
+            this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeMainInitializingMessage");
 
             this.DeviceName = this.DeviceService.Current.Name;
 
@@ -91,15 +90,15 @@ namespace WinSteroid.App.ViewModels.Home
         {
             if (!this.MenuOptions.IsNullOrEmpty()) return;
 
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Settings", Command = SettingsCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainSettingsItemLabel"), Command = SettingsCommand });
 
             if (!ApiHelper.IsMobileSystem())
             {
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Wallpapers", Command = WallpapersCommand });
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "WatchFaces", Command = WatchFacesCommand });
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWallpapersItemLabel"), Command = WallpapersCommand });
+                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWatchFacesItemLabel"), Command = WatchFacesCommand });
             }
 
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = "Tutorials", Command = TutorialsCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainTutorialsItemLabel"), Command = TutorialsCommand });
         }
 
         private BatteryLevel _batteryLevel;
@@ -267,7 +266,9 @@ namespace WinSteroid.App.ViewModels.Home
             var result = await this.DeviceService.RegisterToScreenshotContentService();
             if (!result)
             {
-                await this.DialogService.ShowMessage("I cannot be able to finish screenshot content handlers registration!", "Error");
+                await this.DialogService.ShowMessage(
+                    ResourcesHelper.GetLocalizedString("HomeMainScreenshotServiceHandlersRegistrationFailedError"), 
+                    ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
         }
 

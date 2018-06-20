@@ -19,6 +19,7 @@ using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Home
 {
@@ -167,7 +168,7 @@ namespace WinSteroid.App.ViewModels.Home
         private async void Pair(string deviceId)
         {
             this.IsBusy = true;
-            this.BusyMessage = "Pairing";
+            this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeWelcomePairingMessage");
             this.ConnectionFailed = false;
 
             var errorMessage = await this.DeviceService.ConnectAsync(deviceId);
@@ -176,7 +177,7 @@ namespace WinSteroid.App.ViewModels.Home
                 this.IsBusy = false;
                 this.BusyMessage = string.Empty;
                 this.ConnectionFailed = true;
-                await this.DialogService.ShowMessage(errorMessage, "Error");
+                await this.DialogService.ShowMessage(errorMessage, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
                 return;
             }
 
@@ -186,7 +187,9 @@ namespace WinSteroid.App.ViewModels.Home
                 this.IsBusy = false;
                 this.BusyMessage = string.Empty;
                 this.ConnectionFailed = true;
-                await this.DialogService.ShowMessage("Paired operation failed", "Error");
+                await this.DialogService.ShowMessage(
+                    ResourcesHelper.GetLocalizedString("HomeWelcomePairingOperationFailedError"), 
+                    ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
                 return;
             }
 

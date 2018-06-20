@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Views;
+using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Tutorials
 {
@@ -22,7 +23,7 @@ namespace WinSteroid.App.ViewModels.Tutorials
             {
                 new TutorialItem
                 {
-                    Title = "How to connect an AsteroidOS watch to PC",
+                    Title = ResourcesHelper.GetLocalizedString("TutorialsMainUsbItemLabel"),
                     PageKey = nameof(ViewModelLocator.TutorialsUsb),
                     Glyph = ""
                 }

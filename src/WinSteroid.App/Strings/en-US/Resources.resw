@@ -141,6 +141,9 @@
   <data name="HomeWelcomeConnectButton.Content" xml:space="preserve">
     <value>Connect to device</value>
   </data>
+  <data name="HomeWelcomePairingMessage" xml:space="preserve">
+    <value>Pairing</value>
+  </data>
   <data name="HomeWelcomeRetryButton.Content" xml:space="preserve">
     <value>Retry</value>
   </data>
@@ -257,5 +260,95 @@
   </data>
   <data name="UseBatteryLiveTileToggleSwitch.OnContent" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="HomeMainInitializingMessage" xml:space="preserve">
+    <value>Initializing</value>
+  </data>
+  <data name="HomeMainScreenshotServiceHandlersRegistrationFailedError" xml:space="preserve">
+    <value>I cannot be able to finish screenshot content service registration</value>
+  </data>
+  <data name="HomeMainSettingsLabel" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="HomeMainTutorialsLabel" xml:space="preserve">
+    <value>Tutorials</value>
+  </data>
+  <data name="HomeMainWallpapersLabel" xml:space="preserve">
+    <value>Wallpapers</value>
+  </data>
+  <data name="HomeMainWatchFacesLabel" xml:space="preserve">
+    <value>WatchFaces</value>
+  </data>
+  <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
+    <value>Pairing operation failed</value>
+  </data>
+  <data name="SettingsApplicationsDataExportedMessage" xml:space="preserve">
+    <value>Data successfully exported</value>
+  </data>
+  <data name="SettingsApplicationsDataImportedMessage" xml:space="preserve">
+    <value>Data successfully imported</value>
+  </data>
+  <data name="SettingsApplicationsImportFoundConflictMessage" xml:space="preserve">
+    <value>I found some conflicts. Do you want to overwrite existing application preferences when import them?</value>
+  </data>
+  <data name="SettingsApplicationsImportFoundConflictTitle" xml:space="preserve">
+    <value>Found conflicts</value>
+  </data>
+  <data name="SettingsApplicationUnsavedChangesMessage" xml:space="preserve">
+    <value>I detected some unsaved changes. Are you sure to discard them and go back?</value>
+  </data>
+  <data name="SettingsApplicationUnsavedChangesTitle" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="SettingsMainBatteryCheckFrequencyMinutesFormat" xml:space="preserve">
+    <value>Every {0} minutes</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataFailedOrCanceledMessage" xml:space="preserve">
+    <value>Export failed or canceled. Do you want to retry?</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataMessage" xml:space="preserve">
+    <value>Do you want to save a copy of icon preferences as file?</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataTitle" xml:space="preserve">
+    <value>Export data</value>
+  </data>
+  <data name="SettingsMainResetApplicationKeepIconPreferencesMessage" xml:space="preserve">
+    <value>Do you want to keep the current applications preferences for another device?</value>
+  </data>
+  <data name="SettingsMainResetApplicationKeepIconPreferencesTitle" xml:space="preserve">
+    <value>Keep applications preferences</value>
+  </data>
+  <data name="SettingsMainResetApplicationMessage" xml:space="preserve">
+    <value>Are you sure do you want to disconnect your device and reset the application?</value>
+  </data>
+  <data name="SettingsMainResetApplicationTitle" xml:space="preserve">
+    <value>Reset application</value>
+  </data>
+  <data name="SettingsMainSetTimeErrorMessage" xml:space="preserve">
+    <value>I cannot be able to set time on your device</value>
+  </data>
+  <data name="SharedErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="SharedNoMessage" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SharedOkMessage" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="SharedYesMessage" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="TutorialsMainUsbItemLabel" xml:space="preserve">
+    <value>How to connect an AsteroidOS device to your PC</value>
+  </data>
+  <data name="SettingsMainAboutItemLabel" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="SettingsMainApplicationsItemLabel" xml:space="preserve">
+    <value>Applications</value>
+  </data>
+  <data name="SettingsMainHomeItemLabel" xml:space="preserve">
+    <value>Home</value>
   </data>
 </root>

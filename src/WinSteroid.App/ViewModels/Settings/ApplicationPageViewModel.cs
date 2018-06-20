@@ -44,12 +44,9 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             if (!this.CheckUnsavedChanges()) return Task.FromResult(true);
 
-            return this.DialogService.ShowMessage(
-                message: "I detected some unsaved changes. Are you sure to discard them and go back?",
-                title: "Unsaved changes",
-                buttonConfirmText: "Yes",
-                buttonCancelText: "No",
-                afterHideCallback: r => { });
+            return this.DialogService.ShowConfirmMessage(
+                message: ResourcesHelper.GetLocalizedString("SettingsApplicationUnsavedChangesMessage"),
+                title: ResourcesHelper.GetLocalizedString("SettingsApplicationUnsavedChangesTitle"));
         }
 
         public override void Initialize()

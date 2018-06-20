@@ -141,6 +141,9 @@
   <data name="HomeWelcomeConnectButton.Content" xml:space="preserve">
     <value>Connettiti al dispositivo</value>
   </data>
+  <data name="HomeWelcomePairingMessage" xml:space="preserve">
+    <value>Accoppiamento</value>
+  </data>
   <data name="HomeWelcomeRetryButton.Content" xml:space="preserve">
     <value>Riprova</value>
   </data>
@@ -233,5 +236,119 @@
   </data>
   <data name="UseBatteryLiveTileToggleSwitch.OnContent" xml:space="preserve">
     <value>Sì</value>
+  </data>
+  <data name="HomeMainInitializingMessage" xml:space="preserve">
+    <value>Inizializzazione</value>
+  </data>
+  <data name="HomeMainScreenshotServiceHandlersRegistrationFailedError" xml:space="preserve">
+    <value>Non sono riuscito a finire la registrazione al servizio di salvataggio schermate</value>
+  </data>
+  <data name="HomeMainSettingsItemLabel" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="HomeMainTutorialsItemLabel" xml:space="preserve">
+    <value>Guide</value>
+  </data>
+  <data name="HomeMainWallpapersItemLabel" xml:space="preserve">
+    <value>Sfondi</value>
+  </data>
+  <data name="HomeMainWatchFacesItemLabel" xml:space="preserve">
+    <value>WatchFaces</value>
+  </data>
+  <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
+    <value>Operazione di accoppiamento fallita</value>
+  </data>
+  <data name="SettingsApplicationsDataExportedMessage" xml:space="preserve">
+    <value>Dati esportati con successo</value>
+  </data>
+  <data name="SettingsApplicationsDataImportedMessage" xml:space="preserve">
+    <value>Dati importati con successo</value>
+  </data>
+  <data name="SettingsApplicationsImportFoundConflictMessage" xml:space="preserve">
+    <value>Ho trovato dei conflitti. Vuoi sovrascrivere le preferenze delle applicaizoni esistenti durante l'importazione?</value>
+  </data>
+  <data name="SettingsApplicationsImportFoundConflictTitle" xml:space="preserve">
+    <value>Trovati conflitti</value>
+  </data>
+  <data name="SettingsApplicationUnsavedChangesMessage" xml:space="preserve">
+    <value>Ho rilevato alcune modifiche non salvate. Sei sicuro di volerle scartare e tornare indietro?</value>
+  </data>
+  <data name="SettingsApplicationUnsavedChangesTitle" xml:space="preserve">
+    <value>Modifiche non salvate</value>
+  </data>
+  <data name="SettingsMainBatteryCheckFrequencyMinutesFormat" xml:space="preserve">
+    <value>Ogni {0} minuti</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataFailedOrCanceledMessage" xml:space="preserve">
+    <value>Esportazione fallita o annullata. Vuoi riprovare?</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataMessage" xml:space="preserve">
+    <value>Vuoi salvare una copia delle preferenze in un nuovo file?</value>
+  </data>
+  <data name="SettingsMainResetApplicationExportDataTitle" xml:space="preserve">
+    <value>Esporta dati</value>
+  </data>
+  <data name="SettingsMainResetApplicationKeepIconPreferencesMessage" xml:space="preserve">
+    <value>Vuoi mantenere le attuali preferenze delle applicazioni per un altro dispositivo?</value>
+  </data>
+  <data name="SettingsMainResetApplicationKeepIconPreferencesTitle" xml:space="preserve">
+    <value>Mantieni preferenze applicazioni</value>
+  </data>
+  <data name="SettingsMainResetApplicationMessage" xml:space="preserve">
+    <value>Sei sicuro di voler disconnettere il tuo dispositivo e reimpostare l'applicazione?</value>
+  </data>
+  <data name="SettingsMainResetApplicationTitle" xml:space="preserve">
+    <value>Reimposta applicazione</value>
+  </data>
+  <data name="SettingsMainSetTimeErrorMessage" xml:space="preserve">
+    <value>Non sono stato in grado di impostare l'ora sul tuo dispositivo</value>
+  </data>
+  <data name="SharedErrorTitle" xml:space="preserve">
+    <value>Errore</value>
+  </data>
+  <data name="SharedNoMessage" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SharedOkMessage" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="SharedYesMessage" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="TutorialsMainUsbItemLabel" xml:space="preserve">
+    <value>Come connettere un dispositivo AsteroidOS al tuo PC</value>
+  </data>
+  <data name="TutorialsUsbPivotItem0.Header" xml:space="preserve">
+    <value>Requisiti</value>
+  </data>
+  <data name="TutorialsUsbPivotItem1.Header" xml:space="preserve">
+    <value>Gestione Dispositivi 1/2</value>
+  </data>
+  <data name="TutorialsUsbPivotItem2.Header" xml:space="preserve">
+    <value>Gestione Dispositivi 2/2</value>
+  </data>
+  <data name="TutorialsUsbPivotItem3.Header" xml:space="preserve">
+    <value>Fatto!</value>
+  </data>
+  <data name="TutorialsUsbStepButton0.Content" xml:space="preserve">
+    <value>Successivo</value>
+  </data>
+  <data name="TutorialsUsbStepButton1.Content" xml:space="preserve">
+    <value>Successivo</value>
+  </data>
+  <data name="TutorialsUsbStepButton2.Content" xml:space="preserve">
+    <value>Successivo</value>
+  </data>
+  <data name="TutorialsUsbStepButton3.Content" xml:space="preserve">
+    <value>Torna indietro</value>
+  </data>
+  <data name="SettingsMainAboutItemLabel" xml:space="preserve">
+    <value>Informazioni</value>
+  </data>
+  <data name="SettingsMainApplicationsItemLabel" xml:space="preserve">
+    <value>Applicazioni</value>
+  </data>
+  <data name="SettingsMainHomeItemLabel" xml:space="preserve">
+    <value>Home</value>
   </data>
 </root>

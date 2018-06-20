@@ -121,7 +121,7 @@ namespace WinSteroid.App.ViewModels.Settings
             var result = await this.ApplicationsService.ExportDataAsync();
             if (result)
             {
-                ToastsHelper.Show("Data successfully exported");
+                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsApplicationsDataExportedMessage"));
             }
         }
 
@@ -150,8 +150,8 @@ namespace WinSteroid.App.ViewModels.Settings
                 if (importedIconPreferences.Any(ap => this.IconPreferences.Any(i => i.Id == ap.AppId)))
                 {
                     overWriteExistingApplicationPreferences = await this.DialogService.ShowConfirmMessage(
-                        "I found some conflicts. Do you want to overwrite existing application preferences when import them?", 
-                        "Found conflicts");
+                        ResourcesHelper.GetLocalizedString("SettingsApplicationsImportFoundConflictMessage"),
+                        ResourcesHelper.GetLocalizedString("SettingsApplicationsImportFoundConflictTitle"));
                 }
 
                 foreach (var importedIconPreference in importedIconPreferences)
@@ -162,13 +162,13 @@ namespace WinSteroid.App.ViewModels.Settings
                     this.ApplicationsService.UpsertUserIcon(importedIconPreference);
                 }
 
-                ToastsHelper.Show("Data successfully imported");
+                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsApplicationsDataImportedMessage"));
 
                 this.RefreshIconsPreferences();
             }
             catch (Exception exception)
             {
-                await this.DialogService.ShowError(exception.Message, "Error");
+                await this.DialogService.ShowError(exception.Message, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
         }
 
