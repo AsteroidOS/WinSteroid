@@ -351,4 +351,49 @@
   <data name="SettingsMainHomeItemLabel" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="SettingsWallpapersChooseButton.Content" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="SettingsWallpapersInstallationProgressRun.Text" xml:space="preserve">
+    <value>Installation progress</value>
+  </data>
+  <data name="SettingsWallpapersInstallButton.Content" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="SettingsWallpapersNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Wallpapers</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.Header" xml:space="preserve">
+    <value>Use round preview</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.OffContent" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.OnContent" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="SettingsWallpapersTextBlock.Text" xml:space="preserve">
+    <value>Install new wallpaper/background image</value>
+  </data>
+  <data name="SettingsWallpapersWallpaperInstalledMessage" xml:space="preserve">
+    <value>Wallpaper successfully installed</value>
+  </data>
+  <data name="SettingsWatchFaceChooseButton.Content" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="SettingsWatchFaceInstallationProgressRun.Text" xml:space="preserve">
+    <value>Installation progress</value>
+  </data>
+  <data name="SettingsWatchFaceInstallButton.Content" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="SettingsWatchFaceNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>WatchFaces</value>
+  </data>
+  <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
+    <value>Install new WatchFace</value>
+  </data>
+  <data name="SettingsWatchFaceWatchFaceInstalledMessage" xml:space="preserve">
+    <value>WatchFace successfully installed</value>
+  </data>
 </root>

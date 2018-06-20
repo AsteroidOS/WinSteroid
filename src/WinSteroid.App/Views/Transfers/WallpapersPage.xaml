@@ -44,17 +44,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
               Background="{ThemeResource SoftAcrylicBackgroundThemeBrush}" />
 
         <controls:NavigationPageHeader Grid.Row="0"
+                                       x:Uid="SettingsWallpapersNavigationPageHeader"
                                        Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph=""
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="Wallpapers" />
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Padding="12,8"
                         Width="360"
                         HorizontalAlignment="Left">
 
-                <TextBlock Text="Install new wallpaper/background image"
+                <TextBlock x:Uid="SettingsWallpapersTextBlock"
                            Style="{ThemeResource BaseTextBlockStyle}" />
 
                 <Border HorizontalAlignment="Left"
@@ -65,7 +65,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}">
                     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
                         <Image x:Name="WallpaperPreviewImage" />
-                        
+
                         <ProgressRing VerticalAlignment="Center"
                                       HorizontalAlignment="Center"
                                       Width="48"
@@ -75,9 +75,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </Grid>
                 </Border>
 
-                <ToggleSwitch Header="Use round preview"
-                              OnContent="Yes"
-                              OffContent="No"
+                <ToggleSwitch x:Uid="SettingsWallpapersRoundPreviewToggleSwitch"
                               IsOn="{x:Bind ViewModel.UseRoundPreview, Mode=TwoWay}" 
                               Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
 
@@ -89,13 +87,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                 <StackPanel Orientation="Horizontal"
                             Margin="0,8,0,0">
-                    <Button Content="Choose"
+                    <Button x:Uid="SettingsWallpapersChooseButton"
                             Padding="12,4"
                             Margin="0,0,12,0"
                             IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
                             Command="{x:Bind ViewModel.LoadFileCommand, Mode=OneWay}" />
 
-                    <Button Content="Install"
+                    <Button x:Uid="SettingsWallpapersInstallButton"
                             Padding="12,4"
                             Command="{x:Bind ViewModel.UploadCommand, Mode=OneWay}"
                             IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
@@ -105,7 +103,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                            Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Margin="0,24,0,8">
-                    <Run Text="Installation progress" />
+                    <Run x:Uid="SettingsWallpapersInstallationProgressRun" />
                     <Run Text="{x:Bind ViewModel.UploadProgress}" />
                 </TextBlock>
                 <Grid Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -120,18 +118,5 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </Grid>
             </StackPanel>
         </ScrollViewer>
-
-        <CommandBar Grid.Row="2"
-                    Background="{ThemeResource DefaultPaneBackground}">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Label="How to connect with USB"
-                              Command="{x:Bind ViewModel.UsbTutorialCommand, Mode=OneWay}">
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph=""
-                                  FontFamily="Segoe MDL2 Assets" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar.PrimaryCommands>
-        </CommandBar>
     </Grid>
 </Page>

@@ -156,7 +156,7 @@ namespace WinSteroid.App.ViewModels.Transfers
             }
             catch (Exception exception)
             {
-                await this.DialogService.ShowError(exception, "SCP Connection Error");
+                await this.DialogService.ShowError(exception, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
 
             this.IsUploading = false;
@@ -164,7 +164,7 @@ namespace WinSteroid.App.ViewModels.Transfers
 
             if (successfulUpload)
             {
-                ToastsHelper.Show("Watchface successfully installed");
+                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsWatchFaceWatchFaceInstalledMessage"));
             }
 
             //if (!successfulUpload)
@@ -231,7 +231,7 @@ namespace WinSteroid.App.ViewModels.Transfers
 
         private async void OnClientErrorOccured(object sender, Renci.SshNet.Common.ExceptionEventArgs args)
         {
-            await this.DialogService.ShowError(args.Exception, "Client Error");
+            await this.DialogService.ShowError(args.Exception, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
         }
     }
 }

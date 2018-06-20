@@ -351,4 +351,52 @@
   <data name="SettingsMainHomeItemLabel" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="SettingsWallpapersChooseButton.Content" xml:space="preserve">
+    <value>Seleziona</value>
+  </data>
+  <data name="SettingsWallpapersInstallationProgressRun.Text" xml:space="preserve">
+    <value>Stato installazione</value>
+  </data>
+  <data name="SettingsWallpapersInstallButton.Content" xml:space="preserve">
+    <value>Installa</value>
+  </data>
+  <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
+    <value>The selected file seems corrupted or an invalid file.</value>
+  </data>
+  <data name="SettingsWallpapersNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Sfondi</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.Header" xml:space="preserve">
+    <value>Utilizza anteprima circolare</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.OffContent" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SettingsWallpapersRoundPreviewToggleSwitch.OnContent" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="SettingsWallpapersTextBlock.Text" xml:space="preserve">
+    <value>Installa un nuovo sfondo</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageMessage" xml:space="preserve">
+    <value>The selected image doesn't seem to be squared. Do you want to crop it now?</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageTitle" xml:space="preserve">
+    <value>Unsupported image sizes</value>
+  </data>
+  <data name="SettingsWatchFaceChooseButton.Content" xml:space="preserve">
+    <value>Seleziona</value>
+  </data>
+  <data name="SettingsWatchFaceInstallationProgressRun.Text" xml:space="preserve">
+    <value>Stato installazione</value>
+  </data>
+  <data name="SettingsWatchFaceInstallButton.Content" xml:space="preserve">
+    <value>Installa</value>
+  </data>
+  <data name="SettingsWatchFaceNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>WatchFace</value>
+  </data>
+  <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
+    <value>Installa una nuova WatchFace</value>
+  </data>
 </root>

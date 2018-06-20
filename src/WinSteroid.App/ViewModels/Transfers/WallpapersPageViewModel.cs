@@ -122,16 +122,18 @@ namespace WinSteroid.App.ViewModels.Transfers
             catch (Exception exception)
             {
                 //Corrupted image? Or file isn't an image after all...
-                var message = App.InDebugMode ? exception.ToString() : "The selected file seems corrupted or an invalid file.";
+                var message = App.InDebugMode ? exception.ToString() : ResourcesHelper.GetLocalizedString("SettingsWallpapersInvalidImageMessage");
 
-                await this.DialogService.ShowError(message, "Error");
+                await this.DialogService.ShowError(message, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
 
             if (imageProperties == null) return;
 
             if (imageProperties.Width != imageProperties.Height)
             {
-                var cropImageTaskAllowed = await this.DialogService.ShowConfirmMessage("The selected image doesn't seem to be squared. Do you want to crop it now?", "Unsupported image sizes");
+                var cropImageTaskAllowed = await this.DialogService.ShowConfirmMessage(
+                    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageMessage"), 
+                    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageTitle"));
                 if (!cropImageTaskAllowed)
                 {
                     this.IsBusy = false;
@@ -204,7 +206,7 @@ namespace WinSteroid.App.ViewModels.Transfers
             }
             catch (Exception exception)
             {
-                await this.DialogService.ShowError(exception, "SCP Connection Error");
+                await this.DialogService.ShowError(exception, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
 
             this.IsUploading = false;
@@ -212,29 +214,10 @@ namespace WinSteroid.App.ViewModels.Transfers
 
             if (successfulUpload)
             {
-                ToastsHelper.Show("Watchface successfully installed");
+                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsWallpapersWallpaperInstalledMessage"));
             }
 
             this.IsBusy = false;
-        }
-
-        private RelayCommand _usbTutorialCommand;
-        public RelayCommand UsbTutorialCommand
-        {
-            get
-            {
-                if (_usbTutorialCommand == null)
-                {
-                    _usbTutorialCommand = new RelayCommand(GoToUsbTutorial);
-                }
-
-                return _usbTutorialCommand;
-            }
-        }
-
-        private void GoToUsbTutorial()
-        {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialsUsb));
         }
 
         private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)
@@ -244,7 +227,7 @@ namespace WinSteroid.App.ViewModels.Transfers
 
         private async void OnClientErrorOccured(object sender, Renci.SshNet.Common.ExceptionEventArgs args)
         {
-            await this.DialogService.ShowError(args.Exception, "Client Error");
+            await this.DialogService.ShowError(args.Exception, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
         }
     }
 }
