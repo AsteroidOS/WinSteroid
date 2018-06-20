@@ -238,6 +238,7 @@
                             <ComboBox HorizontalAlignment="Stretch" 
                                       Header="Battery check frequency"
                                       Margin="0,24,0,0"
+                                      MaxWidth="360"
                                       Visibility="{x:Bind ViewModel.UseBatteryLiveTile, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                       ItemsSource="{x:Bind ViewModel.AvailableBatteryCheckFrequencies}"
                                       SelectedItem="{x:Bind ViewModel.BatteryCheckFrequency, Mode=TwoWay}"

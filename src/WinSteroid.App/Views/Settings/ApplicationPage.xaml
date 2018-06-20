@@ -54,6 +54,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
             <ComboBox HorizontalAlignment="Stretch" 
                       Header="Icon"
+                      MaxWidth="360"
                       Margin="0,24,0,0"
                       ItemsSource="{x:Bind ViewModel.AvailableIcons}"
                       SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}"

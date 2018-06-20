@@ -102,7 +102,7 @@ namespace WinSteroid.App.ViewModels.Settings
                         new BatteryFrequency { Label = "Every 15 minutes", Minutes = 15 },
                         new BatteryFrequency { Label = "Every 30 minutes", Minutes = 30 },
                         new BatteryFrequency { Label = "Every 60 minutes", Minutes = 60 },
-                        new BatteryFrequency { Label = "Always", Minutes = 0 }
+                        //new BatteryFrequency { Label = "Always", Minutes = 0 }
                     };
                 }
 
