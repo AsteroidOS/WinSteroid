@@ -66,7 +66,7 @@ namespace WinSteroid.App.Services
                 if (bluetoothDevice == null)
                 {
                     //DISAPPEARED DEVICE
-                    return "I cannot connect to the selected Bluetooth device, seems to be disappeared";
+                    return ResourcesHelper.GetLocalizedString("DeviceServiceDisappearedDeviceError");
                 }
                 
                 var timeServicesResult = await bluetoothDevice.GetGattServicesForUuidAsync(Asteroid.TimeServiceUuid);
@@ -74,7 +74,7 @@ namespace WinSteroid.App.Services
                     || (timeServicesResult.Status == GattCommunicationStatus.Success && timeServicesResult.Services.Count < 1))
                 {
                     //WRONG DEVICE
-                    return "I cannot connect to the selected Bluetooth device, seems to not be an AsteroidOS device";
+                    return ResourcesHelper.GetLocalizedString("DeviceServiceNoAsteroidDeviceError");
                 }
 
                 this.BluetoothDevice = bluetoothDevice;
@@ -83,7 +83,7 @@ namespace WinSteroid.App.Services
             catch (Exception exception)
             {
                 //ERROR
-                var message = "An error occured while connecting.";
+                var message = ResourcesHelper.GetLocalizedString("DeviceServiceGenericConnectionError");
                 
                 if (App.InDebugMode)
                 {
@@ -93,7 +93,7 @@ namespace WinSteroid.App.Services
                 return message;
             }
 
-            return this.BluetoothDevice != null && this.Current != null ? string.Empty : "Connection failed";
+            return this.BluetoothDevice != null && this.Current != null ? string.Empty : ResourcesHelper.GetLocalizedString("DeviceServiceConnectionFailedError");
         }
 
         public async Task<PairingResult> PairAsync()
@@ -106,7 +106,7 @@ namespace WinSteroid.App.Services
 
             if (!this.Current.Pairing.CanPair)
             {
-                return new PairingResult("The selected device cannot be paired");
+                return new PairingResult(ResourcesHelper.GetLocalizedString("DeviceServiceCannotPairError"));
             }
 
             var pairingResult = await this.Current.Pairing.PairAsync();
@@ -116,7 +116,7 @@ namespace WinSteroid.App.Services
                 return PairingResult.Success;
             }
 
-            return new PairingResult("Pairing operation denied or failed");
+            return new PairingResult(ResourcesHelper.GetLocalizedString("DeviceServicePairingOperationDeniedOrFailed"));
         }
 
         public async Task DisconnectAsync()

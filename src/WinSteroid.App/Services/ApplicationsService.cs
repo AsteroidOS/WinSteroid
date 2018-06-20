@@ -140,14 +140,14 @@ namespace WinSteroid.App.Services
             if (string.IsNullOrWhiteSpace(json))
             {
                 //EMPTY FILE
-                throw new ArgumentException("The selected file seems to be empty");
+                throw new ArgumentException(ResourcesHelper.GetLocalizedString("ApplicationsServiceImportDataEmptyFileError"));
             }
 
             var applicationPreferences = JsonConvert.DeserializeObject<ApplicationPreference[]>(json);
             if (applicationPreferences == null)
             {
                 //INVALID FORMAT
-                throw new ArgumentException("The selected file data has an invalid format or wrong serialized data");
+                throw new ArgumentException(ResourcesHelper.GetLocalizedString("ApplicationsServiceImportDataInvalidFileError"));
             }
 
             return applicationPreferences;

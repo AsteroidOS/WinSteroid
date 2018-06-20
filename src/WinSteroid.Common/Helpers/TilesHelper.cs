@@ -84,25 +84,13 @@ namespace WinSteroid.Common.Helpers
             TileUpdateManager.CreateTileUpdaterForSecondaryTile(BatteryTileId).Update(tileNotification);
         }
 
-        private static string GetPercentageText(int percentage)
-        {
-            return percentage > 99 ? "Fully charged" : percentage + "%";
-        }
+        private static string GetPercentageText(int percentage) => percentage + "%";
 
-        private static AdaptiveTextStyle GetPercentageAdaptiveTextStyle(int percentage)
-        {
-            return percentage > 99 ? AdaptiveTextStyle.Subtitle : AdaptiveTextStyle.Header;
-        }
+        private static AdaptiveTextStyle GetPercentageAdaptiveTextStyle(int percentage) => AdaptiveTextStyle.Header;
 
-        private static bool WrapPercentageText(int percentage)
-        {
-            return percentage > 99;
-        }
+        private static bool WrapPercentageText(int percentage) => false;
 
-        private static int GetHintMaxLines(int percentage)
-        {
-            return percentage > 99 ? 2 : 1;
-        }
+        private static int GetHintMaxLines(int percentage) => 1;
 
         private static TileBinding CreateMediumTileBinding(int percentage, string deviceName)
         {

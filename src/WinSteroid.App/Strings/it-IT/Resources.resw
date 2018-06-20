@@ -399,4 +399,28 @@
   <data name="SettingsWallpapersUnsupportedImageTitle" xml:space="preserve">
     <value>Dimensioni immagine non supportate</value>
   </data>
+  <data name="ApplicationsServiceImportDataEmptyFileError" xml:space="preserve">
+    <value>Il file selezionato è vuoto</value>
+  </data>
+  <data name="ApplicationsServiceImportDataInvalidFileError" xml:space="preserve">
+    <value>I dati del file selezionato sembra contenere dati o un formato non valido/i</value>
+  </data>
+  <data name="DeviceServiceCannotPairError" xml:space="preserve">
+    <value>Il dispositivo selezionato non può esser accoppiato</value>
+  </data>
+  <data name="DeviceServiceConnectionFailedError" xml:space="preserve">
+    <value>Connessione fallita</value>
+  </data>
+  <data name="DeviceServiceDisappearedDeviceError" xml:space="preserve">
+    <value>Non posso connettermi al dispositivo Bluetooth selezionato, sembra non esser più disponibile</value>
+  </data>
+  <data name="DeviceServiceGenericConnectionError" xml:space="preserve">
+    <value>È stato generato un errore durante la connessione.</value>
+  </data>
+  <data name="DeviceServiceNoAsteroidDeviceError" xml:space="preserve">
+    <value>Non posso connettermi al dispositivo Bluetooth selezionato, sembra non essere un dispositivo con AsteroidOS</value>
+  </data>
+  <data name="DeviceServicePairingOperationDeniedOrFailed" xml:space="preserve">
+    <value>Operazione di accoppiamento negata o fallita</value>
+  </data>
 </root>
