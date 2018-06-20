@@ -138,7 +138,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="MinWidth" Value="180" />
+        <Setter Property="MinWidth" Value="210" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
         <Setter Property="UseSystemFocusVisuals" Value="True"/>
         <Setter Property="FocusVisualMargin" Value="-3"/>
