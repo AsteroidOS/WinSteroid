@@ -267,16 +267,16 @@
   <data name="HomeMainScreenshotServiceHandlersRegistrationFailedError" xml:space="preserve">
     <value>I cannot be able to finish screenshot content service registration</value>
   </data>
-  <data name="HomeMainSettingsLabel" xml:space="preserve">
+  <data name="HomeMainSettingsItemLabel" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="HomeMainTutorialsLabel" xml:space="preserve">
+  <data name="HomeMainTutorialsItemLabel" xml:space="preserve">
     <value>Tutorials</value>
   </data>
-  <data name="HomeMainWallpapersLabel" xml:space="preserve">
+  <data name="HomeMainWallpapersItemLabel" xml:space="preserve">
     <value>Wallpapers</value>
   </data>
-  <data name="HomeMainWatchFacesLabel" xml:space="preserve">
+  <data name="HomeMainWatchFacesItemLabel" xml:space="preserve">
     <value>WatchFaces</value>
   </data>
   <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
@@ -395,5 +395,14 @@
   </data>
   <data name="SettingsWatchFaceWatchFaceInstalledMessage" xml:space="preserve">
     <value>WatchFace successfully installed</value>
+  </data>
+  <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
+    <value>The selected file seems corrupted or an invalid file.</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageMessage" xml:space="preserve">
+    <value>The selected image doesn't seem to be squared. Do you want to crop it now?</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageTitle" xml:space="preserve">
+    <value>Unsupported image sizes</value>
   </data>
 </root>

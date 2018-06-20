@@ -360,9 +360,6 @@
   <data name="SettingsWallpapersInstallButton.Content" xml:space="preserve">
     <value>Installa</value>
   </data>
-  <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
-    <value>The selected file seems corrupted or an invalid file.</value>
-  </data>
   <data name="SettingsWallpapersNavigationPageHeader.TitleText" xml:space="preserve">
     <value>Sfondi</value>
   </data>
@@ -378,12 +375,6 @@
   <data name="SettingsWallpapersTextBlock.Text" xml:space="preserve">
     <value>Installa un nuovo sfondo</value>
   </data>
-  <data name="SettingsWallpapersUnsupportedImageMessage" xml:space="preserve">
-    <value>The selected image doesn't seem to be squared. Do you want to crop it now?</value>
-  </data>
-  <data name="SettingsWallpapersUnsupportedImageTitle" xml:space="preserve">
-    <value>Unsupported image sizes</value>
-  </data>
   <data name="SettingsWatchFaceChooseButton.Content" xml:space="preserve">
     <value>Seleziona</value>
   </data>
@@ -398,5 +389,14 @@
   </data>
   <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
     <value>Installa una nuova WatchFace</value>
+  </data>
+  <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
+    <value>Il file selezionato sembra corrotto o invalido.</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageMessage" xml:space="preserve">
+    <value>L'immagine selezionata sembra non esser quadrata. Vuoi ridimensionarla?</value>
+  </data>
+  <data name="SettingsWallpapersUnsupportedImageTitle" xml:space="preserve">
+    <value>Dimensioni immagine non supportate</value>
   </data>
 </root>
