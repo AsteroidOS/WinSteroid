@@ -42,10 +42,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0" 
+                                       x:Uid="SettingsAboutNavigationPageHeader"
                                        Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph="" 
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="About" />
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Padding="12">
@@ -63,7 +63,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             </StackPanel>
         </ScrollViewer>
 
-        <CommandBar Grid.Row="2"
+        <!--<CommandBar Grid.Row="2"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Label="Review">
@@ -72,6 +72,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
-        </CommandBar>
+        </CommandBar>-->
     </Grid>
 </Page>

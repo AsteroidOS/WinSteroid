@@ -281,8 +281,8 @@
                                       Fill="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}"
                                       Data="F1 M 32,96.0371L 47.6826,80.3174L 47.9811,80.0182L 48.0056,79.9937L 48.0559,79.9432L 63.9623,64L 79.8687,79.9432L 79.9251,79.9995L 79.9814,80.0557L 80.0925,80.1671L 96,96.1119L 80.0936,112.056C 71.3446,120.825 64.1191,128 64.0362,128L 63.9977,127.971L 63.984,127.982L 63.9615,128L 60.6491,124.696L 48.2958,112.372L 48.0163,112.093L 47.9899,112.066L 47.979,112.056L 36.3345,100.384L 32.0726,96.1362L 32.0849,96.1239L 32.0726,96.1119L 32,96.0371 Z M 76.6414,89.7956L 70.3404,83.4791L 67.2628,86.5609L 67.2254,86.5978L 64.111,89.7174L 67.1515,92.767L 67.4855,93.1029L 70.4128,96.0391L 70.4869,96.1132L 64.1113,102.505L 57.8087,108.823L 57.8091,108.824L 63.9971,115.027L 73.4897,105.589L 73.5271,105.551L 80.3411,98.7205L 82.9306,96.1014L 76.6414,89.7956 Z M 60.6981,86.5999L 57.5868,83.4797L 57.5847,83.479L 54.5072,86.5609L 54.4706,86.5978L 51.3554,89.7173L 54.4318,92.8038L 57.6188,95.9233L 59.444,94.096L 63.809,89.7209L 60.6981,86.5999 Z "/>
 
-                                <mscontrols:DropShadowPanel Width="200" 
-                                                            Height="296"
+                                <mscontrols:DropShadowPanel Width="192" 
+                                                            Height="288"
                                                             ShadowOpacity="0.6"
                                                             BlurRadius="0.5"
                                                             OffsetX="0.5"
@@ -328,11 +328,10 @@
                         <TextBlock Grid.Row="1"
                                    TextAlignment="Center"
                                    Padding="12"
-                                   FontSize="28">
-                            <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
-                                 Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
-                            <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" 
-                                 Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}" />
+                                   FontSize="28"
+                                   Foreground="{x:Bind ViewModel.BatteryLevel, Mode=OneWay, Converter={StaticResource BatteryLevelToBrushConverter}}">
+                            <Run Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}" />
+                            <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" />
                         </TextBlock>
                     </Grid>
 
@@ -341,14 +340,14 @@
                                 x:Name="NotificationsPanel"
                                 Visibility="{x:Bind ViewModel.ShowNotificationsList, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Margin="12,0">
-                        <ListView Header="Notifications" 
+                        <ListView x:Uid="HomeMainNotificationsListView"
                                   ItemsSource="{x:Bind ViewModel.Notifications, Mode=OneWay}"
                                   SelectionMode="None"
                                   IsItemClickEnabled="True"
                                   ItemClick="OnNotificationClick">
                             <ListView.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"
+                                <DataTemplate x:DataType="x:String">
+                                    <TextBlock Text="{x:Bind}"
                                                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                Style="{ThemeResource BaseTextBlockStyle}" />
                                 </DataTemplate>
@@ -398,7 +397,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
 
-                        <TextBlock Text="No new notifications"
+                        <TextBlock x:Uid="HomeMainEmptyNotificationsTextBlock" 
                                    Padding="0,4"
                                    FontSize="16"
                                    Visibility="{x:Bind ViewModel.ShowEmptyNotificationsText, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -412,16 +411,16 @@
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton x:Name="WatchFaceButton" 
-                              Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}"
-                              Label="WatchFaces">
+                              x:Uid="HomeMainWatchFaceAppBarButton"
+                              Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="" 
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     </AppBarButton.Icon>
                 </AppBarButton>
                 <AppBarButton x:Name="WallpapersButton" 
-                              Command="{x:Bind ViewModel.WallpapersCommand, Mode=OneWay}"
-                              Label="Wallpapers">
+                              x:Uid="HomeMainWallpapersFaceAppBarButton"
+                              Command="{x:Bind ViewModel.WallpapersCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="" 
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -434,15 +433,15 @@
                      <SymbolIcon Symbol="Pictures" />
                      </AppBarButton.Icon>
                      </AppBarButton>-->
-                <AppBarButton Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}" 
-                              Label="Settings">
+                <AppBarButton x:Uid="HomeMainSettingsAppBarButton" 
+                              Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Setting" />
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Tutorials"
+                <AppBarButton x:Uid="HomeMainTutorialsAppBarButton"
                               Command="{x:Bind ViewModel.TutorialsCommand, Mode=OneWay}" />
             </CommandBar.SecondaryCommands>
         </CommandBar>

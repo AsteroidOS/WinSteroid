@@ -80,11 +80,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         </Viewbox>
 
         <Button Grid.Row="2" 
-                Content="Connect to the device"
+                x:Uid="HomeWelcomeConnectButton"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Padding="12,8"
                 Margin="0,0,0,24"
+                Style="{StaticResource TutorialStepButtonDesktopStyle}"
                 Foreground="{ThemeResource MediaTextThemeBrush}"
                 Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                 IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
@@ -92,11 +93,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 Command="{x:Bind ViewModel.StartSearchCommand, Mode=OneWay}" />
 
         <Button Grid.Row="2" 
-                Content="Retry to connect"
+                x:Uid="HomeWelcomeRetryButton"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Padding="12,8"
                 Margin="0,0,0,24"
+                Style="{StaticResource TutorialStepButtonDesktopStyle}"
                 Foreground="{ThemeResource MediaTextThemeBrush}"
                 Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                 IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
@@ -132,7 +134,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </Grid>
             </CommandBar.Content>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Tutorials"
+                <AppBarButton x:Uid="HomeWelcomeTutorialsAppBarButton"
                               Command="{x:Bind ViewModel.TutorialsCommand, Mode=OneWay}" />
             </CommandBar.SecondaryCommands>
         </CommandBar>

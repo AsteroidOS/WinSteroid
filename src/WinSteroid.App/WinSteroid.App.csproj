@@ -176,6 +176,8 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="CommonBuild.props" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\it-IT\Resources.resw" />
     <None Include="WinSteroid.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -352,9 +354,7 @@
       <Name>WinSteroid.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messeges\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

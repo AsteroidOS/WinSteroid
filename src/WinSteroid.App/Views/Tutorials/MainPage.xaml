@@ -41,10 +41,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0" 
+                                       x:Uid="TutorialsMainNavigationPageHeader"
                                        Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph="" 
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="Tutorials" />
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <ListView Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.TutorialItems}"

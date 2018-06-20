@@ -42,9 +42,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0"
+                                       x:Uid="SettingsApplicationsNavigationPageHeader"
                                        ButtonGlyph=""
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="Applications preferences" />
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <ListView Grid.Row="1"
                   ItemsSource="{x:Bind ViewModel.IconPreferences, Mode=OneWay}"
@@ -100,13 +100,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <CommandBar Grid.Row="2"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Export"
+                <AppBarButton x:Uid="SettingsApplicationsExportAppBarButton"
                               Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Save" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton Label="Import"
+                <AppBarButton x:Uid="SettingsApplicationsSaveAppBarButton"
                               Command="{x:Bind ViewModel.ImportCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Import" />

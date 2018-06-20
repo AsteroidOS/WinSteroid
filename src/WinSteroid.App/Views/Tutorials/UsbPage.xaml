@@ -78,16 +78,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0"
+                                       x:Uid="TutorialsUsbNavigationPageHeader"
                                        Background="{ThemeResource DefaultPaneBackground}"
                                        ButtonGlyph=""
-                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                       TitleText="Tutorials / USB Connection" />
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <Pivot Grid.Row="1" 
                x:Name="MainPivot"
                IsHeaderItemsCarouselEnabled="True">
             <Pivot.Items>
-                <PivotItem Header="Requirements">
+                <PivotItem x:Uid="TutorialsUsbPivotItem0">
                     <Grid Padding="0,0,0,12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*" />
@@ -167,11 +167,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                         <Button Grid.Row="3"
                                 x:Name="StepButton0"
-                                Content="Next"
+                                x:Uid="TutorialsUsbStepButton0"
                                 Click="OnNextPageClick" />
                     </Grid>
                 </PivotItem>
-                <PivotItem Header="Device Manager 1/2">
+                <PivotItem x:Uid="TutorialsUsbPivotItem1">
                     <Grid Padding="0,12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1.5*" />
@@ -213,12 +213,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         </ScrollViewer>
 
                         <Button Grid.Row="3"
-                                Content="Next"
                                 x:Name="StepButton1"
+                                x:Uid="TutorialsUsbStepButton1"
                                 Click="OnNextPageClick" />
                     </Grid>
                 </PivotItem>
-                <PivotItem Header="Device Manager 2/2">
+                <PivotItem x:Uid="TutorialsUsbPivotItem2">
                     <Grid Padding="0,12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1.5*" />
@@ -262,12 +262,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         </ScrollViewer>
 
                         <Button Grid.Row="3"
-                                Content="Next"
                                 x:Name="StepButton2"
+                                x:Uid="TutorialsUsbStepButton2"
                                 Click="OnNextPageClick" />
                     </Grid>
                 </PivotItem>
-                <PivotItem Header="That's all!">
+                <PivotItem x:Uid="TutorialsUsbPivotItem3">
                     <Grid Padding="0,0,0,12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*" />
@@ -310,8 +310,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                         </ScrollViewer>
 
                         <Button Grid.Row="2"
-                                Content="Go back"
                                 x:Name="StepButton3"
+                                x:Uid="TutorialsUsbStepButton3"
                                 Command="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
                     </Grid>
                 </PivotItem>

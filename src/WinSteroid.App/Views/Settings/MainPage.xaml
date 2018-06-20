@@ -216,11 +216,11 @@
                     </Grid.RowDefinitions>
 
                     <controls:NavigationPageHeader Grid.Row="0" 
-                                                   Background="{ThemeResource DefaultPaneBackground}"
                                                    x:Name="MainNavigationPageHeader"
+                                                   x:Uid="SettingsMainNavigationPageHeader"
+                                                   Background="{ThemeResource DefaultPaneBackground}"
                                                    ButtonGlyph="" 
-                                                   ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}"
-                                                   TitleText="Settings" />
+                                                   ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
                     <ScrollViewer Grid.Row="1">
                         <StackPanel Padding="12,8">
@@ -229,17 +229,15 @@
                                        Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
                                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-                            <TextBlock Text="Battery"
+                            <TextBlock x:Uid="SettingsMainBatteryTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,12,0,8" />
 
-                            <ToggleSwitch Header="Use Live Tile to show current device battery level" 
-                                          OffContent="No"
-                                          OnContent="Yes"
+                            <ToggleSwitch x:Uid="UseBatteryLiveTileToggleSwitch"
                                           IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
 
                             <ComboBox x:Name="BatteryComboBox"
-                                      Header="Battery check frequency"
+                                      x:Uid="BatteryFrequencyComboBox"
                                       Margin="0,24,0,0"
                                       Visibility="{x:Bind ViewModel.UseBatteryLiveTile, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                       ItemsSource="{x:Bind ViewModel.AvailableBatteryCheckFrequencies}"
@@ -251,35 +249,33 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBlock Text="Preview: due to UWP platform limitations, the real time background task that check current battery level stops after a reboot. You need to start WinSteroid on next boot to register it again."
+                            <TextBlock x:Uid="SettingsMainBatteryCheckWarningTextBlock"
                                        TextWrapping="Wrap"
                                        Foreground="Red"
                                        Visibility="{x:Bind ViewModel.ShowBatteryCheckWarning, Mode=OneWay}"
                                        Style="{ThemeResource BodyTextBlockStyle}" 
                                        Margin="0,8,0,0" />
 
-                            <TextBlock Text="Notifications"
+                            <TextBlock x:Uid="SettingsMainNotificationsTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,24,0,8" />
 
-                            <ToggleSwitch Header="Show system notifications on AsteroidOS" 
-                                          OffContent="No"
-                                          OnContent="Yes"
+                            <ToggleSwitch x:Uid="SettingsMainShowNotificationsToggleSwitch"
                                           IsEnabled="{x:Bind ViewModel.CanEnableUserNotifications}"
                                           IsHitTestVisible="{x:Bind ViewModel.CanEnableUserNotifications}"
                                           IsOn="{x:Bind ViewModel.EnableUserNotifications, Mode=TwoWay}" />
 
-                            <Button Content="Set icons preferences"
+                            <Button x:Uid="SettingsMainIconsButton"
                                     Padding="12,4"
                                     Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}"
                                     IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
 
-                            <TextBlock Text="Time"
+                            <TextBlock x:Uid="SettingsMainTimeTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,24,0,8" />
 
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Sync now"
+                                <Button x:Uid="SettingsMainTimeSyncNowButton"
                                         Padding="12,4"
                                         Command="{x:Bind ViewModel.SyncDateCommand, Mode=OneWay}"
                                         IsEnabled="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
@@ -313,12 +309,12 @@
                                  Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                  Margin="0,12,0,0" />-->
 
-                            <TextBlock Text="Secure connections"
+                            <TextBlock x:Uid="SettingsMainSecureConnectionsTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,24,0,8" />
 
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Remove all remembered credentials"
+                                <Button x:Uid="SettingsMainRemoveCredentialsButton"
                                         Padding="12,4"
                                         Command="{x:Bind ViewModel.ResetScpCredentialsCommand, Mode=OneWay}" />
 
@@ -332,7 +328,7 @@
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="0,24,0,8" />
 
-                            <Button Content="Reset application"
+                            <Button x:Uid="SettingsMainResetApplicationButton" 
                                     Padding="12,4"
                                     Command="{x:Bind ViewModel.ResetApplicationCommand, Mode=OneWay}"
                                     Margin="0,8,0,0" />

@@ -71,11 +71,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <StackPanel Grid.Row="1"
                     Padding="12,8">
-            <TextBlock Text="Preferences" 
+            <TextBlock x:Uid="SettingsApplicationPreferencesTextBlock"
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
             <ComboBox x:Name="IconComboBox"
-                      Header="Icon"
+                      x:Uid="SettingsApplicationIconComboBox"
                       Margin="0,24,0,0"
                       ItemsSource="{x:Bind ViewModel.AvailableIcons}"
                       SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}"
@@ -102,11 +102,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <ToggleSwitch Header="Muted" 
+            <ToggleSwitch x:Uid="SettingsApplicationMutedToggleSwitch" 
                           IsOn="{x:Bind ViewModel.Muted, Mode=TwoWay}"
                           Margin="0,24,0,0" />
 
-            <Slider Header="Vibration" 
+            <Slider x:Uid="SettingsApplicationVibrationSlider"
                     Maximum="2" 
                     Minimum="0"
                     Margin="0,24,0,0"
@@ -118,7 +118,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         <CommandBar Grid.Row="2"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Save"
+                <AppBarButton x:Uid="SettingsApplicationSaveAppBarButton"
                               Command="{x:Bind ViewModel.SaveCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <SymbolIcon Symbol="Save" />
