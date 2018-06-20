@@ -423,4 +423,40 @@
   <data name="DeviceServicePairingOperationDeniedOrFailed" xml:space="preserve">
     <value>Operazione di accoppiamento negata o fallita</value>
   </data>
+  <data name="TutorialsUsbStep0Paragraph0Run.Text" xml:space="preserve">
+    <value>Prima di procedere, assicurati che il tuo PC supporti lo standard USB 2.0 o superiore e che la porta stessa e il cavo funzionino correttamente e siano in buono stato.</value>
+  </data>
+  <data name="TutorialsUsbStep0Paragraph1Run.Text" xml:space="preserve">
+    <value>Non siamo responsabili di ogni danno causato da cavi o porte USB malfunzionanti che potrebbero arrecare danni o bloccare i tuoi dispositivi.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph0Run.Text" xml:space="preserve">
+    <value>Apri Gestione Dispositivi e cerca sotto Altri dispositivi un dispositivo con un triangolo giallo chiamato RNDIS.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph1Run.Text" xml:space="preserve">
+    <value>Clicca col tasto destro sul dispositivo e seleziona Aggiorna driver.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph2Run.Text" xml:space="preserve">
+    <value>Nella nuova finestra aperta seleziona Cerca il software del driver nel computer e successivamente seleziona Scegli da un elenco di driver disponibili nel computer.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph0Run.Text" xml:space="preserve">
+    <value>Dalla lista di tipologie di driver, cerca Scheda di rete e successivamente seleziona Microsoft come produttore del driver.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph1Run.Text" xml:space="preserve">
+    <value>Cerca nella nuova lista di driver l'opzione Dispositivo compatibile NDIS remoto.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph2Run.Text" xml:space="preserve">
+    <value>Quando premerai Avanti, una finestra apparirà avvisandoti che Windows non può verificare la compatibilità del driver.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph3Run.Text" xml:space="preserve">
+    <value>Ignora e premi Sì.</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph0Run.Text" xml:space="preserve">
+    <value>Eccellente!</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph1Run.Text" xml:space="preserve">
+    <value>Ora il tuo dispositivo con AsteroidOS è correttamente collegato al tuo PC.</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph2Run.Text" xml:space="preserve">
+    <value>Potrai installare nuove WatchFace e/o sfondi tramite la connessione USB.</value>
+  </data>
 </root>

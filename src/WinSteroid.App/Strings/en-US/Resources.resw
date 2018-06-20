@@ -429,4 +429,40 @@
   <data name="DeviceServicePairingOperationDeniedOrFailed" xml:space="preserve">
     <value>Pairing operation denied or failed</value>
   </data>
+  <data name="TutorialsUsbStep0Paragraph0Run.Text" xml:space="preserve">
+    <value>Before to proceed, be sure that your PC supports USB 2.0 or higher ports standard and your USB port and cable work correctly and in good state.</value>
+  </data>
+  <data name="TutorialsUsbStep0Paragraph1Run.Text" xml:space="preserve">
+    <value>We are not responsible for any damage caused by a malfunctional cable or USB port that may cause damages or bricks your devices.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph0Run.Text" xml:space="preserve">
+    <value>Open Device Manager and find under Other devices a device with a yellow sign named RNDIS.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph1Run.Text" xml:space="preserve">
+    <value>Right click it and select Update driver.</value>
+  </data>
+  <data name="TutorialsUsbStep1Paragraph2Run.Text" xml:space="preserve">
+    <value>Select in the new opened window Browse my computer for driver software, then choose Let me pick from a list of available drivers on my computer.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph0Run.Text" xml:space="preserve">
+    <value>From devices types list, search for Network adapters, then look for Microsoft as driver manufacturer.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph1Run.Text" xml:space="preserve">
+    <value>Afterwards, search in the new drivers list the option Remote NDIS compatible device.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph2Run.Text" xml:space="preserve">
+    <value>When you'll press Next, a window pops up warning you that Windows cannot verify the device driver compatibility.</value>
+  </data>
+  <data name="TutorialsUsbStep2Paragraph3Run.Text" xml:space="preserve">
+    <value>Ignore it and press Yes.</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph0Run.Text" xml:space="preserve">
+    <value>Excellent!</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph1Run.Text" xml:space="preserve">
+    <value>Your AsteroidOS watch is now correctly plugged-in with your PC.</value>
+  </data>
+  <data name="TutorialsUsbStep3Paragraph2Run.Text" xml:space="preserve">
+    <value>You can now install new Watchfaces and/or wallpapers over USB connection.</value>
+  </data>
 </root>

@@ -148,20 +148,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                       Grid.ColumnSpan="3"
                                       Grid.Row="1"
                                       Margin="0,12">
-                            <RichTextBlock>
+                            <RichTextBlock TextWrapping="Wrap">
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
-                                        Before to proceed, be sure that your PC supports
-                                        <Bold>USB 2.0 or higher</Bold>
-                                        ports standard and your USB port and cable
-                                        <Bold>work correctly</Bold>
-                                        and in
-                                        <Bold>good state.</Bold>
+                                        <Run x:Uid="TutorialsUsbStep0Paragraph0Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph Foreground="Red">
                                         <Bold>
-                                            We are not responsible for any damage caused by a malfunctional cable or USB port that may cause damages or bricks your devices.
+                                            <Run x:Uid="TutorialsUsbStep0Paragraph1Run" />
                                         </Bold>
                                     </Paragraph>
                                 </RichTextBlock.Blocks>
@@ -191,24 +186,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
-                                        Open
-                                        <Bold>Device Manager</Bold>
-                                        and find under
-                                        <Bold>Other devices</Bold>
-                                        a device with a yellow sign named
-                                        <Bold>RNDIS.</Bold>
+                                        <Run x:Uid="TutorialsUsbStep1Paragraph0Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        Right click it and select
-                                        <Bold>Update driver.</Bold>
+                                        <Run x:Uid="TutorialsUsbStep1Paragraph1Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        Select in the new opened window
-                                        <Bold>Browse my computer for driver software,</Bold>
-                                        then choose
-                                        <Bold>Let me pick from a list of available drivers on my computer.</Bold>
+                                        <Run x:Uid="TutorialsUsbStep1Paragraph2Run" />
                                         <LineBreak />
                                     </Paragraph>
                                 </RichTextBlock.Blocks>
@@ -238,27 +224,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
-                                        From devices types list, search for
-                                        <Bold>Network adapters,</Bold>
-                                        then look for
-                                        <Bold>Microsoft</Bold>
-                                        as driver manufacturer.
+                                        <Run x:Uid="TutorialsUsbStep2Paragraph0Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        Afterwards, search in the new drivers list the option
-                                        <Bold>Remote NDIS compatible device.</Bold>
+                                        <Run x:Uid="TutorialsUsbStep2Paragraph1Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        When you'll press
-                                        <Bold>Next,</Bold>
-                                        a window popups warning you that the device driver is not verified from Microsoft.
+                                        <Run x:Uid="TutorialsUsbStep2Paragraph2Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        Ignore it and press
-                                        <Bold>Yes.</Bold>
+                                        <Bold>
+                                            <Run x:Uid="TutorialsUsbStep2Paragraph3Run" />
+                                        </Bold>
                                     </Paragraph>
                                 </RichTextBlock.Blocks>
                             </RichTextBlock>
@@ -297,15 +277,17 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
-                                        <Bold>Excellent!</Bold>
+                                        <Bold>
+                                            <Run x:Uid="TutorialsUsbStep3Paragraph0Run" />
+                                        </Bold>
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        Your AsteroidOS watch is now correctly plugged-in with your PC.
+                                        <Run x:Uid="TutorialsUsbStep3Paragraph1Run" />
                                         <LineBreak />
                                     </Paragraph>
                                     <Paragraph>
-                                        You can now install new Watchfaces and/or wallpapers over USB connection.
+                                        <Run x:Uid="TutorialsUsbStep3Paragraph2Run" />
                                         <LineBreak />
                                     </Paragraph>
                                 </RichTextBlock.Blocks>
