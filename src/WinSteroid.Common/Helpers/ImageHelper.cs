@@ -50,13 +50,28 @@ namespace WinSteroid.Common.Helpers
 
         public static async Task<BitmapImage> ConvertToImageAsync(AppDisplayInfo appDisplayInfo)
         {
-            using (var ras = await appDisplayInfo.GetLogo(new Size(DefaultAppLogoSize, DefaultAppLogoSize)).OpenReadAsync())
+            try
             {
-                var bitmapImage = new BitmapImage();
+                using (var ras = await appDisplayInfo.GetLogo(new Size(DefaultAppLogoSize, DefaultAppLogoSize)).OpenReadAsync())
+                {
+                    var bitmapImage = new BitmapImage();
 
-                await bitmapImage.SetSourceAsync(ras);
+                    await bitmapImage.SetSourceAsync(ras);
 
-                return bitmapImage;
+                    return bitmapImage;
+                }
+            }
+            catch
+            {
+                var fallbackLogo = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/Square44x44Logo.png"));
+                using (var ras = await fallbackLogo.OpenReadAsync())
+                {
+                    var bitmapImage = new BitmapImage();
+
+                    await bitmapImage.SetSourceAsync(ras);
+
+                    return bitmapImage;
+                }
             }
         }
 
