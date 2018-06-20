@@ -41,6 +41,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <controls:AcrylicGrid Grid.Row="1" />
 
+        <Grid Grid.Row="1"
+              Background="{ThemeResource SoftAcrylicBackgroundThemeBrush}" />
+
         <controls:NavigationPageHeader Grid.Row="0"
                                        x:Uid="SettingsApplicationsNavigationPageHeader"
                                        ButtonGlyph=""
@@ -80,7 +83,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                    VerticalAlignment="Center"
                                    FontSize="24"
                                    FontFamily="Segoe MDL2 Assets"
-                                   Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                                    Visibility="{x:Bind Muted, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    Style="{ThemeResource BodyTextBlockStyle}" />
 
@@ -89,7 +92,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                    VerticalAlignment="Center"
                                    FontSize="24"
                                    FontFamily="Segoe MDL2 Assets"
-                                   Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}"
+                                   Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                                    Visibility="{x:Bind Vibration, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    Style="{ThemeResource BodyTextBlockStyle}" />
                     </Grid>

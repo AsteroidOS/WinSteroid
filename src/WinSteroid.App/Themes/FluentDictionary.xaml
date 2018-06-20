@@ -25,6 +25,8 @@
             
             <StaticResource x:Key="DefaultPageBackground" 
                             ResourceKey="SystemControlChromeHighAcrylicWindowMediumBrush" />
+
+            <SolidColorBrush x:Key="SoftAcrylicBackgroundThemeBrush" Color="#36000000" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <StaticResource x:Key="DefaultPaneBackground" 
@@ -32,6 +34,8 @@
             
             <StaticResource x:Key="DefaultPageBackground" 
                             ResourceKey="SystemControlChromeHighAcrylicWindowMediumBrush" />
+
+            <SolidColorBrush x:Key="SoftAcrylicBackgroundThemeBrush" Color="#36FFFFFF" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

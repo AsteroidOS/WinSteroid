@@ -40,6 +40,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
         <controls:AcrylicGrid Grid.Row="1" />
 
+        <Grid Grid.Row="1"
+              Background="{ThemeResource SoftAcrylicBackgroundThemeBrush}" />
+
         <controls:NavigationPageHeader Grid.Row="0" 
                                        x:Uid="TutorialsMainNavigationPageHeader"
                                        Background="{ThemeResource DefaultPaneBackground}"

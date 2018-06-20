@@ -29,6 +29,8 @@
 
                     <StaticResource x:Key="DefaultPageBackground" 
                                     ResourceKey="ApplicationPageBackgroundThemeBrush" />
+
+                    <SolidColorBrush x:Key="SoftAcrylicBackgroundThemeBrush" Color="#FF000000" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
                     <StaticResource x:Key="DefaultPaneBackground" 
@@ -36,6 +38,8 @@
 
                     <StaticResource x:Key="DefaultPageBackground" 
                                     ResourceKey="ApplicationPageBackgroundThemeBrush" />
+
+                    <SolidColorBrush x:Key="SoftAcrylicBackgroundThemeBrush" Color="#FFFFFFFF" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
