@@ -110,7 +110,7 @@ namespace WinSteroid.App.Services
                 Name = TimeBatteryLevelTaskName
             };
             builder.SetTrigger(trigger);
-            builder.AddCondition(new SystemCondition(SystemConditionType.SessionConnected));
+            //builder.AddCondition(new SystemCondition(SystemConditionType.SessionConnected));
             var result = builder.Register();
 
             return result != null;
