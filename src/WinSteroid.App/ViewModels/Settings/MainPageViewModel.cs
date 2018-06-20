@@ -61,10 +61,11 @@ namespace WinSteroid.App.ViewModels.Settings
             this.CustomTime = DateTimeOffset.Now.TimeOfDay;
             this.DeviceName = this.DeviceService.Current.Name;
             this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
-            this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
 
             var lastSavedBatteryTaskFrequency = SettingsHelper.GetValue(Constants.LastSavedBatteryTaskFrequencySettingKey, (uint)15);
             this.BatteryCheckFrequency = this.AvailableBatteryCheckFrequencies.FirstOrDefault(bf => bf.Minutes == lastSavedBatteryTaskFrequency);
+
+            this.UseBatteryLiveTile = TilesHelper.BatteryTileExists();
         }
 
         public override void InitializeMenuOptions()

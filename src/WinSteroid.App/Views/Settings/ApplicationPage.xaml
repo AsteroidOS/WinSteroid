@@ -23,6 +23,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
     xmlns:models="using:WinSteroid.Common.Models"
+    xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     mc:Ignorable="d"
     DataContext="{Binding SettingsApplication, Source={StaticResource Locator}}">
 
@@ -39,6 +40,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="IconComboBox.HorizontalAlignment" Value="Left" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="IconComboBox.HorizontalAlignment" Value="Stretch" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <controls:AcrylicGrid Grid.Row="1" />
 
         <controls:NavigationPageHeader Grid.Row="0"
@@ -52,9 +74,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
             <TextBlock Text="Preferences" 
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <ComboBox HorizontalAlignment="Stretch" 
+            <ComboBox x:Name="IconComboBox"
                       Header="Icon"
-                      MaxWidth="360"
                       Margin="0,24,0,0"
                       ItemsSource="{x:Bind ViewModel.AvailableIcons}"
                       SelectedItem="{x:Bind ViewModel.SelectedIcon, Mode=TwoWay}"

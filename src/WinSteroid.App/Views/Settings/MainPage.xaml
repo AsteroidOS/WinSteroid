@@ -70,6 +70,7 @@
                                 <Visibility>Collapsed</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="BatteryComboBox.HorizontalAlignment" Value="Left" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Normal">
@@ -100,6 +101,7 @@
                                 <Visibility>Collapsed</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="BatteryComboBox.HorizontalAlignment" Value="Left" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Narrow">
@@ -119,6 +121,7 @@
                                 <Visibility>Visible</Visibility>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="BatteryComboBox.HorizontalAlignment" Value="Stretch" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -235,10 +238,9 @@
                                           OnContent="Yes"
                                           IsOn="{x:Bind ViewModel.UseBatteryLiveTile, Mode=TwoWay}" />
 
-                            <ComboBox HorizontalAlignment="Stretch" 
+                            <ComboBox x:Name="BatteryComboBox"
                                       Header="Battery check frequency"
                                       Margin="0,24,0,0"
-                                      MaxWidth="360"
                                       Visibility="{x:Bind ViewModel.UseBatteryLiveTile, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                                       ItemsSource="{x:Bind ViewModel.AvailableBatteryCheckFrequencies}"
                                       SelectedItem="{x:Bind ViewModel.BatteryCheckFrequency, Mode=TwoWay}"
