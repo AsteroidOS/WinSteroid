@@ -468,4 +468,7 @@
   <data name="HomeMainUpdateButtonTextBlock.Text" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="SettingsAboutReviewAppBarButton.Label" xml:space="preserve">
+    <value>Review</value>
+  </data>
 </root>

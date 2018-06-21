@@ -57,7 +57,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
             <TextBlock Grid.Row="0" 
                        Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
                        FontWeight="SemiBold"
@@ -116,15 +116,15 @@
             </ListView>
         </Grid>
 
-        <!--<CommandBar Grid.Row="2"
-             Background="{ThemeResource DefaultPaneBackground}">
-             <CommandBar.PrimaryCommands>
-             <AppBarButton Label="Review">
-             <AppBarButton.Icon>
-             <SymbolIcon Symbol="OutlineStar" />
-             </AppBarButton.Icon>
-             </AppBarButton>
-             </CommandBar.PrimaryCommands>
-             </CommandBar>-->
+        <CommandBar Grid.Row="2"
+                    Background="{ThemeResource DefaultPaneBackground}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton x:Uid="SettingsAboutReviewAppBarButton">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Symbol="OutlineStar" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>
