@@ -22,6 +22,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
+    xmlns:settings="using:WinSteroid.App.ViewModels.Settings"
     mc:Ignorable="d"
     DataContext="{Binding SettingsAbout, Source={StaticResource Locator}}">
 
@@ -49,31 +50,71 @@
                                        ButtonGlyph="" 
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
-        <StackPanel Grid.Row="1" 
-                    Padding="12">
-            <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
+        <Grid Grid.Row="1" 
+              Padding="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" 
+                       Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
                        FontWeight="SemiBold"
                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-            <TextBlock Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
+            <TextBlock Grid.Row="1" 
+                       Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
                        FontWeight="SemiBold"
                        Style="{ThemeResource BaseTextBlockStyle}"
-                       Margin="0,12,0,0" />
+                       Margin="0,12" />
 
-            <ListView>
+            <ListView Grid.Row="2" 
+                      Header="Third-Software"
+                      ItemsSource="{x:Bind ViewModel.UsedSoftwares, Mode=OneWay}"
+                      IsItemClickEnabled="False"
+                      SelectionMode="None">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0" />
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="settings:SoftwareItem">
+                        <StackPanel Padding="0,12,0,4"
+                                    BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                    BorderThickness="0,0,0,1.5">
+                            <TextBlock Text="{x:Bind SoftwareName}"
+                                       TextWrapping="Wrap"
+                                       Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                       Style="{ThemeResource SubtitleTextBlockStyle}" />
 
+                            <HyperlinkButton NavigateUri="{x:Bind SoftwareUrl}"
+                                             Content="{x:Bind SoftwareUrl}"
+                                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                             Margin="0,8" />
+
+                            <TextBlock Text="{x:Bind Author}"
+                                       TextWrapping="Wrap"
+                                       FontSize="18"
+                                       Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                       Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+                            <HyperlinkButton NavigateUri="{x:Bind AuthorUrl}"
+                                             Content="{x:Bind AuthorUrl}"
+                                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                             Margin="0,8" />
+
+                            <TextBlock Text="{x:Bind License}"
+                                       TextWrapping="Wrap"
+                                       Style="{ThemeResource BodyTextBlockStyle}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
+        </Grid>
 
         <!--<CommandBar Grid.Row="2"
              Background="{ThemeResource DefaultPaneBackground}">
