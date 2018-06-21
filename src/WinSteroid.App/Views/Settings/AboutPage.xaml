@@ -86,24 +86,9 @@
                         <StackPanel Padding="0,12,0,4"
                                     BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}"
                                     BorderThickness="0,0,0,1.5">
-                            <TextBlock Text="{x:Bind SoftwareName}"
-                                       TextWrapping="Wrap"
-                                       Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                                       Style="{ThemeResource SubtitleTextBlockStyle}" />
-
                             <HyperlinkButton NavigateUri="{x:Bind SoftwareUrl}"
-                                             Content="{x:Bind SoftwareUrl}"
-                                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                             Margin="0,8" />
-
-                            <TextBlock Text="{x:Bind Author}"
-                                       TextWrapping="Wrap"
-                                       FontSize="18"
-                                       Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                                       Style="{ThemeResource SubtitleTextBlockStyle}" />
-
-                            <HyperlinkButton NavigateUri="{x:Bind AuthorUrl}"
-                                             Content="{x:Bind AuthorUrl}"
+                                             Content="{x:Bind SoftwareName}"
+                                             FontSize="18"
                                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                              Margin="0,8" />
 

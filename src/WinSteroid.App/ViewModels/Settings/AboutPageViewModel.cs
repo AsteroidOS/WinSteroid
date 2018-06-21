@@ -53,64 +53,6 @@ namespace WinSteroid.App.ViewModels.Settings
 
         }
 
-        private List<SoftwareItem> LoadSoftwareItems(IList<string> lines)
-        {
-            if (lines.IsNullOrEmpty()) return new List<SoftwareItem>();
-
-            lines = lines
-                .Skip(3)
-                .Select(l => l?.Trim() ?? string.Empty)
-                .ToList();
-
-            if (lines.IsNullOrEmpty()) return new List<SoftwareItem>();
-
-            var softwareItemsList = new List<SoftwareItem>();
-
-            var currentItem = new SoftwareItem();
-
-            foreach (var line in lines)
-            {
-                switch (line)
-                {
-                    case var l when !string.IsNullOrWhiteSpace(l) && l.Length >= 2 && l.Substring(0, 2).Equals("##"):
-                        {
-                            if (line.StartsWith("####")) //END
-                            {
-                                currentItem.License += Environment.NewLine;
-                                softwareItemsList.Add(currentItem);
-                                currentItem = new SoftwareItem();
-                            }
-                            else if (line.StartsWith("###")) //AUTHOR
-                            {
-                                var authorsData = line.Replace("###", string.Empty).Split('(');
-                                currentItem.Author = authorsData[0].Trim();
-                                currentItem.AuthorUrl = authorsData[1].Replace(")", string.Empty).Trim();
-                            }
-                            else
-                            {
-                                var softwareData = line.Replace("##", string.Empty).Split('(');
-                                currentItem.SoftwareName = softwareData[0].Trim();
-                                currentItem.SoftwareUrl = softwareData[1].Replace(")", string.Empty).Trim();
-                            }
-                            break;
-                        }
-                    default:
-                        {
-                            if (currentItem.License == null)
-                            {
-                                currentItem.License = string.Empty;
-                                if (string.IsNullOrWhiteSpace(line)) break;
-                            }
-
-                            currentItem.License += line;
-                            break;
-                        }
-                }
-            }
-
-            return softwareItemsList;
-        }
-
         private string _applicationVersion;
         public string ApplicationVersion
         {
@@ -150,17 +92,65 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             await Launcher.LaunchUriAsync(new Uri(string.Format("ms-windows-store:REVIEW?PFN={0}", Package.Current.Id.FamilyName)));
         }
+
+        private List<SoftwareItem> LoadSoftwareItems(IList<string> lines)
+        {
+            if (lines.IsNullOrEmpty()) return new List<SoftwareItem>();
+
+            lines = lines
+                .Skip(3)
+                .Select(l => l?.Trim() ?? string.Empty)
+                .ToList();
+
+            if (lines.IsNullOrEmpty()) return new List<SoftwareItem>();
+
+            var softwareItemsList = new List<SoftwareItem>();
+
+            var currentItem = new SoftwareItem();
+
+            foreach (var line in lines)
+            {
+                switch (line)
+                {
+                    case var l when !string.IsNullOrWhiteSpace(l) && l.Length >= 2 && l.Substring(0, 2).Equals("##"):
+                        {
+                            if (line.StartsWith("####")) //END
+                            {
+                                softwareItemsList.Add(currentItem);
+                                currentItem = new SoftwareItem();
+                            }
+                            else
+                            {
+                                var softwareData = line.Replace("##", string.Empty).Split('(');
+                                currentItem.SoftwareName = softwareData[0].Replace("[", string.Empty).Replace("]", string.Empty).Trim();
+                                currentItem.SoftwareUrl = softwareData[1].Replace(")", string.Empty).Trim();
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            if (currentItem.License == null)
+                            {
+                                currentItem.License = string.Empty;
+                                if (string.IsNullOrWhiteSpace(line)) break;
+                            }
+
+                            currentItem.License += line;
+                            currentItem.License += Environment.NewLine;
+                            break;
+                        }
+                }
+            }
+
+            return softwareItemsList;
+        }
     }
 
     public class SoftwareItem
     {
-        public string SoftwareName { get; set; }
-
-        public string Author { get; set; }
-
-        public string AuthorUrl { get; set; }
-
         public string License { get; set; }
+
+        public string SoftwareName { get; set; }
 
         public string SoftwareUrl { get; set; }
     }
