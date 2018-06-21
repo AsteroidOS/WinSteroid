@@ -459,4 +459,7 @@
   <data name="TutorialsUsbStep3Paragraph2Run.Text" xml:space="preserve">
     <value>Potrai installare nuove WatchFace e/o sfondi tramite la connessione USB.</value>
   </data>
+  <data name="HomeMainUpdateButtonTextBlock.Text" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
 </root>

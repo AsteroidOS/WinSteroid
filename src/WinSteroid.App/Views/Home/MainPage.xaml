@@ -21,7 +21,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mscontrols="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:viewmodels="using:WinSteroid.App.ViewModels"
     xmlns:windowsstatetriggers="using:WindowsStateTriggers"
     xmlns:controls="using:WinSteroid.App.Controls"
@@ -324,6 +323,24 @@
                             <Run Text="{x:Bind ViewModel.BatteryPercentage, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}" />
                         </TextBlock>
                     </Grid>
+
+                    <Button Grid.Column="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            Padding="12,8"
+                            Margin="0,0,0,24"
+                            Style="{StaticResource TutorialStepButtonDesktopStyle}"
+                            Foreground="{ThemeResource MediaTextThemeBrush}"
+                            Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                            IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                            Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                            Command="{x:Bind ViewModel.UpdateBatteryPercentageCommand, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Uid="HomeMainUpdateButtonTextBlock"
+                                       Margin="0,0,12,0" />
+                            <SymbolIcon Symbol="Refresh" />
+                        </StackPanel>
+                    </Button>
 
                     <StackPanel Grid.Column="0"
                                 Grid.Row="1"

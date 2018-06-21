@@ -249,6 +249,36 @@ namespace WinSteroid.App.ViewModels.Home
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Tutorials));
         }
 
+        private RelayCommand _updateBatteryPercentageCommand;
+        public RelayCommand UpdateBatteryPercentageCommand
+        {
+            get
+            {
+                if (_updateBatteryPercentageCommand == null)
+                {
+                    _updateBatteryPercentageCommand = new RelayCommand(UpdateBatteryPercentage);
+                }
+
+                return _updateBatteryPercentageCommand;
+            }
+        }
+
+        private async void UpdateBatteryPercentage()
+        {
+            await DispatcherHelper.RunAsync(async () =>
+            {
+                this.IsBusy = true;
+
+                var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+                var oldPercentage = this.BatteryPercentage;
+
+                this.BatteryPercentage = newPercentage;
+                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+
+                this.IsBusy = false;
+            });
+        }
+
         private void RegisterNotificationsHandlers()
         {
             if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
