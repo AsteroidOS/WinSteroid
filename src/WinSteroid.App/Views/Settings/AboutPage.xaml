@@ -1,18 +1,18 @@
 ﻿<!-- 
-Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <Page
@@ -22,7 +22,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:WinSteroid.App.Controls"
-    xmlns:toolkitControls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     DataContext="{Binding SettingsAbout, Source={StaticResource Locator}}">
 
@@ -50,31 +49,41 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                        ButtonGlyph="" 
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Padding="12">
-                <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
-                           FontWeight="SemiBold"
-                           Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
-                           Style="{ThemeResource SubtitleTextBlockStyle}" />
-                
-                <TextBlock Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
-                           FontWeight="SemiBold"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="0,12,0,0" />
+        <StackPanel Grid.Row="1" 
+                    Padding="12">
+            <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
+                       FontWeight="SemiBold"
+                       Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                       Style="{ThemeResource SubtitleTextBlockStyle}" />
 
-                <toolkitControls:MarkdownTextBlock Text="{x:Bind ViewModel.UsedSoftwares, Mode=OneWay}" />
-            </StackPanel>
-        </ScrollViewer>
+            <TextBlock Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
+                       FontWeight="SemiBold"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Margin="0,12,0,0" />
+
+            <ListView>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
 
         <!--<CommandBar Grid.Row="2"
-                    Background="{ThemeResource DefaultPaneBackground}">
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Label="Review">
-                    <AppBarButton.Icon>
-                        <SymbolIcon Symbol="OutlineStar" />
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar.PrimaryCommands>
-        </CommandBar>-->
+             Background="{ThemeResource DefaultPaneBackground}">
+             <CommandBar.PrimaryCommands>
+             <AppBarButton Label="Review">
+             <AppBarButton.Icon>
+             <SymbolIcon Symbol="OutlineStar" />
+             </AppBarButton.Icon>
+             </AppBarButton>
+             </CommandBar.PrimaryCommands>
+             </CommandBar>-->
     </Grid>
 </Page>
