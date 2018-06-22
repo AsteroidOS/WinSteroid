@@ -18,6 +18,7 @@ using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.System;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 
@@ -182,11 +183,27 @@ namespace WinSteroid.App.ViewModels.Home
             }
 
             var pairingResult = await this.DeviceService.PairAsync();
+
+            this.IsBusy = false;
+            this.BusyMessage = string.Empty;
+
             if (!pairingResult.IsSuccess)
             {
-                this.IsBusy = false;
-                this.BusyMessage = string.Empty;
                 this.ConnectionFailed = true;
+
+                if (pairingResult.NeedSystemPairing)
+                {
+                    var openSettings = await this.DialogService.ShowConfirmMessage(
+                        ResourcesHelper.GetLocalizedString("DeviceServiceSystemPairingRequiredMessage"),
+                        ResourcesHelper.GetLocalizedString("DeviceServiceSystemPairingRequiredTitle"));
+
+                    if (openSettings)
+                    {
+                        await Launcher.LaunchUriAsync(new Uri("ms-settings:bluetooth"));
+                        return;
+                    }
+                }
+                
                 await this.DialogService.ShowMessage(
                     ResourcesHelper.GetLocalizedString("HomeWelcomePairingOperationFailedError"), 
                     ResourcesHelper.GetLocalizedString("SharedErrorTitle"));

@@ -17,18 +17,23 @@ namespace WinSteroid.Common.Models
 {
     public class PairingResult
     {
-        public PairingResult(string errorMessage) : this(false, errorMessage) { }
+        public PairingResult(string errorMessage) : this(false, false, errorMessage) { }
 
-        private PairingResult(bool isSuccess, string errorMessage)
+        private PairingResult(bool isSuccess, bool needSystemPairing, string errorMessage)
         {
             this.IsSuccess = isSuccess;
+            this.NeedSystemPairing = needSystemPairing;
             this.ErrorMessage = errorMessage;
         }
 
         public bool IsSuccess { get; }
 
+        public bool NeedSystemPairing { get; }
+
         public string ErrorMessage { get; }
 
-        public static PairingResult Success => new PairingResult(true, null);
+        public static PairingResult PairingRequired => new PairingResult(false, true, null);
+
+        public static PairingResult Success => new PairingResult(true, false, null);
     }
 }

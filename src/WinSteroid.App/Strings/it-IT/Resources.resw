@@ -465,4 +465,10 @@
   <data name="SettingsAboutReviewAppBarButton.Label" xml:space="preserve">
     <value>Recensisci</value>
   </data>
+  <data name="DeviceServiceSystemPairingRequiredMessage" xml:space="preserve">
+    <value>Causa limitazione di permessi, è necessario accoppiare il tuo dispositivo AsteroidOS direttamente dal sistema. Vuoi aprire ora le impostazioni per effettuare l'operazione?</value>
+  </data>
+  <data name="DeviceServiceSystemPairingRequiredTitle" xml:space="preserve">
+    <value>Accoppiamento di sistema</value>
+  </data>
 </root>

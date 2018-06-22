@@ -471,4 +471,10 @@
   <data name="SettingsAboutReviewAppBarButton.Label" xml:space="preserve">
     <value>Review</value>
   </data>
+  <data name="DeviceServiceSystemPairingRequiredMessage" xml:space="preserve">
+    <value>Due to permissions limitations, it is necessary to pair your AsteroidOS device from your operating system. Do you want to open Settings?</value>
+  </data>
+  <data name="DeviceServiceSystemPairingRequiredTitle" xml:space="preserve">
+    <value>System pairing</value>
+  </data>
 </root>

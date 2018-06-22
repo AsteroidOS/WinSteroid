@@ -108,12 +108,17 @@ namespace WinSteroid.App.Services
             {
                 return new PairingResult(ResourcesHelper.GetLocalizedString("DeviceServiceCannotPairError"));
             }
-
+            
             var pairingResult = await this.Current.Pairing.PairAsync();
             if (pairingResult.Status == DevicePairingResultStatus.Paired || pairingResult.Status == DevicePairingResultStatus.AlreadyPaired)
             {
                 this.UpdateLastSavedDeviceInfo();
                 return PairingResult.Success;
+            }
+
+            if (pairingResult.Status == DevicePairingResultStatus.Failed)
+            {
+                return PairingResult.PairingRequired;
             }
 
             return new PairingResult(ResourcesHelper.GetLocalizedString("DeviceServicePairingOperationDeniedOrFailed"));
@@ -188,9 +193,7 @@ namespace WinSteroid.App.Services
 
         public Task<bool> SendMediaCommandAsync(MediaCommandType mediaCommand)
         {
-            var commandByte = (byte)mediaCommand;
-            
-            return this.WriteByteArrayToCharacteristicAsync(Asteroid.CommandCharacteristicUuid, new[] { commandByte });
+            return this.WriteByteArrayToCharacteristicAsync(Asteroid.CommandCharacteristicUuid, new[] { (byte)mediaCommand });
         }
 
         public Task<bool> InsertNotificationAsync(UserNotification userNotification)
