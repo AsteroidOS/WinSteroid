@@ -24,6 +24,7 @@
     <PackageCertificateThumbprint>91731C450F3761C216EFAF044F77FB63975231F1</PackageCertificateThumbprint>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
+    <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)\CommonBuild.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
