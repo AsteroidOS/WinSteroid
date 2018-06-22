@@ -131,8 +131,9 @@ namespace WinSteroid.App.Services
                 foreach (var characteristic in this.CachedCharacteristics)
                 {
                     await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.None);
-                    this.CachedCharacteristics.Remove(characteristic);
                 }
+
+                this.CachedCharacteristics.Clear();
             }
 
             if (this.BluetoothDevice != null)
