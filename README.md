@@ -10,8 +10,6 @@ Use this <a href="https://www.microsoft.com/store/apps/9ND0R9RHNGC2" target="_bl
   <img src="https://assets.windowsphone.com/85864462-9c82-451e-9355-a3d5f874397a/English_get-it-from-MS_InvariantCulture_Default.png" alt="English badge" style="width:20%"/>
 </a>
 
-P.S.: not yet working, still uploading first packages and infos!
-
 ## Build
 To compile WinSteroid, you need:
 
