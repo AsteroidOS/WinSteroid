@@ -122,16 +122,21 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToBatteryIconConverter.cs" />
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
+    <Compile Include="Converters\StringToBooleanConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
     <Compile Include="Extensions\IDialogServiceExtensions.cs" />
+    <Compile Include="Messages\ScreenshotAcquiredMessage.cs" />
+    <Compile Include="Messages\ScreenshotBenchmarkMessage.cs" />
+    <Compile Include="Messages\ScreenshotProgressMessage.cs" />
     <Compile Include="Services\ApplicationsService.cs" />
     <Compile Include="Services\BackgroundService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\NotificationsService.cs" />
     <Compile Include="Factory\SecureConnectionsFactory.cs" />
     <Compile Include="ViewModels\BaseMainPageViewModel.cs" />
+    <Compile Include="ViewModels\Home\ScreenshotsPageViewModel.cs" />
     <Compile Include="ViewModels\MenuOptionViewModel.cs" />
     <Compile Include="ViewModels\NotificationItemViewModel.cs" />
     <Compile Include="ViewModels\Settings\ApplicationPageViewModel.cs" />
@@ -146,6 +151,9 @@
     <Compile Include="ViewModels\Transfers\WallpapersPageViewModel.cs" />
     <Compile Include="ViewModels\Transfers\WatchFacePageViewModel.cs" />
     <Compile Include="ViewModels\Home\WelcomePageViewModel.cs" />
+    <Compile Include="Views\Home\ScreenshotsPage.xaml.cs">
+      <DependentUpon>ScreenshotsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -265,6 +273,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\StylesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Home\ScreenshotsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

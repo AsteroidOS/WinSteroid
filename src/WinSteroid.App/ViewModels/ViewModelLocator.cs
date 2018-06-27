@@ -29,6 +29,7 @@ namespace WinSteroid.App.ViewModels
 
             SimpleIoc.Default.Register<Home.WelcomePageViewModel>();
             SimpleIoc.Default.Register<Home.MainPageViewModel>();
+            SimpleIoc.Default.Register<Home.ScreenshotsPageViewModel>();
 
             SimpleIoc.Default.Register<Settings.AboutPageViewModel>();
             SimpleIoc.Default.Register<Settings.ApplicationPageViewModel>();
@@ -65,6 +66,7 @@ namespace WinSteroid.App.ViewModels
 
             navigationService.Configure(nameof(HomeWelcome), typeof(Views.Home.WelcomePage));
             navigationService.Configure(nameof(Home), typeof(Views.Home.MainPage));
+            navigationService.Configure(nameof(HomeScreenshots), typeof(Views.Home.ScreenshotsPage));
 
             navigationService.Configure(nameof(SettingsAbout), typeof(Views.Settings.AboutPage));
             navigationService.Configure(nameof(Settings), typeof(Views.Settings.MainPage));
@@ -89,6 +91,8 @@ namespace WinSteroid.App.ViewModels
             {
                 case nameof(Home):
                     return Home;
+                case nameof(HomeScreenshots):
+                    return HomeScreenshots;
                 case nameof(HomeWelcome):
                     return HomeWelcome;
                 case nameof(Settings):
@@ -115,6 +119,11 @@ namespace WinSteroid.App.ViewModels
         public static Home.MainPageViewModel Home
         {
             get { return ServiceLocator.Current.GetInstance<Home.MainPageViewModel>(); }
+        }
+
+        public static Home.ScreenshotsPageViewModel HomeScreenshots
+        {
+            get { return ServiceLocator.Current.GetInstance<Home.ScreenshotsPageViewModel>(); }
         }
 
         public static Home.WelcomePageViewModel HomeWelcome

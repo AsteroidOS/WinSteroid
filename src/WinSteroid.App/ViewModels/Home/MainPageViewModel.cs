@@ -91,6 +91,7 @@ namespace WinSteroid.App.ViewModels.Home
             if (!this.MenuOptions.IsNullOrEmpty()) return;
 
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainSettingsItemLabel"), Command = SettingsCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainScreenshotsItemLabel"), Command = ScreenshotsCommand });
 
             if (!ApiHelper.IsMobileSystem())
             {
@@ -173,23 +174,23 @@ namespace WinSteroid.App.ViewModels.Home
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Settings));
         }
 
-        private RelayCommand _takeScreenshotCommand;
-        public RelayCommand TakeScreenshotCommand
+        private RelayCommand _screenshotsCommand;
+        public RelayCommand ScreenshotsCommand
         {
             get
             {
-                if (_takeScreenshotCommand == null)
+                if (_screenshotsCommand == null)
                 {
-                    _takeScreenshotCommand = new RelayCommand(this.TakeScreenshot);
+                    _screenshotsCommand = new RelayCommand(GoToScreenshots);
                 }
 
-                return _takeScreenshotCommand;
+                return _screenshotsCommand;
             }
         }
 
-        private async void TakeScreenshot()
+        private void GoToScreenshots()
         {
-            await this.DeviceService.TakeScreenshotAsync();
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.HomeScreenshots));
         }
 
         private RelayCommand _wallpapersCommand;

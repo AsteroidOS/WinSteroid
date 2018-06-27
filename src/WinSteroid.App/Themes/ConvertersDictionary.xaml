@@ -47,6 +47,8 @@
 
     <converters:NumberToVibrationLevelStringConverter x:Key="NumberToVibrationLevelStringConverter" />
 
+    <converters:StringToBooleanConverter x:Key="StringToBooleanConverter" />
+
     <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
     <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />

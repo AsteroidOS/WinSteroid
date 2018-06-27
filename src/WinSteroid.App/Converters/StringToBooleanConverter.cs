@@ -13,15 +13,27 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.Common
+using System;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+
+namespace WinSteroid.App.Converters
 {
-    public static class Constants
+    public class StringToBooleanConverter : DependencyObject, IValueConverter
     {
-        public const string LastAppIdSettingKey = "lastAppId";
-        public const string LastNotificationIdsSettingKey = "lastNotificationIds";
-        public const string LastSavedDeviceIdSettingKey = "lastSavedDeviceId";
-        public const string LastSavedDeviceNameSettingKey = "lastSavedDeviceName";
-        public const string LastSavedBatteryTaskFrequencySettingKey = "lastSavedBatteryTaskFrequencyName";
-        public const string ScreenshotsFolderName = "Screenshots";
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is string @string)
+            {
+                return !string.IsNullOrWhiteSpace(@string);
+            }
+
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -15,6 +15,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.DataTransfer;
@@ -31,7 +32,7 @@ namespace WinSteroid.Common.Helpers
     public static class ImageHelper
     {
         private const int DefaultAppLogoSize = 40;
-
+        
         public static async Task<BitmapImage> ConvertToImageAsync(byte[] bytes)
         {
             using (var ras = new InMemoryRandomAccessStream())

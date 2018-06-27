@@ -471,4 +471,64 @@
   <data name="DeviceServiceSystemPairingRequiredTitle" xml:space="preserve">
     <value>Accoppiamento di sistema</value>
   </data>
+  <data name="ScreenshotServiceInitializationErrorMessage" xml:space="preserve">
+    <value>Non sono stato in grado di inizializzare il servizio degli screenshot. Potrebbe non esser disponibile sul tuo dispositivo AsteroidOS oppure non è supportato</value>
+  </data>
+  <data name="ScreenshotAcquiredMessageFormat" xml:space="preserve">
+    <value>Schermata {0} acquisita</value>
+  </data>
+  <data name="SharedFileNotFoundMessageFormat" xml:space="preserve">
+    <value>File {0} non trovato</value>
+  </data>
+  <data name="ScreenshotServiceMaxDtuSizeErrorMessageFormat" xml:space="preserve">
+    <value>Uno o entrambi i dispositivi non possono gestire l'attuale dimensione massima dei pacchetti ({0} byte) da AsteroidOS con il trasferimento dati Bluetooth Low Energy size ({0} bytes) per trasferire le schermate acquisite</value>
+  </data>
+  <data name="SharedUnavailableServiceTitle" xml:space="preserve">
+    <value>Servizio non disponibile</value>
+  </data>
+  <data name="HomeScreenshotsNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Schermate</value>
+  </data>
+  <data name="HomeScreenshotsDeleteHistoryButton.Content" xml:space="preserve">
+    <value>Elimina tutte le schermate salvate</value>
+  </data>
+  <data name="HomeScreenshotsDeleteScreenshotsHistoryMessage" xml:space="preserve">
+    <value>Sei sicuro di voler eliminare la cronologia delle schermate salvate?</value>
+  </data>
+  <data name="HomeScreenshotsDeleteScreenshotsHistoryTitle" xml:space="preserve">
+    <value>Elimina schermate</value>
+  </data>
+  <data name="HomeScreenshotsExportButton.Content" xml:space="preserve">
+    <value>Esporta nella libreria Immagini</value>
+  </data>
+  <data name="HomeScreenshotsExportHistoryButton.Content" xml:space="preserve">
+    <value>Esporta tutte le schermate salvate</value>
+  </data>
+  <data name="HomeScreenshotsGalleryAppBarButton.Label" xml:space="preserve">
+    <value>Galleria</value>
+  </data>
+  <data name="HomeScreenshotsHistoryDetailRun.Text" xml:space="preserve">
+    <value>Numero schermate salvate: </value>
+  </data>
+  <data name="HomeScreenshotsHistoryExportedMessage" xml:space="preserve">
+    <value>Cronologia schermate salvate esportata con successo</value>
+  </data>
+  <data name="HomeScreenshotsHistoryTextBlock.Text" xml:space="preserve">
+    <value>Cronologia schermate salvate</value>
+  </data>
+  <data name="HomeScreenshotsTakeScreenshotButton.Content" xml:space="preserve">
+    <value>Acquisisci schermata</value>
+  </data>
+  <data name="SharedOperationCompletedTitle" xml:space="preserve">
+    <value>Operazione completata</value>
+  </data>
+  <data name="HomeMainScreenshotsAppBarButton.Label" xml:space="preserve">
+    <value>Schermate</value>
+  </data>
+  <data name="HomeMainScreenshotsItemLabel" xml:space="preserve">
+    <value>Schermate</value>
+  </data>
+  <data name="HomeScreenshotsCancelScreenshotTaskButton.Content" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
 </root>

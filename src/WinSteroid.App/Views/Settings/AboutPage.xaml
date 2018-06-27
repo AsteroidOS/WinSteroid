@@ -68,7 +68,7 @@
                        Text="{x:Bind ViewModel.ApplicationVersion, Mode=OneWay}"
                        FontWeight="SemiBold"
                        Style="{ThemeResource BaseTextBlockStyle}"
-                       Margin="0,12" />
+                       Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}" />
 
             <ListView Grid.Row="2" 
                       Header="Third-Software"

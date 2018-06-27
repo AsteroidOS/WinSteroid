@@ -45,6 +45,12 @@
 
             <viewmodels:ViewModelLocator x:Key="Locator" />
 
+            <Thickness x:Key="DefaultStackPanelItemsVerticalMargin">0,12</Thickness>
+
+            <Thickness x:Key="DefaultButtonPadding">12,8</Thickness>
+
+            <Thickness x:Key="DefaultStackPanelHeaderTextBlockMargin">0,24,0,8</Thickness>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ms-appx:///Themes/StylesDictionary.xaml" />
                 <ResourceDictionary Source="ms-appx:///Themes/ConvertersDictionary.xaml" />

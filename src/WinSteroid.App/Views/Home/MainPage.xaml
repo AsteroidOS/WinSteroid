@@ -327,7 +327,7 @@
                     <Button Grid.Column="0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom"
-                            Padding="12,8"
+                            Padding="{StaticResource DefaultButtonPadding}"
                             Margin="0,0,0,24"
                             Style="{StaticResource TutorialStepButtonDesktopStyle}"
                             Foreground="{ThemeResource MediaTextThemeBrush}"
@@ -433,13 +433,12 @@
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <!--<AppBarButton Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}" 
-                     IsEnabled="False"
-                     Label="Take screenshot">
+                <AppBarButton x:Uid="HomeMainScreenshotsAppBarButton" 
+                              Command="{x:Bind ViewModel.ScreenshotsCommand, Mode=OneWay}" >
                      <AppBarButton.Icon>
                      <SymbolIcon Symbol="Pictures" />
                      </AppBarButton.Icon>
-                     </AppBarButton>-->
+                     </AppBarButton>
                 <AppBarButton x:Uid="HomeMainSettingsAppBarButton" 
                               Command="{x:Bind ViewModel.SettingsCommand, Mode=OneWay}">
                     <AppBarButton.Icon>

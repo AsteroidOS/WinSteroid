@@ -21,9 +21,9 @@ namespace WinSteroid.Common.Helpers
 {
     public static class ToastsHelper
     {
-        public static void Show(string message) => Show(Package.Current.DisplayName, message);
+        public static void Show(string message, params string[] actionArgs) => Show(Package.Current.DisplayName, message);
 
-        public static void Show(string title, string message)
+        public static void Show(string title, string message, params string[] actionArgs)
         {
             var toastVisual = new ToastVisual
             {
@@ -39,6 +39,7 @@ namespace WinSteroid.Common.Helpers
 
             var toastContent = new ToastContent
             {
+
                 Visual = toastVisual
             };
 

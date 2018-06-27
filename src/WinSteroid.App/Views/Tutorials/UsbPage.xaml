@@ -146,7 +146,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                         <ScrollViewer Grid.Row="1"
                                       HorizontalAlignment="Stretch"
-                                      Margin="0,12">
+                                      Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
                             <RichTextBlock TextWrapping="Wrap">
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
@@ -182,7 +182,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                         <ScrollViewer Grid.Row="2"
                                       HorizontalAlignment="Stretch"
-                                      Margin="0,12">
+                                      Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
@@ -221,7 +221,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                         <ScrollViewer Grid.Row="2" 
                                       HorizontalAlignment="Stretch"
-                                      Margin="0,12">
+                                      Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>
@@ -275,7 +275,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                         <ScrollViewer Grid.Row="1"
                                       HorizontalAlignment="Stretch"
-                                      Margin="0,12">
+                                      Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
                             <RichTextBlock>
                                 <RichTextBlock.Blocks>
                                     <Paragraph>

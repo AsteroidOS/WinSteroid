@@ -1,0 +1,127 @@
+﻿<!-- 
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Page
+    x:Class="WinSteroid.App.Views.Home.ScreenshotsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinSteroid.App.Controls"
+    mc:Ignorable="d"
+    DataContext="{Binding HomeScreenshots, Source={StaticResource Locator}}">
+
+    <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <controls:AcrylicGrid Grid.Row="1" />
+
+        <Grid Grid.Row="1"
+              Background="{ThemeResource SoftAcrylicBackgroundThemeBrush}" />
+
+        <controls:NavigationPageHeader Grid.Row="0" 
+                                       x:Uid="HomeScreenshotsNavigationPageHeader"
+                                       Background="{ThemeResource DefaultPaneBackground}"
+                                       ButtonGlyph="" 
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
+
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    Padding="12">
+            <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}"
+                  HorizontalAlignment="Left"
+                  Width="240"
+                  Height="240"
+                  Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
+                <Image Source="{x:Bind ViewModel.ScreenshotPreview, Mode=OneWay}" />
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ProgressBar Value="{x:Bind ViewModel.ScreenshotProgress, Mode=OneWay}"
+                             Minimum="0"
+                             Maximum="100"
+                             Background="Transparent"
+                             VerticalAlignment="Center"
+                             Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                             Height="6"
+                             Width="240" />
+
+                <TextBlock Text="{x:Bind ViewModel.ScreenshotProgress, Mode=OneWay, Converter={StaticResource NumberToPercentageTextConverter}}"
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Margin="8,0" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}">
+                <Button x:Uid="HomeScreenshotsTakeScreenshotButton" 
+                        Padding="{StaticResource DefaultButtonPadding}"
+                        Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}" />
+
+                <!--<Button x:Uid="HomeScreenshotsCancelScreenshotTaskButton"
+                        Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Padding="{StaticResource DefaultButtonPadding}"
+                        Margin="12,0,0,0"
+                        Command="{x:Bind ViewModel.CancelScreenshotTaskCommand, Mode=OneWay}" />-->
+                
+                <Button x:Uid="HomeScreenshotsExportButton" 
+                        Padding="{StaticResource DefaultButtonPadding}"
+                        Command="{x:Bind ViewModel.ExportCommand, Mode=OneWay}"
+                        Margin="12,0"
+                        Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}"
+                        IsEnabled="{x:Bind ViewModel.ScreenshotName, Mode=OneWay, Converter={StaticResource StringToBooleanConverter}}" />
+
+                <SymbolIcon Symbol="Accept" 
+                            Margin="0,4"
+                            Visibility="{x:Bind ViewModel.ScreenshotSuccessfullyExported, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+            </StackPanel>
+
+            <TextBlock x:Uid="HomeScreenshotsHistoryTextBlock"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
+
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}">
+                <Run x:Uid="HomeScreenshotsHistoryDetailRun" />
+                
+                <Run Text="{x:Bind ViewModel.ScreenshotHistoryFilesCount, Mode=OneWay}" />
+            </TextBlock>
+
+            <Button x:Uid="HomeScreenshotsExportHistoryButton" 
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    Command="{x:Bind ViewModel.ExportHistoryCommand, Mode=OneWay}"
+                    Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}"
+                    Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}" />
+
+            <Button x:Uid="HomeScreenshotsDeleteHistoryButton" 
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    Command="{x:Bind ViewModel.DeleteHistoryCommand, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}" />
+        </StackPanel>
+    </Grid>
+</Page>

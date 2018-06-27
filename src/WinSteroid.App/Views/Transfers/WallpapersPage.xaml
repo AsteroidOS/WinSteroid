@@ -50,7 +50,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                        ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
         <ScrollViewer Grid.Row="1">
-            <StackPanel Padding="12,8"
+            <StackPanel Padding="{StaticResource DefaultButtonPadding}"
                         Width="360"
                         HorizontalAlignment="Left">
 
@@ -60,7 +60,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 <Border HorizontalAlignment="Left"
                         Width="240"
                         Height="240"
-                        Margin="0,12"
+                        Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}"
                         CornerRadius="{x:Bind ViewModel.UseRoundPreview, Mode=OneWay, Converter={StaticResource BooleanToCornerRadiusConverter}}"
                         Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}">
                     <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}">
@@ -102,7 +102,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                            Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           Margin="0,24,0,8">
+                           Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}">
                     <Run x:Uid="SettingsWallpapersInstallationProgressRun" />
                     <Run Text="{x:Bind ViewModel.UploadProgress}" />
                 </TextBlock>

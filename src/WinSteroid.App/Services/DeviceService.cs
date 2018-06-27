@@ -13,16 +13,20 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
@@ -37,6 +41,13 @@ namespace WinSteroid.App.Services
     {
         private readonly ApplicationsService ApplicationsService;
         private readonly List<GattCharacteristic> CachedCharacteristics;
+
+        private int? TotalSize = null;
+        private byte[] TotalData = null;
+        private int? Progress = null;
+        private int PacketCounter = 0;
+        private List<int> PacketSizes = null;
+        private Stopwatch Stopwatch;
 
         public DeviceService(ApplicationsService applicationsService)
         {
@@ -169,6 +180,15 @@ namespace WinSteroid.App.Services
             return characteristic;
         }
 
+        public bool RemoveGattCharacteristic(Guid characteristicUuid)
+        {
+            var cachedCharacteristic = this.CachedCharacteristics.FirstOrDefault(gc => Equals(gc.Uuid, characteristicUuid));
+            if (cachedCharacteristic == null) return true;
+
+            this.CachedCharacteristics.Remove(cachedCharacteristic);
+            return true;
+        }
+
         private async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
         {
             var characteristic = await this.GetGattCharacteristicAsync(characteristicUuid);
@@ -240,7 +260,62 @@ namespace WinSteroid.App.Services
 
             return devicePicker.PickSingleDeviceAsync(rect);
         }
-        
+
+        public async Task<bool> RegisterToScreenshotContentServiceBenchmark()
+        {
+            var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
+            if (characteristic == null) return false;
+
+            var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+            if (notifyResult != GattCommunicationStatus.Success) return false;
+
+            characteristic.ValueChanged += OnScreenshotContentBenchmarkCharacteristicValueChanged;
+            return true;
+        }
+
+        public Task<bool> TestScreenshotContentServiceAsync()
+        {
+            return this.WriteByteArrayToCharacteristicAsync(Asteroid.ScreenshotRequestCharacteristicUuid, new byte[] { 0x0 });
+        }
+
+        private void OnScreenshotContentBenchmarkCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            var bytes = new byte[args.CharacteristicValue.Length];
+            DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(bytes);
+
+            if (!this.TotalSize.HasValue)
+            {
+                var size = BitConverter.ToInt32(bytes, 0);
+                this.TotalData = new byte[size];
+                this.TotalSize = size;
+                this.Progress = 0;
+                this.PacketCounter = 0;
+                this.PacketSizes = new List<int>();
+                this.Stopwatch = new Stopwatch();
+                this.Stopwatch.Start();
+                return;
+            }
+
+            this.PacketSizes.Add(bytes.Length);
+
+            if (this.PacketCounter < 100) return;
+
+            this.Stopwatch.Stop();
+
+            sender.ValueChanged -= OnScreenshotContentBenchmarkCharacteristicValueChanged;
+
+            var message = new Messages.ScreenshotBenchmarkMessage((int)this.PacketSizes.Average(), this.Stopwatch.ElapsedMilliseconds);
+
+            Messenger.Default.Send(message);
+
+            this.TotalSize = null;
+            this.TotalData = null;
+            this.Progress = null;
+            this.PacketCounter = 0;
+            this.PacketSizes = null;
+            this.Stopwatch = null;
+        }
+
         public async Task<bool> RegisterToScreenshotContentService()
         {
             var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
@@ -253,14 +328,33 @@ namespace WinSteroid.App.Services
             return true;
         }
 
+        public async Task<bool> UnregisterToScreenshotContentService()
+        {
+            var characteristic = await this.GetGattCharacteristicAsync(Asteroid.ScreenshotContentCharacteristicUuid);
+            if (characteristic == null) return true;
+
+            try
+            {
+                var notifyResult = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.None);
+                if (notifyResult != GattCommunicationStatus.Success) return false;
+
+                this.TotalSize = null;
+                this.TotalData = null;
+                this.Progress = null;
+                Messenger.Default.Send(new Messages.ScreenshotProgressMessage(percentage: 0));
+
+                return this.RemoveGattCharacteristic(Asteroid.ScreenshotContentCharacteristicUuid);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public Task<bool> TakeScreenshotAsync()
         {
             return this.WriteByteArrayToCharacteristicAsync(Asteroid.ScreenshotRequestCharacteristicUuid, new byte[] { 0x1 });
         }
-
-        private int? TotalSize = null;
-        private byte[] TotalData = null;
-        private int? Progress = null;
 
         private async void OnScreenshotContentCharacteristicValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
@@ -283,17 +377,30 @@ namespace WinSteroid.App.Services
 
             this.Progress += bytes.Length;
 
-            System.Diagnostics.Debug.WriteLine("Progress: " + this.Progress.Value + "; Total size: " + this.TotalSize.Value);
+            if (this.Progress.Value < this.TotalSize.Value)
+            {
+                var percentage = (int)Math.Ceiling((this.Progress.Value * 100d) / this.TotalSize.Value);
+                Messenger.Default.Send(new Messages.ScreenshotProgressMessage(percentage));
+                return;
+            }
 
-            if (this.Progress.Value < this.TotalSize.Value) return;
-            
-            var storageFilePath = await FilesHelper.WriteBytesAsync("screenshot.jpg", Windows.Storage.KnownFolders.PicturesLibrary, this.TotalData);
-            
-            ToastsHelper.Show("Screenshot acquired! File: " + storageFilePath);
+            var screenshotsFolder = await FilesHelper.GetScreenshotsFolderAsync();
+
+            var fileName = $"{Package.Current.DisplayName}_Screenshot_{DateTime.Now.ToString("yyyyMMdd")}_{DateTime.Now.ToString("HHmmss")}.jpg";
+
+            var screenshotFile = await screenshotsFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+            await FileIO.WriteBytesAsync(screenshotFile, this.TotalData);
+
+            ToastsHelper.Show(string.Format(ResourcesHelper.GetLocalizedString("ScreenshotAcquiredMessageFormat"), fileName));
+
+            sender.ValueChanged -= OnScreenshotContentCharacteristicValueChanged;
             
             this.TotalSize = null;
             this.TotalData = null;
             this.Progress = null;
+
+            Messenger.Default.Send(new Messages.ScreenshotAcquiredMessage(fileName));
         }
 
         public Task<bool> SetTimeAsync(DateTime dateTime)

@@ -226,7 +226,7 @@
                                                    ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
 
                     <ScrollViewer Grid.Row="1">
-                        <StackPanel Padding="12,8">
+                        <StackPanel Padding="{StaticResource DefaultButtonPadding}">
                             <TextBlock Text="{x:Bind ViewModel.DeviceName, Mode=OneWay}"
                                        FontWeight="SemiBold"
                                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
@@ -261,7 +261,7 @@
 
                             <TextBlock x:Uid="SettingsMainNotificationsTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="0,24,0,8" />
+                                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
 
                             <ToggleSwitch x:Uid="SettingsMainShowNotificationsToggleSwitch"
                                           IsEnabled="{x:Bind ViewModel.CanEnableUserNotifications}"
@@ -275,7 +275,7 @@
 
                             <TextBlock x:Uid="SettingsMainTimeTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="0,24,0,8" />
+                                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
 
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Uid="SettingsMainTimeSyncNowButton"
@@ -314,7 +314,7 @@
 
                             <TextBlock x:Uid="SettingsMainSecureConnectionsTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="0,24,0,8" />
+                                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
 
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Uid="SettingsMainRemoveCredentialsButton"
@@ -329,7 +329,7 @@
 
                             <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="0,24,0,8" />
+                                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
 
                             <Button x:Uid="SettingsMainResetApplicationButton" 
                                     Padding="12,4"

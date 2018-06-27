@@ -73,7 +73,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                                        TitleText="{x:Bind ViewModel.Name, Mode=OneWay}" />
 
         <StackPanel Grid.Row="1"
-                    Padding="12,8">
+                    Padding="{StaticResource DefaultButtonPadding}">
             <TextBlock x:Uid="SettingsApplicationPreferencesTextBlock"
                        Style="{ThemeResource SubtitleTextBlockStyle}" />
 

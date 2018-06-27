@@ -25,6 +25,11 @@ namespace WinSteroid.Common.Helpers
 {
     public static class FilesHelper
     {
+        public static IAsyncOperation<StorageFolder> GetScreenshotsFolderAsync()
+        {
+            return ApplicationData.Current.LocalFolder.CreateFolderAsync(Constants.ScreenshotsFolderName, CreationCollisionOption.OpenIfExists);
+        }
+
         public static IAsyncOperation<StorageFile> PickFileAsync(params string[] fileExtensions)
         {
             var fileOpenPicker = new FileOpenPicker
@@ -65,17 +70,6 @@ namespace WinSteroid.Common.Helpers
             }
 
             return folder;
-        }
-
-        public static async Task<string> WriteBytesAsync(string fileName, StorageFolder folder, byte[] bytes, bool replaceExisting = false)
-        {
-            var collisionOption = replaceExisting ? CreationCollisionOption.ReplaceExisting : CreationCollisionOption.GenerateUniqueName;
-
-            var file = await folder.CreateFileAsync(fileName, collisionOption);
-
-            await FileIO.WriteBytesAsync(file, bytes);
-
-            return file.Path;
         }
     }
 }

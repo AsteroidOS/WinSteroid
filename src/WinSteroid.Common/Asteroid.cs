@@ -183,5 +183,7 @@ namespace WinSteroid.Common
                 return new[] { BatteryService, MediaService, NotificationService, TimeService, WeatherService, ScreenshotsService };
             }
         }
+
+        public const int CurrentMinimalBtsyncdPacketSize = 200;
     }
 }

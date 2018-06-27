@@ -477,4 +477,64 @@
   <data name="DeviceServiceSystemPairingRequiredTitle" xml:space="preserve">
     <value>System pairing</value>
   </data>
+  <data name="ScreenshotServiceInitializationErrorMessage" xml:space="preserve">
+    <value>I am not able to initialize screenshot service. It is not available on your AsteroidOS device or it isn't supported</value>
+  </data>
+  <data name="ScreenshotAcquiredMessageFormat" xml:space="preserve">
+    <value>Screenshot {0} acquired</value>
+  </data>
+  <data name="SharedFileNotFoundMessageFormat" xml:space="preserve">
+    <value>File {0} not found</value>
+  </data>
+  <data name="ScreenshotServiceMaxDtuSizeErrorMessageFormat" xml:space="preserve">
+    <value>One or both devices cannot manage the current maximum BLE transfer packet size ({0} bytes) used by AsteroidOS to stream acquired screenshots</value>
+  </data>
+  <data name="SharedUnavailableServiceTitle" xml:space="preserve">
+    <value>Unavailable service</value>
+  </data>
+  <data name="HomeScreenshotsNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Screenshots</value>
+  </data>
+  <data name="HomeMainScreenshotsAppBarButton.Label" xml:space="preserve">
+    <value>Screenshots</value>
+  </data>
+  <data name="HomeMainScreenshotsItemLabel" xml:space="preserve">
+    <value>Screenshots</value>
+  </data>
+  <data name="HomeScreenshotsDeleteHistoryButton.Content" xml:space="preserve">
+    <value>Delete all saved screenshots</value>
+  </data>
+  <data name="HomeScreenshotsDeleteScreenshotsHistoryMessage" xml:space="preserve">
+    <value>Are you sure to delete current screenshots history?</value>
+  </data>
+  <data name="HomeScreenshotsDeleteScreenshotsHistoryTitle" xml:space="preserve">
+    <value>Delete screenshots</value>
+  </data>
+  <data name="HomeScreenshotsExportButton.Content" xml:space="preserve">
+    <value>Export to Pictures library</value>
+  </data>
+  <data name="HomeScreenshotsExportHistoryButton.Content" xml:space="preserve">
+    <value>Export all saved screenshots</value>
+  </data>
+  <data name="HomeScreenshotsGalleryAppBarButton.Label" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="HomeScreenshotsHistoryDetailRun.Text" xml:space="preserve">
+    <value>Saved screenshots count</value>
+  </data>
+  <data name="HomeScreenshotsHistoryExportedMessage" xml:space="preserve">
+    <value>Screenshots history successfully exported</value>
+  </data>
+  <data name="HomeScreenshotsHistoryTextBlock.Text" xml:space="preserve">
+    <value>Saved screenshots history</value>
+  </data>
+  <data name="HomeScreenshotsTakeScreenshotButton.Content" xml:space="preserve">
+    <value>Take screenshot</value>
+  </data>
+  <data name="SharedOperationCompletedTitle" xml:space="preserve">
+    <value>Operation completed</value>
+  </data>
+  <data name="HomeScreenshotsCancelScreenshotTaskButton.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
