@@ -83,11 +83,11 @@
                         Command="{x:Bind ViewModel.TakeScreenshotCommand, Mode=OneWay}"
                         IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}" />
 
-                <!--<Button x:Uid="HomeScreenshotsCancelScreenshotTaskButton"
+                <Button x:Uid="HomeScreenshotsCancelScreenshotTaskButton"
                         Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Padding="{StaticResource DefaultButtonPadding}"
                         Margin="12,0,0,0"
-                        Command="{x:Bind ViewModel.CancelScreenshotTaskCommand, Mode=OneWay}" />-->
+                        Command="{x:Bind ViewModel.CancelScreenshotTaskCommand, Mode=OneWay}" />
                 
                 <Button x:Uid="HomeScreenshotsExportButton" 
                         Padding="{StaticResource DefaultButtonPadding}"

@@ -170,6 +170,9 @@ namespace WinSteroid.App.ViewModels.Home
         private async void CancelScreenshotTask()
         {
             await this.DeviceService.UnregisterToScreenshotContentService();
+
+            this.ScreenshotProgress = 0;
+            this.IsBusy = false;
         }
 
         private RelayCommand _exportCommand;
