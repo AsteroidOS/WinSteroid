@@ -22,7 +22,9 @@ using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using Windows.ApplicationModel;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using WinSteroid.App.Controls;
 using WinSteroid.App.Messages;
 using WinSteroid.App.Services;
 using WinSteroid.Common;
@@ -54,7 +56,6 @@ namespace WinSteroid.App.ViewModels.Home
             this.ScreenshotName = string.Empty;
 
             this.MessengerInstance.Register<ScreenshotAcquiredMessage>(this, LoadScreenshotPreview);
-            this.MessengerInstance.Register<ScreenshotBenchmarkMessage>(this, LoadBenchmarkResults);
             this.MessengerInstance.Register<ScreenshotProgressMessage>(this, UpdateScreenshotProgress);
 
             var defaultImageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/default.png"));
@@ -67,6 +68,25 @@ namespace WinSteroid.App.ViewModels.Home
             }
 
             this.UpdateScreenshotHistoryFilesCount();
+
+            var screenshotsServiceTested = SettingsHelper.GetValue(Constants.ScreenshotsServiceTestedSettingKey, false);
+            if (screenshotsServiceTested)
+            {
+                this.ScreenshotServiceAvailable = true;
+                return;
+            }
+
+            var screenshotsBenchmarkDialog = new ScreenshotsBenchmarkDialog();
+
+            var result = await screenshotsBenchmarkDialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+            {
+                this.NavigationService.GoBack();
+                return;
+            }
+
+            this.ScreenshotServiceAvailable = true;
+            SettingsHelper.SetValue(Constants.ScreenshotsServiceTestedSettingKey, true);
         }
 
         public override void Reset()
@@ -102,25 +122,18 @@ namespace WinSteroid.App.ViewModels.Home
             set { Set(nameof(ScreenshotProgress), ref _screenshotProgress, value); }
         }
 
+        private bool _screenshotServiceAvailable;
+        public bool ScreenshotServiceAvailable
+        {
+            get { return _screenshotServiceAvailable; }
+            set { Set(nameof(ScreenshotServiceAvailable), ref _screenshotServiceAvailable, value); }
+        }
+
         private bool _screenshotSuccessfullyExported;
         public bool ScreenshotSuccessfullyExported
         {
             get { return _screenshotSuccessfullyExported; }
             set { Set(nameof(ScreenshotSuccessfullyExported), ref _screenshotSuccessfullyExported, value); }
-        }
-
-        private async void StartBenchmark()
-        {
-            var screenshotServiceReady = await this.DeviceService.RegisterToScreenshotContentServiceBenchmark();
-            if (!screenshotServiceReady)
-            {
-                await this.DialogService.ShowError(
-                    ResourcesHelper.GetLocalizedString("ScreenshotServiceInitializationErrorMessage"),
-                    ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
-                return;
-            }
-
-            await this.DeviceService.TestScreenshotContentServiceAsync();
         }
 
         private RelayCommand _takeScreenshotCommand;
@@ -271,15 +284,6 @@ namespace WinSteroid.App.ViewModels.Home
             }
 
             this.UpdateScreenshotHistoryFilesCount();
-        }
-
-        private async void LoadBenchmarkResults(ScreenshotBenchmarkMessage message)
-        {
-            if (message.ServiceReady) return;
-
-            await this.DialogService.ShowMessage(
-                string.Format(ResourcesHelper.GetLocalizedString("ScreenshotServiceMaxDtuSizeErrorMessageFormat"), Asteroid.CurrentMinimalBtsyncdPacketSize),
-                ResourcesHelper.GetLocalizedString("SharedUnavailableServiceTitle"));
         }
 
         private async void LoadScreenshotPreview(ScreenshotAcquiredMessage message)

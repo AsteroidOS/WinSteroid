@@ -109,10 +109,12 @@
   <ItemGroup>
     <Compile Include="Asteroid.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Constants.Secrets.cs" />
     <Compile Include="Extensions\ApplicationIconExtensions.cs" />
     <Compile Include="Extensions\BatteryLevelExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
+    <Compile Include="Extensions\IHockeyClientExtensions.cs" />
     <Compile Include="Extensions\IRandomAccessStreamExtensions.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\StorageFileExtensions.cs" />
@@ -145,6 +147,9 @@
     <EmbeddedResource Include="Properties\WinSteroid.Common.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="HockeySDK.UWP">
+      <Version>4.1.6</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.5</Version>
     </PackageReference>

@@ -537,4 +537,19 @@
   <data name="HomeScreenshotsCancelScreenshotTaskButton.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ScreenshotsBenchmarkDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialog.Title" xml:space="preserve">
+    <value>SCREENSHOTS SERVICE TEST</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialogGuideTextBlock.Text" xml:space="preserve">
+    <value>Before using Screenshots functionality, WinSteroid need to check if your devices are both compatible to take screenshots due to Bluetooth LE limitations. Click on "Start transfer test" to check it.</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialogStartTestButton.Content" xml:space="preserve">
+    <value>Start transfer test</value>
+  </data>
 </root>

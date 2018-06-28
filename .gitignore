@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /WinSteroid.sln.licenseheader
+/src/WinSteroid.Common/Constants.Secrets.cs

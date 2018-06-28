@@ -15,6 +15,7 @@
 
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
+using Microsoft.HockeyApp;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace WinSteroid.App
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            HockeyClient.Current.ConfigureWithDefaultParameters();
         }
 
         private bool IsRunning { get; set; }
@@ -97,8 +99,7 @@ namespace WinSteroid.App
 
                 var navigationService = SimpleIoc.Default.GetInstance<INavigationService>();
                 var viewModel = ViewModelLocator.GetCurrentViewModel(navigationService.CurrentPageKey);
-                var canGoBack = await viewModel.CanGoBack();
-                if (canGoBack)
+                if (await viewModel.CanGoBack())
                 {
                     rootFrame.GoBack();
                 }
@@ -245,30 +246,29 @@ namespace WinSteroid.App
             }
 
             var userNotifications = await notificationService.RetriveNotificationsAsync();
-            if (userNotifications.Count == 0)
-            {
-                notificationService.SaveLastNotificationIds(new string[0]);
-                return;
-            }
 
             var lastNotificationIds = notificationService.GetLastNotificationIds();
             if (lastNotificationIds.Count > 0)
             {
-                var removedNotificationIds = lastNotificationIds
-                    .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
-                    .ToArray();
+                var removedNotificationIds = userNotifications.IsNullOrEmpty() 
+                    ? lastNotificationIds 
+                    : lastNotificationIds
+                        .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
+                        .ToList();
 
-                if (removedNotificationIds?.Length > 0)
+                if (removedNotificationIds?.Count > 0)
                 {
                     foreach (var notificationId in removedNotificationIds)
                     {
                         await deviceService.RemoveNotificationAsync(notificationId);
                     }
                 }
+            }
 
-                userNotifications = userNotifications
-                    .Where(notification => lastNotificationIds.All(id => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
-                    .ToArray();
+            if (userNotifications.IsNullOrEmpty())
+            {
+                notificationService.SaveLastNotificationIds(new string[0]);
+                return;
             }
 
             foreach (var userNotification in userNotifications)

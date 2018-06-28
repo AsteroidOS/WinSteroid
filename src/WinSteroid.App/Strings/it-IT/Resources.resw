@@ -531,4 +531,19 @@
   <data name="HomeScreenshotsCancelScreenshotTaskButton.Content" xml:space="preserve">
     <value>Annulla</value>
   </data>
+  <data name="ScreenshotsBenchmarkDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Fatto</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialog.Title" xml:space="preserve">
+    <value>TEST SERVIZIO SCHERMATE</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialogGuideTextBlock.Text" xml:space="preserve">
+    <value>Prima di poter utilizzare la funzionalità Schermate, WinSteroid deve controllare se entrambi i dispositivi sono compatibili a causa di limitazioni del Bluetooth LE. Clicca su "Avvia test di trasferimento" per controllare.</value>
+  </data>
+  <data name="ScreenshotsBenchmarkDialogStartTestButton.Content" xml:space="preserve">
+    <value>Avvia test di trasferimento</value>
+  </data>
 </root>

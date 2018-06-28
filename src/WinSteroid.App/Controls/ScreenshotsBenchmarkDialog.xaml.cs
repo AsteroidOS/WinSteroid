@@ -13,16 +13,23 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.Common
+using Windows.UI.Xaml.Controls;
+using WinSteroid.App.ViewModels.Controls;
+
+namespace WinSteroid.App.Controls
 {
-    public static partial class Constants
+    public sealed partial class ScreenshotsBenchmarkDialog : ContentDialog
     {
-        public const string LastAppIdSettingKey = "lastAppId";
-        public const string LastNotificationIdsSettingKey = "lastNotificationIds";
-        public const string LastSavedDeviceIdSettingKey = "lastSavedDeviceId";
-        public const string LastSavedDeviceNameSettingKey = "lastSavedDeviceName";
-        public const string LastSavedBatteryTaskFrequencySettingKey = "lastSavedBatteryTaskFrequencyName";
-        public const string ScreenshotsServiceTestedSettingKey = "ScreenshotsServiceTested";
-        public const string ScreenshotsFolderName = "Screenshots";
+        public ScreenshotsBenchmarkDialogViewModel ViewModel
+        {
+            get { return this.DataContext as ScreenshotsBenchmarkDialogViewModel; }
+        }
+
+        public ScreenshotsBenchmarkDialog()
+        {
+            this.InitializeComponent();
+
+            this.ViewModel.Initialize();
+        }
     }
 }

@@ -45,6 +45,8 @@ namespace WinSteroid.App.ViewModels
                 SimpleIoc.Default.Register<Transfers.WallpapersPageViewModel>();
             }
 
+            SimpleIoc.Default.Register<Controls.ScreenshotsBenchmarkDialogViewModel>();
+
             SimpleIoc.Default.Register(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<Services.ApplicationsService>(createInstanceImmediately: true);
@@ -153,34 +155,27 @@ namespace WinSteroid.App.ViewModels
 
         public static Transfers.WatchFacePageViewModel TransfersWatchFace
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<Transfers.WatchFacePageViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<Transfers.WatchFacePageViewModel>(); }
         }
 
         public static Transfers.WallpapersPageViewModel TransfersWallpapers
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<Transfers.WallpapersPageViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<Transfers.WallpapersPageViewModel>(); }
         }
 
         public static Tutorials.MainPageViewModel Tutorials
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<Tutorials.MainPageViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<Tutorials.MainPageViewModel>(); }
         }
 
         public static Tutorials.UsbPageViewModel TutorialsUsb
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<Tutorials.UsbPageViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<Tutorials.UsbPageViewModel>(); }
+        }
+
+        public static Controls.ScreenshotsBenchmarkDialogViewModel ScreenshotsBenchmark
+        {
+            get { return ServiceLocator.Current.GetInstance<Controls.ScreenshotsBenchmarkDialogViewModel>(); }
         }
 
         public static void Clear<T>() where T : ViewModelBase

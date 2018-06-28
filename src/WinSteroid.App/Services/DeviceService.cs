@@ -45,7 +45,6 @@ namespace WinSteroid.App.Services
         private int? TotalSize = null;
         private byte[] TotalData = null;
         private int? Progress = null;
-        private int PacketCounter = 0;
         private List<int> PacketSizes = null;
         private Stopwatch Stopwatch;
 
@@ -285,20 +284,37 @@ namespace WinSteroid.App.Services
 
             if (!this.TotalSize.HasValue)
             {
-                var size = BitConverter.ToInt32(bytes, 0);
-                this.TotalData = new byte[size];
-                this.TotalSize = size;
-                this.Progress = 0;
-                this.PacketCounter = 0;
-                this.PacketSizes = new List<int>();
-                this.Stopwatch = new Stopwatch();
-                this.Stopwatch.Start();
+                try
+                {
+                    var size = BitConverter.ToInt32(bytes, 0);
+                    this.TotalData = new byte[size];
+                    this.TotalSize = size;
+                    this.Progress = 0;
+                    this.PacketSizes = new List<int>();
+                    this.Stopwatch = new Stopwatch();
+                    this.Stopwatch.Start();
+                }
+                catch (ArithmeticException)
+                {
+                    this.TotalSize = null;
+                    this.TotalData = null;
+                    this.Progress = null;
+                    this.PacketSizes = null;
+                    if (this.Stopwatch.IsRunning)
+                    {
+                        this.Stopwatch.Stop();
+                    }
+                    this.Stopwatch = null;
+
+                    sender.ValueChanged -= OnScreenshotContentBenchmarkCharacteristicValueChanged;
+                }
+
                 return;
             }
 
             this.PacketSizes.Add(bytes.Length);
 
-            if (this.PacketCounter < 100) return;
+            if (this.PacketSizes.Count < 100) return;
 
             this.Stopwatch.Stop();
 
@@ -311,7 +327,6 @@ namespace WinSteroid.App.Services
             this.TotalSize = null;
             this.TotalData = null;
             this.Progress = null;
-            this.PacketCounter = 0;
             this.PacketSizes = null;
             this.Stopwatch = null;
         }

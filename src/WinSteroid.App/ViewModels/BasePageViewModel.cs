@@ -13,16 +13,14 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Threading.Tasks;
 
 namespace WinSteroid.App.ViewModels
 {
-    public abstract class BasePageViewModel : ViewModelBase
+    public abstract class BasePageViewModel : BaseViewModel
     {
         public readonly IDialogService DialogService;
         public readonly INavigationService NavigationService;
@@ -31,28 +29,9 @@ namespace WinSteroid.App.ViewModels
         {
             this.DialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             this.NavigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            this.MessengerInstance = Messenger.Default;
         }
         
         public abstract Task<bool> CanGoBack();
-
-        public abstract void Initialize();
-
-        public abstract void Reset();
-
-        private string _busyMessage;
-        public string BusyMessage
-        {
-            get { return _busyMessage; }
-            set { Set(nameof(BusyMessage), ref _busyMessage, value); }
-        }
-        
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { Set(nameof(IsBusy), ref _isBusy, value); }
-        }
 
         private RelayCommand _backCommand;
         public RelayCommand BackCommand

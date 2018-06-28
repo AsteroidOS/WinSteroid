@@ -1,0 +1,84 @@
+﻿<!-- 
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ContentDialog
+    x:Class="WinSteroid.App.Controls.ScreenshotsBenchmarkDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Uid="ScreenshotsBenchmarkDialog"
+    FullSizeDesired="True"
+    IsPrimaryButtonEnabled="{x:Bind ViewModel.TestPassed, Mode=OneWay}"
+    DataContext="{Binding ScreenshotsBenchmark, Source={StaticResource Locator}}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   x:Uid="ScreenshotsBenchmarkDialogGuideTextBlock"
+                   TextWrapping="Wrap"
+                   Style="{ThemeResource BodyTextBlockStyle}" />
+
+        <Grid Grid.Row="1" 
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <Path Width="120" 
+                  Height="185" 
+                  Stretch="Fill"
+                  Fill="{x:Bind ViewModel.TestBrush, Mode=OneWay}"
+                  Data="F1 M 51,47L 36,61L 36,43L 28.25,50L 25.25,46.75L 35,38L 25.25,29.25L 28.25,26L 36,32L 36,14L 51,29L 42,38L 51,47 Z M 41,43L 41,50.5L 44.5,46.5L 41,43 Z M 41,33L 44.5,29.5L 41,25.3995L 41,33 Z " />
+
+            <FontIcon Glyph="{x:Bind ViewModel.TestGlyph, Mode=OneWay}"
+                      VerticalAlignment="Bottom"
+                      HorizontalAlignment="Right"
+                      FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                      FontSize="44"
+                      Margin="-12"
+                      FontWeight="Bold"
+                      Foreground="{x:Bind ViewModel.TestBrush, Mode=OneWay}" 
+                      Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeVisibilityConverter}}" />
+        </Grid>
+
+        <ProgressBar Grid.Row="2" 
+                     Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                     Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                     IsIndeterminate="True" />
+
+        <StackPanel Grid.Row="3"
+                    Margin="0,12,0,0">
+            <Button x:Uid="ScreenshotsBenchmarkDialogStartTestButton" 
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    Command="{x:Bind ViewModel.StartBenchmarkCommand, Mode=OneWay}" />
+
+            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}" 
+                       Foreground="Red"
+                       TextWrapping="Wrap"
+                       Visibility="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+                       Margin="{StaticResource DefaultStackPanelItemsVerticalMargin}" />
+        </StackPanel>
+    </Grid>
+</ContentDialog>

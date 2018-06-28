@@ -13,16 +13,19 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.Common
+using WinSteroid.Common;
+
+namespace Microsoft.HockeyApp
 {
-    public static partial class Constants
+    public static class IHockeyClientExtensions
     {
-        public const string LastAppIdSettingKey = "lastAppId";
-        public const string LastNotificationIdsSettingKey = "lastNotificationIds";
-        public const string LastSavedDeviceIdSettingKey = "lastSavedDeviceId";
-        public const string LastSavedDeviceNameSettingKey = "lastSavedDeviceName";
-        public const string LastSavedBatteryTaskFrequencySettingKey = "lastSavedBatteryTaskFrequencyName";
-        public const string ScreenshotsServiceTestedSettingKey = "ScreenshotsServiceTested";
-        public const string ScreenshotsFolderName = "Screenshots";
+        public static void ConfigureWithDefaultParameters(this IHockeyClient hockeyClient)
+        {
+            hockeyClient.Configure(Constants.HockeyAppId, new TelemetryConfiguration
+            {
+                EnableDiagnostics = true,
+                Collectors = WindowsCollectors.Session | WindowsCollectors.UnhandledException
+            });
+        }
     }
 }

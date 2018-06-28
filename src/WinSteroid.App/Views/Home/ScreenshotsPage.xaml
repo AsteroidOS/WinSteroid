@@ -50,7 +50,8 @@
 
         <StackPanel Grid.Row="1"
                     HorizontalAlignment="Stretch"
-                    Padding="12">
+                    Padding="12"
+                    IsHitTestVisible="{x:Bind ViewModel.ScreenshotServiceAvailable, Mode=OneWay}">
             <Grid Background="{ThemeResource AppBarBackgroundThemeBrush}"
                   HorizontalAlignment="Left"
                   Width="240"
