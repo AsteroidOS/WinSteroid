@@ -546,4 +546,16 @@
   <data name="ScreenshotsBenchmarkDialogStartTestButton.Content" xml:space="preserve">
     <value>Avvia test di trasferimento</value>
   </data>
+  <data name="ScpCredentialsDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Connetti</value>
+  </data>
+  <data name="ScpCredentialsDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="ScpCredentialsDialog.Title" xml:space="preserve">
+    <value>CONNESSIONE SCP</value>
+  </data>
+  <data name="ScpCredentialsDialogInvalidFieldsFirstSegmentMessage" xml:space="preserve">
+    <value>Campi non validi:</value>
+  </data>
 </root>

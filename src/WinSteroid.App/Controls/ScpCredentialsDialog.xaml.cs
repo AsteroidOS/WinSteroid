@@ -50,7 +50,7 @@ namespace WinSteroid.App.Controls
             if (!validForm)
             {
                 var stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine("Invalid fields:");
+                stringBuilder.AppendLine(ResourcesHelper.GetLocalizedString("ScpCredentialsDialogInvalidFieldsFirstSegmentMessage"));
 
                 if (!validHostIP)
                 {
