@@ -558,4 +558,7 @@
   <data name="ScpCredentialsDialogInvalidFieldsFirstSegmentMessage" xml:space="preserve">
     <value>Campi non validi:</value>
   </data>
+  <data name="SettingsWallpapersUnsupportedImageErrorMessage" xml:space="preserve">
+    <value>L'immagine selezionata non è quadrata.</value>
+  </data>
 </root>

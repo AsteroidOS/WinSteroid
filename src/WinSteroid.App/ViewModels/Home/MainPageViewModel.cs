@@ -91,14 +91,9 @@ namespace WinSteroid.App.ViewModels.Home
             if (!this.MenuOptions.IsNullOrEmpty()) return;
 
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainSettingsItemLabel"), Command = SettingsCommand });
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainScreenshotsItemLabel"), Command = ScreenshotsCommand });
-
-            if (!ApiHelper.IsMobileSystem())
-            {
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWallpapersItemLabel"), Command = WallpapersCommand });
-                this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWatchFacesItemLabel"), Command = WatchFacesCommand });
-            }
-
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainScreenshotsItemLabel"), Command = ScreenshotsCommand });        
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWallpapersItemLabel"), Command = WallpapersCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWatchFacesItemLabel"), Command = WatchFacesCommand });
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainTutorialsItemLabel"), Command = TutorialsCommand });
         }
 

@@ -128,11 +128,15 @@ namespace WinSteroid.App.ViewModels.Transfers
 
             if (imageProperties.Width != imageProperties.Height)
             {
+                await this.DialogService.ShowError(
+                    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageErrorMessage"),
+                    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageTitle"));
+
                 this.IsBusy = false;
                 return;
 
                 //var cropImageTaskAllowed = await this.DialogService.ShowConfirmMessage(
-                //    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageMessage"), 
+                //    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageMessage"),
                 //    ResourcesHelper.GetLocalizedString("SettingsWallpapersUnsupportedImageTitle"));
                 //if (!cropImageTaskAllowed)
                 //{
@@ -140,7 +144,7 @@ namespace WinSteroid.App.ViewModels.Transfers
                 //    return;
                 //}
 
-                //file = await ImageHelper.CropImageFileAsync(file, cropWidthPixels: DefaultImageSize, cropHeightPixels: DefaultImageSize, ellipticalCrop: false);
+                //file = await ImageHelper.CropImageFileAsync(file, cropWidthPixels: DefaultImageSize, cropHeightPixels: DefaultImageSize);
             }
 
             this.SelectedFile = file;

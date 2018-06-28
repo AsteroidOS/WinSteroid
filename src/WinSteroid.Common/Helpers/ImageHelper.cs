@@ -95,29 +95,31 @@ namespace WinSteroid.Common.Helpers
             }
         }
 
-        public static Task<StorageFile> CropImageFileAsync(StorageFile storageFile, int cropWidthPixels, int cropHeightPixels, bool ellipticalCrop)
+        public async static Task<StorageFile> CropImageFileAsync(StorageFile inputFile, int cropWidthPixels, int cropHeightPixels)
         {
-            throw new NotImplementedException();
-            //var destinationToken = SharedStorageAccessManager.AddFile(storageFile);
+            var outputFile = await ApplicationData.Current.TemporaryFolder.CreateFileAsync("Cropped_" + inputFile.Name, CreationCollisionOption.ReplaceExisting);
 
-            //var inputData = new ValueSet
-            //{
-            //    { "CropWidthPixels", cropWidthPixels },
-            //    { "CropHeightPixels", cropHeightPixels },
-            //    { "EllipticalCrop", ellipticalCrop },
-            //    { "ShowCamera", false },
-            //    { "DestinationToken", destinationToken }
-            //};
+            var inputToken = SharedStorageAccessManager.AddFile(inputFile);
+            var destinationToken = SharedStorageAccessManager.AddFile(outputFile);
 
-            //var launcherOptions = new LauncherOptions
-            //{
-            //    TargetApplicationPackageFamilyName = PhotosApplicationPackageName
-            //};
+            var inputData = new ValueSet
+            {
+                { "InputToken", inputToken },
+                { "DestinationToken", destinationToken },
+                { "CropWidthPixels", cropWidthPixels },
+                { "CropHeightPixels", cropHeightPixels },
+                { "EllipticalCrop", false }
+            };
 
-            //var launcherResult = await Launcher.LaunchUriForResultsAsync(new Uri(PhotosApplicationCropUri), launcherOptions, inputData);
-            //if (launcherResult.Status != LaunchUriStatus.Success) return null;
+            var launcherOptions = new LauncherOptions
+            {
+                TargetApplicationPackageFamilyName = "Microsoft.Windows.Photos_8wekyb3d8bbwe"
+            };
 
-            //return storageFile;
+            var launcherResult = await Launcher.LaunchUriForResultsAsync(new Uri("microsoft.windows.photos.crop:"), launcherOptions, inputData);
+            if (launcherResult.Status != LaunchUriStatus.Success) return null;
+
+            return outputFile;
         }
     }
 }
