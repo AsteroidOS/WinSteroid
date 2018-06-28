@@ -64,13 +64,6 @@ namespace WinSteroid.App.ViewModels.Transfers
             set { Set(nameof(IsUploading), ref _isUploading, value); }
         }
 
-        private int _uploadProgress;
-        public int UploadProgress
-        {
-            get { return _uploadProgress; }
-            set { Set(nameof(UploadProgress), ref _uploadProgress, value); }
-        }
-
         private bool _useRoundPreview;
         public bool UseRoundPreview
         {
@@ -110,8 +103,12 @@ namespace WinSteroid.App.ViewModels.Transfers
         {
             this.IsBusy = true;
 
-            var file = await FilesHelper.PickFileAsync(".img", ".png");
-            if (file == null) return;
+            var file = await FilesHelper.PickFileAsync(".jpeg", ".jpg");
+            if (file == null)
+            {
+                this.IsBusy = false;
+                return;
+            }
 
             ImageProperties imageProperties = null;
 
@@ -189,7 +186,6 @@ namespace WinSteroid.App.ViewModels.Transfers
                 using (var scpClient = SecureConnectionsFactory.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
                 {
                     scpClient.ErrorOccurred += OnClientErrorOccured;
-                    scpClient.Uploading += OnClientUploading;
 
                     var bytes = await ImageHelper.EncodeToSquareJpegImageAsync(this.SelectedFile, DefaultImageSize);
 
@@ -198,10 +194,9 @@ namespace WinSteroid.App.ViewModels.Transfers
                         memoryStream.Write(bytes, 0, bytes.Length);
                         memoryStream.Seek(0, SeekOrigin.Begin);
 
-                        scpClient.Upload(memoryStream, "/usr/share/asteroid-launcher/wallpapers/" + this.SelectedFile.Name);
+                        scpClient.Upload(memoryStream, "/usr/share/asteroid-launcher/wallpapers/WinSteroid_" + this.SelectedFile.Name);
                     }
-
-                    scpClient.Uploading -= OnClientUploading;
+                    
                     scpClient.ErrorOccurred -= OnClientErrorOccured;
                 }
 
@@ -213,7 +208,6 @@ namespace WinSteroid.App.ViewModels.Transfers
             }
 
             this.IsUploading = false;
-            this.UploadProgress = 0;
 
             if (successfulUpload)
             {
@@ -221,11 +215,6 @@ namespace WinSteroid.App.ViewModels.Transfers
             }
 
             this.IsBusy = false;
-        }
-
-        private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)
-        {
-            this.UploadProgress = Convert.ToInt32(((args.Size - args.Uploaded) * 100) / args.Size);
         }
 
         private async void OnClientErrorOccured(object sender, Renci.SshNet.Common.ExceptionEventArgs args)

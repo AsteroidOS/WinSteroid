@@ -100,22 +100,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                             Visibility="{x:Bind ViewModel.SelectedFile, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
                 </StackPanel>
 
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                <TextBlock x:Uid="SettingsWallpapersInstallationProgressRun"
+                           Style="{ThemeResource BodyTextBlockStyle}"
                            Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}">
-                    <Run x:Uid="SettingsWallpapersInstallationProgressRun" />
-                    <Run Text="{x:Bind ViewModel.UploadProgress}" />
-                </TextBlock>
-                <Grid Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ProgressBar IsIndeterminate="True"
-                                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                           Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
 
-                    <ProgressBar Value="{x:Bind ViewModel.UploadProgress, Mode=OneWay}" 
-                                 Minimum="0"
-                                 Maximum="100"
-                                 Background="Transparent"
-                                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                </Grid>
+                <ProgressBar IsIndeterminate="True"
+                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                             Visibility="{x:Bind ViewModel.IsUploading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

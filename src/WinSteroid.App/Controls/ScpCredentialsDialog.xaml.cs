@@ -13,6 +13,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System.Net;
 using System.Text;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.Common.Helpers;
@@ -42,7 +43,7 @@ namespace WinSteroid.App.Controls
 
         private void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var validHostIP = IPHelper.IsValid(this.HostIP);
+            var validHostIP = IPAddress.TryParse(this.HostIP, out IPAddress ipAddress);
             var validUsername = !string.IsNullOrWhiteSpace(this.Username);
             var validPassword = true;
 

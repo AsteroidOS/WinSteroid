@@ -48,13 +48,6 @@ namespace WinSteroid.App.ViewModels.Transfers
 
         }
 
-        private int _uploadProgress;
-        public int UploadProgress
-        {
-            get { return _uploadProgress; }
-            set { Set(nameof(UploadProgress), ref _uploadProgress, value); }
-        }
-
         private bool _isUploading;
         public bool IsUploading
         {
@@ -138,7 +131,6 @@ namespace WinSteroid.App.ViewModels.Transfers
                 using (var scpClient = SecureConnectionsFactory.CreateScpClient(scpCredentialsDialog.HostIP, scpCredentialsDialog.Username, scpCredentialsDialog.Password))
                 {
                     scpClient.ErrorOccurred += OnClientErrorOccured;
-                    scpClient.Uploading += OnClientUploading;
 
                     using (var randomAccessStream = await this.SelectedFile.OpenReadAsync())
                     {
@@ -147,8 +139,7 @@ namespace WinSteroid.App.ViewModels.Transfers
                             scpClient.Upload(stream, "/usr/share/asteroid-launcher/watchfaces/" + this.SelectedFile.Name);
                         }
                     }
-
-                    scpClient.Uploading -= OnClientUploading;
+                    
                     scpClient.ErrorOccurred -= OnClientErrorOccured;
                 }
 
@@ -160,7 +151,6 @@ namespace WinSteroid.App.ViewModels.Transfers
             }
 
             this.IsUploading = false;
-            this.UploadProgress = 0;
 
             if (successfulUpload)
             {
@@ -222,11 +212,6 @@ namespace WinSteroid.App.ViewModels.Transfers
         private void GoToUsbTutorial()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.TutorialsUsb));
-        }
-
-        private void OnClientUploading(object sender, Renci.SshNet.Common.ScpUploadEventArgs args)
-        {
-            this.UploadProgress = Convert.ToInt32(((args.Size - args.Uploaded) * 100) / args.Size);
         }
 
         private async void OnClientErrorOccured(object sender, Renci.SshNet.Common.ExceptionEventArgs args)
