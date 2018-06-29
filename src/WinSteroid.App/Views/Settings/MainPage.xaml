@@ -312,21 +312,6 @@
                                  Visibility="{x:Bind ViewModel.ShowCustomDateTimeOptions, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                  Margin="0,12,0,0" />-->
 
-                            <TextBlock x:Uid="SettingsMainSecureConnectionsTextBlock"
-                                       Style="{ThemeResource BaseTextBlockStyle}"
-                                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
-
-                            <StackPanel Orientation="Horizontal">
-                                <Button x:Uid="SettingsMainRemoveCredentialsButton"
-                                        Padding="12,4"
-                                        Command="{x:Bind ViewModel.ResetScpCredentialsCommand, Mode=OneWay}" />
-
-                                <SymbolIcon Symbol="Accept" 
-                                            Margin="8,4"
-                                            Visibility="{x:Bind ViewModel.ScpCredentialsRemoved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                            </StackPanel>
-
                             <TextBlock Text="{x:Bind ViewModel.ApplicationName, Mode=OneWay}"
                                        Style="{ThemeResource BaseTextBlockStyle}"
                                        Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />

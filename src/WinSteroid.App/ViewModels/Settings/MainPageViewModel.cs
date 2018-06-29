@@ -204,14 +204,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
             this.EnableUserNotifications = false;
         }
-
-        private bool _scpCredentialsRemoved;
-        public bool ScpCredentialsRemoved
-        {
-            get { return _scpCredentialsRemoved; }
-            set { Set(nameof(ScpCredentialsRemoved), ref _scpCredentialsRemoved, value); }
-        }
-
+        
         private bool _showCustomDateTimeOptions;
         public bool ShowCustomDateTimeOptions
         {
@@ -425,27 +418,6 @@ namespace WinSteroid.App.ViewModels.Settings
         private void GoToHome()
         {
             this.NavigationService.GoBack();
-        }
-
-        private RelayCommand _resetScpCredentialsCommand;
-        public RelayCommand ResetScpCredentialsCommand
-        {
-            get
-            {
-                if (_resetScpCredentialsCommand == null)
-                {
-                    _resetScpCredentialsCommand = new RelayCommand(ResetScpCredentials);
-                }
-
-                return _resetScpCredentialsCommand;
-            }
-        }
-
-        private void ResetScpCredentials()
-        {
-            this.ScpCredentialsRemoved = false;
-            SettingsHelper.RemoveAllScpCredentials();
-            this.ScpCredentialsRemoved = true;
         }
 
         private async void ManageResetMessageResult(bool confirmed)
