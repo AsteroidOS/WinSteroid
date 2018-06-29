@@ -246,38 +246,13 @@ namespace WinSteroid.App
             }
 
             var userNotifications = await notificationService.RetriveNotificationsAsync();
-
-            var lastNotificationIds = notificationService.GetLastNotificationIds();
-            if (lastNotificationIds.Count > 0)
-            {
-                var removedNotificationIds = userNotifications.IsNullOrEmpty() 
-                    ? lastNotificationIds 
-                    : lastNotificationIds
-                        .Where(id => userNotifications.All(notification => !StringExtensions.OrdinalIgnoreCaseEquals(notification.Id.ToString(), id)))
-                        .ToList();
-
-                if (removedNotificationIds?.Count > 0)
-                {
-                    foreach (var notificationId in removedNotificationIds)
-                    {
-                        await deviceService.RemoveNotificationAsync(notificationId);
-                    }
-                }
-            }
-
-            if (userNotifications.IsNullOrEmpty())
-            {
-                notificationService.SaveLastNotificationIds(new string[0]);
-                return;
-            }
+            if (userNotifications.IsNullOrEmpty()) return;
 
             foreach (var userNotification in userNotifications)
             {
                 await deviceService.InsertNotificationAsync(userNotification);
             }
-
-            notificationService.SaveLastNotificationIds(userNotifications);
-
+            
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
         }
 

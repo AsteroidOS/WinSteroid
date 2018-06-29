@@ -143,7 +143,6 @@
     <Compile Include="ViewModels\Controls\ScreenshotsBenchmarkDialogViewModel.cs" />
     <Compile Include="ViewModels\Home\ScreenshotsPageViewModel.cs" />
     <Compile Include="ViewModels\MenuOptionViewModel.cs" />
-    <Compile Include="ViewModels\NotificationItemViewModel.cs" />
     <Compile Include="ViewModels\Settings\ApplicationPageViewModel.cs" />
     <Compile Include="ViewModels\BasePageViewModel.cs" />
     <Compile Include="ViewModels\Settings\ApplicationsPageViewModel.cs" />

@@ -17,12 +17,9 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight.Views;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.UI.Notifications;
-using Windows.UI.Notifications.Management;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -63,9 +60,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeMainInitializingMessage");
 
             this.DeviceName = this.DeviceService.Current.Name;
-
-            this.Notifications = new ObservableCollection<NotificationItemViewModel>();
-
+            
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
 
@@ -117,39 +112,7 @@ namespace WinSteroid.App.ViewModels.Home
             get { return _deviceName; }
             set { Set(nameof(DeviceName), ref _deviceName, value); }
         }
-
-        private bool _showNotificationsList;
-        public bool ShowNotificationsList
-        {
-            get { return _showNotificationsList; }
-            set { Set(nameof(ShowNotificationsList), ref _showNotificationsList, value); }
-        }
-
-        private bool _showEmptyNotificationsText;
-        public bool ShowEmptyNotificationsText
-        {
-            get { return _showEmptyNotificationsText; }
-            set { Set(nameof(ShowEmptyNotificationsText), ref _showEmptyNotificationsText, value); }
-        }
-
-        private void ManageShowNotificationsListSelection()
-        {
-            if (this.ShowNotificationsList)
-            {
-                this.RegisterNotificationsHandlers();
-                return;
-            }
-
-            this.UnregisterNotificationsHandlers();
-        }
-
-        private ObservableCollection<NotificationItemViewModel> _notifications;
-        public ObservableCollection<NotificationItemViewModel> Notifications
-        {
-            get { return _notifications; }
-            set { Set(nameof(Notifications), ref _notifications, value); }
-        }
-
+        
         private RelayCommand _settingsCommand;
         public RelayCommand SettingsCommand
         {
@@ -275,18 +238,6 @@ namespace WinSteroid.App.ViewModels.Home
             });
         }
 
-        private void RegisterNotificationsHandlers()
-        {
-            if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
-
-            this.NotificationsService.RegisterNotificationsChangedHandler(OnNotificationChanged);
-        }
-
-        private void UnregisterNotificationsHandlers()
-        {
-            this.NotificationsService.UnregisterNotificationsChangedHandler();
-        }
-
         private async Task InizializeScreenshotContentHandlersAsync()
         {
             var result = await this.DeviceService.RegisterToScreenshotContentService();
@@ -327,69 +278,6 @@ namespace WinSteroid.App.ViewModels.Home
                 this.BatteryPercentage = newPercentage;
                 this.BatteryLevel = BatteryHelper.Parse(newPercentage);
             });
-        }
-
-        private void OnNotificationChanged(UserNotificationListener sender, UserNotificationChangedEventArgs args)
-        {
-            this.UpdateNotificationsList();
-        }
-
-        private async void UpdateNotificationsList()
-        {
-            if (!this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName)) return;
-
-            await DispatcherHelper.RunAsync(async () =>
-            {
-                var notifications = await this.NotificationsService.RetriveNotificationsAsync();
-                if (notifications.IsNullOrEmpty())
-                {
-                    this.Notifications.Clear();
-                    this.ShowEmptyNotificationsText = true;
-                    return;
-                }
-
-                foreach (var notification in this.Notifications)
-                {
-                    if (notifications.All(n => n.Id.ToString() != notification.Id))
-                    {
-                        this.Notifications.Remove(notification);
-                    }
-                }
-
-                foreach (var notification in notifications)
-                {
-                    var existingNotification = this.Notifications.Any(n => n.Id == notification.Id.ToString());
-                    if (existingNotification) continue;
-
-                    var application = this.ApplicationsService.GetApplicationPreferenceByAppId(notification.AppInfo.PackageFamilyName);
-
-                    var packageIcon = await ImageHelper.ConvertToImageAsync(notification.AppInfo.DisplayInfo);
-
-                    this.Notifications.Insert(0, new NotificationItemViewModel
-                    {
-                        Id = notification.Id.ToString(),
-                        AppId = notification.AppInfo.PackageFamilyName,
-                        PackageName = notification.AppInfo.DisplayInfo.DisplayName,
-                        Title = notification.GetTitle(),
-                        Body = notification.GetBody(),
-                        //LaunchUri = notification.GetLaunchUri(),
-                        Icon = (application?.Icon ?? ApplicationIcon.Alert).GetGlyph(),
-                        PackageIcon = packageIcon
-                    });
-                }
-
-                this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
-            });
-        }
-
-        public void UpdateNotificationsOptions()
-        {
-            this.ShowNotificationsList = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
-            this.ShowEmptyNotificationsText = this.Notifications.Count == 0;
-
-            this.ManageShowNotificationsListSelection();
-
-            this.UpdateNotificationsList();
         }
     }
 }

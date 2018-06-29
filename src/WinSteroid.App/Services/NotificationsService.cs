@@ -15,15 +15,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 using Windows.UI.Notifications;
 using Windows.UI.Notifications.Management;
 using Windows.UI.ViewManagement;
-using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.Services
@@ -80,47 +77,16 @@ namespace WinSteroid.App.Services
             return UserNotificationListener.GetNotificationsAsync(NotificationKinds.Toast);
         }
 
-        public void SaveLastNotificationIds(IEnumerable<UserNotification> notifications)
-        {
-            if (notifications == null)
-            {
-                notifications = new UserNotification[0];
-            }
-
-            this.SaveLastNotificationIds(notifications.Select(notification => notification.Id.ToString()));
-        }
-
-        public void SaveLastNotificationIds(IEnumerable<string> ids)
-        {
-            if (ids == null)
-            {
-                ids = new string[0];
-            }
-
-            var value = ids.Count() > 0 ? string.Join(";", ids) : string.Empty;
-
-            SettingsHelper.SetValue(Constants.LastNotificationIdsSettingKey, value);
-        }
-
-        public IReadOnlyList<string> GetLastNotificationIds()
-        {
-            var value = SettingsHelper.GetValue(Constants.LastNotificationIdsSettingKey, string.Empty);
-            if (string.IsNullOrWhiteSpace(value)) return new string[0];
-
-            return value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
         public void ManageNotificationAction(IBuffer buffer)
         {
-            var bytes = new byte[buffer.Length];
+            //var bytes = new byte[buffer.Length];
 
-            DataReader.FromBuffer(buffer).ReadBytes(bytes);
+            //DataReader.FromBuffer(buffer).ReadBytes(bytes);
 
-            if (bytes?.Length > 0)
-            {
-                var @string = Encoding.UTF8.GetString(bytes);
-                ToastsHelper.Show("Test action", @string);
-            }
+            //if (bytes?.Length > 0)
+            //{
+            //    var @string = Encoding.UTF8.GetString(bytes);
+            //}
         }
 
         public Task ShowBusySystemTrayAsync(string text)

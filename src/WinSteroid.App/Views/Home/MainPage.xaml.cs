@@ -13,8 +13,6 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.ViewModels;
@@ -44,29 +42,12 @@ namespace WinSteroid.App.Views.Home
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.ViewModel.UpdateNotificationsOptions();
-
             if (this.Content is Grid grid)
             {
                 grid.UpdateLayout();
             }
 
             base.OnNavigatedTo(e);
-        }
-
-        private async void OnNotificationClick(object sender, ItemClickEventArgs e)
-        {
-            if (!(e.ClickedItem is NotificationItemViewModel notification)) return;
-
-            if (notification.LaunchUri == null) return;
-            
-            var launcherOptions = new LauncherOptions
-            {
-                TreatAsUntrusted = false,
-                TargetApplicationPackageFamilyName = notification.AppId
-            };
-
-            await Launcher.LaunchUriAsync(notification.LaunchUri, launcherOptions);
         }
     }
 }
