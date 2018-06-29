@@ -75,7 +75,6 @@ namespace WinSteroid.App.Services
                 var bluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
                 if (bluetoothDevice == null)
                 {
-                    //DISAPPEARED DEVICE
                     return ResourcesHelper.GetLocalizedString("DeviceServiceDisappearedDeviceError");
                 }
                 
@@ -83,16 +82,15 @@ namespace WinSteroid.App.Services
                 if (timeServicesResult.Status != GattCommunicationStatus.Success 
                     || (timeServicesResult.Status == GattCommunicationStatus.Success && timeServicesResult.Services.Count < 1))
                 {
-                    //WRONG DEVICE
                     return ResourcesHelper.GetLocalizedString("DeviceServiceNoAsteroidDeviceError");
                 }
 
                 this.BluetoothDevice = bluetoothDevice;
+                this.BluetoothDevice.ConnectionStatusChanged += OnBluetoothDeviceConnectionStatusChanged;
                 this.Current = bluetoothDevice.DeviceInformation;
             }
             catch (Exception exception)
             {
-                //ERROR
                 var message = ResourcesHelper.GetLocalizedString("DeviceServiceGenericConnectionError");
                 
                 if (App.InDebugMode)
@@ -104,6 +102,11 @@ namespace WinSteroid.App.Services
             }
 
             return this.BluetoothDevice != null && this.Current != null ? string.Empty : ResourcesHelper.GetLocalizedString("DeviceServiceConnectionFailedError");
+        }
+
+        private void OnBluetoothDeviceConnectionStatusChanged(BluetoothLEDevice sender, object args)
+        {
+            Messenger.Default.Send(new Messages.DeviceConnectionStatusMessage(sender.ConnectionStatus == BluetoothConnectionStatus.Connected));
         }
 
         public async Task<PairingResult> PairAsync()
@@ -148,6 +151,7 @@ namespace WinSteroid.App.Services
 
             if (this.BluetoothDevice != null)
             {
+                this.BluetoothDevice.ConnectionStatusChanged -= OnBluetoothDeviceConnectionStatusChanged;
                 this.BluetoothDevice.Dispose();
                 this.BluetoothDevice = null;
                 this.Current = null;
@@ -254,10 +258,8 @@ namespace WinSteroid.App.Services
             var devicePicker = new DevicePicker();
             devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(false));
             devicePicker.Filter.SupportedDeviceSelectors.Add(BluetoothLEDevice.GetDeviceSelectorFromPairingState(true));
-
-            var rect = rootFrame.GetPickerRect();
-
-            return devicePicker.PickSingleDeviceAsync(rect);
+            
+            return devicePicker.PickSingleDeviceAsync(rootFrame.GetPickerRect());
         }
 
         public async Task<bool> RegisterToScreenshotContentServiceBenchmark()
@@ -300,7 +302,7 @@ namespace WinSteroid.App.Services
                     this.TotalData = null;
                     this.Progress = null;
                     this.PacketSizes = null;
-                    if (this.Stopwatch.IsRunning)
+                    if (this.Stopwatch?.IsRunning ?? false)
                     {
                         this.Stopwatch.Stop();
                     }
