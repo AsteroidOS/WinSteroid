@@ -20,6 +20,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using WinSteroid.App.Messages;
 using WinSteroid.App.Services;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
@@ -64,15 +65,17 @@ namespace WinSteroid.App.ViewModels.Home
             var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
 
-            this.InitializeBatteryLevelHandlersAsync();
-
             this.BatteryPercentage = newPercentage;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+
+            await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
 
             App.RemoveWelcomePageFromBackStack();
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
+
+            this.MessengerInstance.Register<Messages.DeviceBatteryMessage>(this, OnDeviceBatteryPercentageChanged);
         }
 
         public override void Reset()
@@ -215,56 +218,22 @@ namespace WinSteroid.App.ViewModels.Home
             {
                 if (_updateBatteryPercentageCommand == null)
                 {
-                    _updateBatteryPercentageCommand = new RelayCommand(UpdateBatteryPercentage);
+                    _updateBatteryPercentageCommand = new RelayCommand(() => UpdateBatteryPercentage());
                 }
 
                 return _updateBatteryPercentageCommand;
             }
         }
 
-        private async void UpdateBatteryPercentage()
+        private async void UpdateBatteryPercentage(int? newPercentage = null)
         {
             await DispatcherHelper.RunAsync(async () =>
             {
-                this.IsBusy = true;
+                if (!newPercentage.HasValue)
+                {
+                    newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+                }
 
-                var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
-                var oldPercentage = this.BatteryPercentage;
-
-                this.BatteryPercentage = newPercentage;
-                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-                this.IsBusy = false;
-            });
-        }
-
-        private async Task InizializeScreenshotContentHandlersAsync()
-        {
-            var result = await this.DeviceService.RegisterToScreenshotContentService();
-            if (!result)
-            {
-                await this.DialogService.ShowMessage(
-                    ResourcesHelper.GetLocalizedString("HomeMainScreenshotServiceHandlersRegistrationFailedError"), 
-                    ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
-            }
-        }
-
-        private async void InitializeBatteryLevelHandlersAsync()
-        {
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
-            if (characteristic == null) return;
-
-            var result = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
-            if (result != GattCommunicationStatus.Success) return;
-
-            characteristic.ValueChanged += OnBatteryLevelValueChanged;
-        }
-
-        private async void OnBatteryLevelValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
-        {
-            await DispatcherHelper.RunAsync(() =>
-            {
-                var newPercentage = BatteryHelper.GetPercentage(args.CharacteristicValue);
                 if (newPercentage > 0)
                 {
                     TilesHelper.UpdateBatteryTile(newPercentage);
@@ -275,9 +244,11 @@ namespace WinSteroid.App.ViewModels.Home
                 }
 
                 var oldPercentage = this.BatteryPercentage;
-                this.BatteryPercentage = newPercentage;
-                this.BatteryLevel = BatteryHelper.Parse(newPercentage);
+                this.BatteryPercentage = newPercentage.Value;
+                this.BatteryLevel = BatteryHelper.Parse(newPercentage.Value);
             });
         }
+
+        private void OnDeviceBatteryPercentageChanged(DeviceBatteryMessage message) => UpdateBatteryPercentage(message.Percentage);
     }
 }

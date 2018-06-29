@@ -180,6 +180,15 @@ namespace WinSteroid.App.Services
                 this.CachedCharacteristics.Add(characteristic);
             }
 
+            if (characteristic.Uuid == GattCharacteristicUuids.BatteryLevel)
+            {
+                var result = await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+                if (result == GattCommunicationStatus.Success)
+                {
+                    characteristic.ValueChanged += OnBatteryLevelValueChanged;
+                }
+            }
+
             return characteristic;
         }
 
@@ -190,6 +199,11 @@ namespace WinSteroid.App.Services
 
             this.CachedCharacteristics.Remove(cachedCharacteristic);
             return true;
+        }
+
+        private void OnBatteryLevelValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        {
+            Messenger.Default.Send(new Messages.DeviceBatteryMessage(BatteryHelper.GetPercentage(args.CharacteristicValue)));
         }
 
         private async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
