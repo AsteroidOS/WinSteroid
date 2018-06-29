@@ -223,10 +223,24 @@ namespace WinSteroid.App.Services
             var characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
             if (characteristic == null) return 0;
 
-            var valueResult = await characteristic.ReadValueAsync(BluetoothCacheMode.Uncached);
-            if (valueResult.Status != GattCommunicationStatus.Success) return 0;
+            GattReadResult valueResult = null;
 
-            return BatteryHelper.GetPercentage(valueResult.Value);
+            try
+            {
+                valueResult = await characteristic.ReadValueAsync(BluetoothCacheMode.Uncached);
+                if (valueResult.Status != GattCommunicationStatus.Success) return 0;
+            }
+            catch
+            {
+                this.RemoveGattCharacteristic(GattCharacteristicUuids.BatteryLevel);
+                characteristic = await this.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
+                if (characteristic == null) return 0;
+
+                valueResult = await characteristic.ReadValueAsync(BluetoothCacheMode.Uncached);
+                if (valueResult.Status != GattCommunicationStatus.Success) return 0;
+            }
+
+            return BatteryHelper.GetPercentage(valueResult?.Value);
         }
 
         public Task<bool> SendMediaCommandAsync(MediaCommandType mediaCommand)

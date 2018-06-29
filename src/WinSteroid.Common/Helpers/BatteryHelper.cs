@@ -23,6 +23,8 @@ namespace WinSteroid.Common.Helpers
     {
         public static int GetPercentage(IBuffer buffer)
         {
+            if (buffer == null) return 0;
+
             var bytes = new byte[buffer.Length];
             DataReader.FromBuffer(buffer).ReadBytes(bytes);
 
