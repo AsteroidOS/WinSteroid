@@ -28,6 +28,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
 using WinSteroid.App.ViewModels;
+using WinSteroid.Common;
 using WinSteroid.Common.Background;
 using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
@@ -170,13 +171,16 @@ namespace WinSteroid.App
             var errorMessage = await DeviceManager.ConnectAsync();
             if (!string.IsNullOrWhiteSpace(errorMessage)) return;
 
+            var characteristic = await DeviceManager.GetGattCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid);
+            if (characteristic == null) return;
+
             var userNotifications = await NotificationsManager.RetriveNotificationsAsync();
             if (userNotifications.IsNullOrEmpty()) return;
 
             foreach (var userNotification in userNotifications)
             {
                 var application = applicationsService.GetApplicationPreferenceByAppId(userNotification.AppInfo.PackageFamilyName);
-                await DeviceManager.InsertNotificationAsync(userNotification, application);
+                await DeviceManager.InsertNotificationAsync(characteristic, userNotification, application);
             }
             
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);

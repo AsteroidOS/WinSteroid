@@ -172,6 +172,12 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
+    <PackageReference Include="runtime.native.System.IO.Compression">
+      <Version>4.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="SSH.NET">
+      <Version>2016.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="CommonBuild.props" />

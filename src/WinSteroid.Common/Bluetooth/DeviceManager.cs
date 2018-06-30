@@ -165,9 +165,14 @@ namespace WinSteroid.Common.Bluetooth
             return new PairingResult(ResourcesHelper.GetLocalizedString("DeviceServicePairingOperationDeniedOrFailed"));
         }
 
-        public static async Task<bool> InsertNotificationAsync(UserNotification userNotification, ApplicationPreference application)
+        public static Task<bool> InsertNotificationAsync(
+            GattCharacteristic characteristic,
+            UserNotification userNotification, 
+            ApplicationPreference application)
         {
-            if (application != null && application.Muted) return true;
+            if (userNotification?.AppInfo == null) return Task.FromResult(false);
+
+            if (application != null && application.Muted) return Task.FromResult(true);
 
             var xmlNotification = AsteroidHelper.CreateInsertNotificationCommandXml(
                 packageName: userNotification.AppInfo.PackageFamilyName,
@@ -177,10 +182,10 @@ namespace WinSteroid.Common.Bluetooth
                 summary: userNotification.GetTitle(),
                 body: userNotification.GetBody(),
                 vibrationLevel: application?.Vibration ?? VibrationLevel.None);
-            
-            var characteristic = await BluetoothDevice.GetGattCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid);
 
-            return await characteristic.WriteByteArrayToCharacteristicAsync(Encoding.UTF8.GetBytes(xmlNotification));
+            if (string.IsNullOrWhiteSpace(xmlNotification)) return Task.FromResult(false);
+            
+            return characteristic.WriteByteArrayToCharacteristicAsync(Encoding.UTF8.GetBytes(xmlNotification));
         }
 
         public static async Task<bool> RemoveNotificationAsync(string notificationId)
@@ -394,6 +399,11 @@ namespace WinSteroid.Common.Bluetooth
             Progress = null;
 
             Messenger.Default.Send(new Messages.ScreenshotAcquiredMessage(fileName));
+        }
+
+        public static Task<GattCharacteristic> GetGattCharacteristicAsync(Guid characteristicUuid)
+        {
+            return BluetoothDevice.GetGattCharacteristicAsync(characteristicUuid);
         }
 
         public static async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
