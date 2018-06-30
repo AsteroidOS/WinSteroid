@@ -98,7 +98,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
                 Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                 IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}"
                 Visibility="{x:Bind ViewModel.ConnectionFailed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                Command="{x:Bind ViewModel.PairCommand, Mode=OneWay}" />
+                Command="{x:Bind ViewModel.StartSearchCommand, Mode=OneWay}" />
 
         <ProgressRing Grid.Row="1"
                       Width="116"

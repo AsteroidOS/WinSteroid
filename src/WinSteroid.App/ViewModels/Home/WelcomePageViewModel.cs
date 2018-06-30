@@ -132,27 +132,6 @@ namespace WinSteroid.App.ViewModels.Home
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.Tutorials));
         }
 
-        private RelayCommand _pairCommand;
-        public RelayCommand PairCommand
-        {
-            get
-            {
-                if (_pairCommand == null)
-                {
-                    _pairCommand = new RelayCommand(Pair);
-                }
-
-                return _pairCommand;
-            }
-        }
-
-        private void Pair()
-        {
-            var deviceId = DeviceManager.DeviceId ?? SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
-
-            this.Pair(deviceId);
-        }
-
         private async void Pair(string deviceId)
         {
             this.IsBusy = true;
