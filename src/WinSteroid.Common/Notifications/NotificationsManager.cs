@@ -23,48 +23,18 @@ using Windows.UI.Notifications.Management;
 using Windows.UI.ViewManagement;
 using WinSteroid.Common.Helpers;
 
-namespace WinSteroid.App.Services
+namespace WinSteroid.Common.Notifications
 {
-    public class NotificationsService
+    public static class NotificationsManager
     {
-        private readonly UserNotificationListener UserNotificationListener;
+        private static readonly UserNotificationListener UserNotificationListener = UserNotificationListener.Current;
 
-        public NotificationsService()
-        {
-            this.UserNotificationListener = UserNotificationListener.Current;
-        }
-
-        private TypedEventHandler<UserNotificationListener, UserNotificationChangedEventArgs> NotificationChangedHandler = null;
-
-        public void RegisterNotificationsChangedHandler(TypedEventHandler<UserNotificationListener, UserNotificationChangedEventArgs> notificationChangedHandler)
-        {
-            if (this.NotificationChangedHandler != null) return;
-
-            this.NotificationChangedHandler = notificationChangedHandler;
-            this.UserNotificationListener.NotificationChanged += this.NotificationChangedHandler;
-        }
-
-        public void UnregisterNotificationsChangedHandler()
-        {
-            if (this.NotificationChangedHandler == null) return;
-
-            try
-            {
-                this.UserNotificationListener.NotificationChanged -= this.NotificationChangedHandler;
-                this.NotificationChangedHandler = null;
-            }
-            catch
-            {
-                //Code or nothing
-            }
-        }
-
-        public async Task<bool> RequestAccessAsync()
+        public static async Task<bool> RequestAccessAsync()
         {
             var status = UserNotificationListenerAccessStatus.Unspecified;
             if (ApiHelper.IsMobileSystem())
             {
-                status = this.UserNotificationListener.GetAccessStatus();
+                status = UserNotificationListener.GetAccessStatus();
                 if (status == UserNotificationListenerAccessStatus.Allowed) return true;
             }
 
@@ -72,12 +42,12 @@ namespace WinSteroid.App.Services
             return status == UserNotificationListenerAccessStatus.Allowed;
         }
 
-        public IAsyncOperation<IReadOnlyList<UserNotification>> RetriveNotificationsAsync()
+        public static IAsyncOperation<IReadOnlyList<UserNotification>> RetriveNotificationsAsync()
         {
             return UserNotificationListener.GetNotificationsAsync(NotificationKinds.Toast);
         }
 
-        public void ManageNotificationAction(IBuffer buffer)
+        public static void ManageNotificationAction(IBuffer buffer)
         {
             //var bytes = new byte[buffer.Length];
 
@@ -89,7 +59,7 @@ namespace WinSteroid.App.Services
             //}
         }
 
-        public Task ShowBusySystemTrayAsync(string text)
+        public static Task ShowBusySystemTrayAsync(string text)
         {
             if (!ApiHelper.IsSystemTrayAvailable()) return Task.CompletedTask;
 
@@ -98,7 +68,7 @@ namespace WinSteroid.App.Services
             return statusBar.ProgressIndicator.ShowAsync().AsTask();
         }
 
-        public Task HideBusySystemTrayAsync()
+        public static Task HideBusySystemTrayAsync()
         {
             if (!ApiHelper.IsSystemTrayAvailable()) return Task.CompletedTask;
 

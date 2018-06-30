@@ -168,6 +168,8 @@ namespace WinSteroid.App.ViewModels.Settings
             }
             catch (Exception exception)
             {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackException(exception);
+
                 await this.DialogService.ShowError(exception.Message, ResourcesHelper.GetLocalizedString("SharedErrorTitle"));
             }
         }

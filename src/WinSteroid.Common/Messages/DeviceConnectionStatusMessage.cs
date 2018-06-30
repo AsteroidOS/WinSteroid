@@ -13,15 +13,15 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.App.Messages
+namespace WinSteroid.Common.Messages
 {
-    public class ScreenshotAcquiredMessage
+    public class DeviceConnectionStatusMessage
     {
-        public ScreenshotAcquiredMessage(string fileName)
+        public DeviceConnectionStatusMessage(bool isConnected)
         {
-            this.FileName = fileName;
+            this.IsConnected = isConnected;
         }
 
-        public string FileName { get; }
+        public bool IsConnected { get; }
     }
 }

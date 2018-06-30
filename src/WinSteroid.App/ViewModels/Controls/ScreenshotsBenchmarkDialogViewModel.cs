@@ -19,22 +19,15 @@ using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
-using WinSteroid.App.Messages;
-using WinSteroid.App.Services;
 using WinSteroid.Common;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Messages;
 
 namespace WinSteroid.App.ViewModels.Controls
 {
     public class ScreenshotsBenchmarkDialogViewModel : BaseViewModel
     {
-        private readonly DeviceService DeviceService;
-
-        public ScreenshotsBenchmarkDialogViewModel(DeviceService deviceService)
-        {
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-        }
-
         public override void Initialize()
         {
             this.TestGlyph = "";
@@ -93,7 +86,7 @@ namespace WinSteroid.App.ViewModels.Controls
 
         private async void StartBenchmark()
         {
-            var screenshotServiceReady = await this.DeviceService.RegisterToScreenshotContentServiceBenchmark();
+            var screenshotServiceReady = await DeviceManager.RegisterToScreenshotContentServiceBenchmark();
             if (!screenshotServiceReady)
             {
                 this.ErrorMessage = ResourcesHelper.GetLocalizedString("ScreenshotServiceInitializationErrorMessage");
@@ -101,7 +94,7 @@ namespace WinSteroid.App.ViewModels.Controls
             }
 
             this.IsBusy = true;
-            await this.DeviceService.TestScreenshotContentServiceAsync();
+            await DeviceManager.TestScreenshotContentServiceAsync();
         }
 
         private async void LoadBenchmarkResults(ScreenshotBenchmarkMessage message)

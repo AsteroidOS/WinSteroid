@@ -19,25 +19,16 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Notifications;
-using WinSteroid.Common;
 
-namespace WinSteroid.App.Services
+namespace WinSteroid.Common.Background
 {
-    public class BackgroundService
+    public static class BackgroundManager
     {
-        private readonly DeviceService DeviceService;
-
-        public BackgroundService(DeviceService deviceService)
-        {
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-        }
-
         public const string ActiveNotificationTaskName = "ActiveNotificationBackgroundTask";
-        public const string BatteryLevelTaskName = "BatteryLevelBackgroundTask";
         public const string TimeBatteryLevelTaskName = "TimeBatteryLevelBackgroundTask";
         public const string UserNotificationsTaskName = "UserNotificationsTask";
 
-        private async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
+        private static async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
         {
             var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
 
@@ -46,25 +37,24 @@ namespace WinSteroid.App.Services
                 && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
         }
 
-        private IBackgroundTaskRegistration GetBackgroundTask(string taskName)
+        private static IBackgroundTaskRegistration GetBackgroundTask(string taskName)
         {
             return BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(task => StringExtensions.OrdinalIgnoreCaseEquals(task.Name, taskName));
         }
 
-        public bool IsBackgroundTaskRegistered(string taskName)
+        public static bool IsBackgroundTaskRegistered(string taskName)
         {
             return BackgroundTaskRegistration.AllTasks.Any(kvp => StringExtensions.OrdinalIgnoreCaseEquals(kvp.Value.Name, taskName));
         }
 
-        public async Task<bool> RegisterActiveNotificationTask()
+        public static async Task<bool> RegisterActiveNotificationTask(GattCharacteristic characteristic)
         {
+            if (characteristic == null) return false;
+
             if (IsBackgroundTaskRegistered(ActiveNotificationTaskName)) return true;
 
             var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
             if (!canExecuteBackgroundTasks) return false;
-
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(Asteroid.NotificationFeedbackCharacteristicUuid);
-            if (characteristic == null) return false;
 
             var builder = new BackgroundTaskBuilder
             {
@@ -76,29 +66,9 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
-        public async Task<bool> RegisterBatteryLevelTask()
+        public static async Task<bool> RegisterTimeBatteryLevelTask(uint freshnessTime)
         {
-            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return true;
-
-            var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
-            if (!canExecuteBackgroundTasks) return false;
-
-            var characteristic = await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
-            if (characteristic == null) return false;
-
-            var builder = new BackgroundTaskBuilder
-            {
-                Name = BatteryLevelTaskName
-            };
-            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
-            var result = builder.Register();
-
-            return result != null;
-        }
-
-        public async Task<bool> RegisterTimeBatteryLevelTask(uint freshnessTime)
-        {
-            if (IsBackgroundTaskRegistered(BatteryLevelTaskName)) return true;
+            if (IsBackgroundTaskRegistered(TimeBatteryLevelTaskName)) return true;
 
             var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
             if (!canExecuteBackgroundTasks) return false;
@@ -110,13 +80,12 @@ namespace WinSteroid.App.Services
                 Name = TimeBatteryLevelTaskName
             };
             builder.SetTrigger(trigger);
-            //builder.AddCondition(new SystemCondition(SystemConditionType.SessionConnected));
             var result = builder.Register();
 
             return result != null;
         }
 
-        public bool RegisterUserNotificationTask()
+        public static bool RegisterUserNotificationTask()
         {
             if (IsBackgroundTaskRegistered(UserNotificationsTaskName)) return true;
 
@@ -130,7 +99,7 @@ namespace WinSteroid.App.Services
             return result != null;
         }
 
-        public void Unregister(string taskName)
+        public static void Unregister(string taskName)
         {
             foreach (var task in BackgroundTaskRegistration.AllTasks.Values)
             {

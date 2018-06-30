@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroid.App", "src\WinSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroid.Common", "src\WinSteroid.Common\WinSteroid.Common.csproj", "{EC5251DB-F7CF-4D33-BB34-4ED03BAE15A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroidMediaService", "src\WinSteroidMediaService\WinSteroidMediaService.csproj", "{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,30 @@ Global
 		{EC5251DB-F7CF-4D33-BB34-4ED03BAE15A2}.TaskDebug|x64.Build.0 = Debug|x64
 		{EC5251DB-F7CF-4D33-BB34-4ED03BAE15A2}.TaskDebug|x86.ActiveCfg = Debug|x86
 		{EC5251DB-F7CF-4D33-BB34-4ED03BAE15A2}.TaskDebug|x86.Build.0 = Debug|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|ARM.ActiveCfg = Debug|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|ARM.Build.0 = Debug|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|x64.ActiveCfg = Debug|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|x64.Build.0 = Debug|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|x86.ActiveCfg = Debug|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Debug|x86.Build.0 = Debug|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|ARM.ActiveCfg = Release|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|ARM.Build.0 = Release|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|x64.ActiveCfg = Release|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|x64.Build.0 = Release|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|x86.ActiveCfg = Release|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.Release|x86.Build.0 = Release|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|Any CPU.Build.0 = Debug|Any CPU
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|ARM.ActiveCfg = Debug|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|ARM.Build.0 = Debug|ARM
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|x64.ActiveCfg = Debug|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|x64.Build.0 = Debug|x64
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|x86.ActiveCfg = Debug|x86
+		{B68DAC35-06B1-4092-BC10-D95D3ED3AFF9}.TaskDebug|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,15 +13,15 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.App.Messages
+namespace WinSteroid.Common.Messages
 {
-    public class DeviceConnectionStatusMessage
+    public class ScreenshotProgressMessage
     {
-        public DeviceConnectionStatusMessage(bool isConnected)
+        public ScreenshotProgressMessage(int percentage)
         {
-            this.IsConnected = isConnected;
+            this.Percentage = percentage;
         }
 
-        public bool IsConnected { get; }
+        public int Percentage { get; }
     }
 }

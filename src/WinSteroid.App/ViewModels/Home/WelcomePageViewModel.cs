@@ -19,22 +19,16 @@ using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.System;
-using WinSteroid.App.Services;
+using WinSteroid.Common;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Home
 {
     public class WelcomePageViewModel : BasePageViewModel
     {
-        private readonly DeviceService DeviceService;
-
-        public WelcomePageViewModel(
-            DeviceService deviceService,
-            IDialogService dialogService,
-            INavigationService navigationService) : base(dialogService, navigationService)
+        public WelcomePageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-
             this.Initialize();
         }
 
@@ -47,7 +41,7 @@ namespace WinSteroid.App.ViewModels.Home
         {
             this.ApplicationFooter = $"{Package.Current.DisplayName} - {Package.Current.Id.GetVersion()}";
 
-            var deviceId = this.DeviceService.GetLastSavedDeviceId();
+            var deviceId = SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
                 this.Pair(deviceId);
@@ -102,14 +96,14 @@ namespace WinSteroid.App.ViewModels.Home
             this.ConnectionFailed = false;
             this.ShowConnectionOptions = false;
 
-            var deviceId = this.DeviceService.GetLastSavedDeviceId();
+            var deviceId = SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
             if (!string.IsNullOrWhiteSpace(deviceId))
             {
                 this.Pair(deviceId);
                 return;
             }
             
-            var device = await this.DeviceService.PickSingleDeviceAsync();
+            var device = await DeviceManager.PickSingleDeviceAsync();
             if (device == null)
             {
                 this.ShowConnectionOptions = true;
@@ -154,16 +148,9 @@ namespace WinSteroid.App.ViewModels.Home
 
         private void Pair()
         {
-            if (this.DeviceService.Current != null)
-            {
-                this.Pair(this.DeviceService.Current.Id);
-            }
-            else
-            {
-                var deviceId = this.DeviceService.GetLastSavedDeviceId();
+            var deviceId = DeviceManager.DeviceId ?? SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
 
-                this.Pair(deviceId);
-            }
+            this.Pair(deviceId);
         }
 
         private async void Pair(string deviceId)
@@ -172,7 +159,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeWelcomePairingMessage");
             this.ConnectionFailed = false;
 
-            var errorMessage = await this.DeviceService.ConnectAsync(deviceId);
+            var errorMessage = await DeviceManager.ConnectAsync(deviceId);
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 this.IsBusy = false;
@@ -182,7 +169,7 @@ namespace WinSteroid.App.ViewModels.Home
                 return;
             }
 
-            var pairingResult = await this.DeviceService.PairAsync();
+            var pairingResult = await DeviceManager.PairAsync();
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;

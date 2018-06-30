@@ -19,34 +19,17 @@ using GalaSoft.MvvmLight.Views;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using WinSteroid.App.Messages;
-using WinSteroid.App.Services;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Messages;
 using WinSteroid.Common.Models;
 
 namespace WinSteroid.App.ViewModels.Home
 {
     public class MainPageViewModel : BaseMainPageViewModel
     {
-        private readonly ApplicationsService ApplicationsService;
-        private readonly BackgroundService BackgroundService;
-        private readonly DeviceService DeviceService;
-        private readonly NotificationsService NotificationsService;
-
-        public MainPageViewModel(
-            ApplicationsService applicationsService,
-            BackgroundService backgroundService,
-            DeviceService deviceService,
-            NotificationsService notificationsService,
-            INavigationService navigationService,
-            IDialogService dialogService) : base(dialogService, navigationService)
+        public MainPageViewModel(INavigationService navigationService, IDialogService dialogService) : base(dialogService, navigationService)
         {
-            this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
-            this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-            this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
-
             this.Initialize();
         }
 
@@ -60,22 +43,20 @@ namespace WinSteroid.App.ViewModels.Home
             this.IsBusy = true;
             this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeMainInitializingMessage");
 
-            this.DeviceName = this.DeviceService.Current.Name;
+            this.DeviceName = DeviceManager.DeviceName;
             
-            var newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+            var newPercentage = await DeviceManager.GetBatteryPercentageAsync();
             var oldPercentage = this.BatteryPercentage;
 
             this.BatteryPercentage = newPercentage;
             this.BatteryLevel = BatteryHelper.Parse(newPercentage);
-
-            await this.DeviceService.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
 
             App.RemoveWelcomePageFromBackStack();
 
             this.IsBusy = false;
             this.BusyMessage = string.Empty;
 
-            this.MessengerInstance.Register<Messages.DeviceBatteryMessage>(this, OnDeviceBatteryPercentageChanged);
+            this.MessengerInstance.Register<DeviceBatteryMessage>(this, OnDeviceBatteryPercentageChanged);
         }
 
         public override void Reset()
@@ -231,7 +212,7 @@ namespace WinSteroid.App.ViewModels.Home
             {
                 if (!newPercentage.HasValue)
                 {
-                    newPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+                    newPercentage = await DeviceManager.GetBatteryPercentageAsync();
                 }
 
                 if (newPercentage > 0)

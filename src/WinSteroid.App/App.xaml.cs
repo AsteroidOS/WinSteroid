@@ -22,14 +22,16 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
-using Windows.Devices.Bluetooth.Background;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
 using WinSteroid.App.ViewModels;
+using WinSteroid.Common.Background;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Notifications;
 
 namespace WinSteroid.App
 {
@@ -41,9 +43,7 @@ namespace WinSteroid.App
             this.Suspending += OnSuspending;
             HockeyClient.Current.ConfigureWithDefaultParameters();
         }
-
-        private bool IsRunning { get; set; }
-
+        
         public static bool InDebugMode
         {
             get
@@ -128,22 +128,12 @@ namespace WinSteroid.App
 
             switch (args.TaskInstance.Task.Name)
             {
-                case BackgroundService.ActiveNotificationTaskName:
-                    {
-                        await this.OnActiveNotificationBackgroundTaskActivated(args.TaskInstance);
-                        break;
-                    }
-                case BackgroundService.BatteryLevelTaskName:
-                    {
-                        await this.OnBatteryLevelBackgroundTaskActivated(args.TaskInstance);
-                        break;
-                    }
-                case BackgroundService.TimeBatteryLevelTaskName:
+                case BackgroundManager.TimeBatteryLevelTaskName:
                     {
                         await this.OnTimeBatteryLevelBackgroundTaskActivated(args.TaskInstance);
                         break;
                     }
-                case BackgroundService.UserNotificationsTaskName:
+                case BackgroundManager.UserNotificationsTaskName:
                     {
                         await this.OnUserNotificationsBackgroundTaskActivated(args.TaskInstance);
                         break;
@@ -153,62 +143,16 @@ namespace WinSteroid.App
             backgroundTaskDeferral.Complete();
         }
 
-        private Task OnActiveNotificationBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
-        {
-            //var notificationService = this.IsRunning ? SimpleIoc.Default.GetInstance<NotificationsService>() : new NotificationsService();
-
-            //var details = (GattCharacteristicNotificationTriggerDetails)backgroundTaskInstance.TriggerDetails;
-
-            //notificationService.ManageNotificationAction(details.Value);
-
-            return Task.CompletedTask;
-        }
-
-        private Task OnBatteryLevelBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
-        {
-            if (!TilesHelper.BatteryTileExists()) return Task.CompletedTask;
-
-            var details = (GattCharacteristicNotificationTriggerDetails)backgroundTaskInstance.TriggerDetails;
-
-            var percentage = BatteryHelper.GetPercentage(details.Value);
-            if (percentage > 0)
-            {
-                TilesHelper.UpdateBatteryTile(percentage);
-            }
-            else
-            {
-                TilesHelper.ResetBatteryTile();
-            }
-
-            return Task.CompletedTask;
-        }
-
         private async Task OnTimeBatteryLevelBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
         {
             if (!TilesHelper.BatteryTileExists()) return;
 
-            ApplicationsService applicationsService = null;
-            DeviceService deviceService = null;
+            var applicationsService = new ApplicationsService();
 
-            if (this.IsRunning)
-            {
-                applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
-                deviceService = SimpleIoc.Default.GetInstance<DeviceService>();
-            }
-            else
-            {
-                applicationsService = new ApplicationsService();
-                deviceService = new DeviceService(applicationsService);
-            }
+            var errorMessage = await DeviceManager.ConnectAsync();
+            if (!string.IsNullOrWhiteSpace(errorMessage)) return;
 
-            if (deviceService.BluetoothDevice == null || deviceService.Current == null)
-            {
-                var deviceId = deviceService.GetLastSavedDeviceId();
-                var errorMessage = await deviceService.ConnectAsync(deviceId);
-                if (!string.IsNullOrWhiteSpace(errorMessage)) return;
-            }
-
-            var percentage = await deviceService.GetBatteryPercentageAsync();
+            var percentage = await DeviceManager.GetBatteryPercentageAsync();
             if (percentage > 0)
             {
                 TilesHelper.UpdateBatteryTile(percentage);
@@ -221,39 +165,23 @@ namespace WinSteroid.App
 
         private async Task OnUserNotificationsBackgroundTaskActivated(IBackgroundTaskInstance backgroundTaskInstance)
         {
-            ApplicationsService applicationsService = null;
-            NotificationsService notificationService = null;
-            DeviceService deviceService = null;
+            var applicationsService = new ApplicationsService();
 
-            if (this.IsRunning)
-            {
-                applicationsService = SimpleIoc.Default.GetInstance<ApplicationsService>();
-                notificationService = SimpleIoc.Default.GetInstance<NotificationsService>();
-                deviceService = SimpleIoc.Default.GetInstance<DeviceService>();
-            }
-            else
-            {
-                applicationsService = new ApplicationsService();
-                notificationService = new NotificationsService();
-                deviceService = new DeviceService(applicationsService);
-            }
+            var errorMessage = await DeviceManager.ConnectAsync();
+            if (!string.IsNullOrWhiteSpace(errorMessage)) return;
 
-            if (deviceService.BluetoothDevice == null || deviceService.Current == null)
-            {
-                var deviceId = deviceService.GetLastSavedDeviceId();
-                var errorMessage = await deviceService.ConnectAsync(deviceId);
-                if (!string.IsNullOrWhiteSpace(errorMessage)) return;
-            }
-
-            var userNotifications = await notificationService.RetriveNotificationsAsync();
+            var userNotifications = await NotificationsManager.RetriveNotificationsAsync();
             if (userNotifications.IsNullOrEmpty()) return;
 
             foreach (var userNotification in userNotifications)
             {
-                await deviceService.InsertNotificationAsync(userNotification);
+                var application = applicationsService.GetApplicationPreferenceByAppId(userNotification.AppInfo.PackageFamilyName);
+                await DeviceManager.InsertNotificationAsync(userNotification, application);
             }
             
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
+
+            await DeviceManager.DisconnectAsync();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -285,7 +213,6 @@ namespace WinSteroid.App
             }
 
             GalaSoft.MvvmLight.Threading.DispatcherHelper.Initialize();
-            this.IsRunning = true;
         }
     }
 }

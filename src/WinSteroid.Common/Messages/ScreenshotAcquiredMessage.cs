@@ -13,15 +13,15 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-namespace WinSteroid.App.Messages
+namespace WinSteroid.Common.Messages
 {
-    public class DeviceBatteryMessage
+    public class ScreenshotAcquiredMessage
     {
-        public DeviceBatteryMessage(int percentage)
+        public ScreenshotAcquiredMessage(string fileName)
         {
-            this.Percentage = percentage;
+            this.FileName = fileName;
         }
 
-        public int Percentage { get; }
+        public string FileName { get; }
     }
 }

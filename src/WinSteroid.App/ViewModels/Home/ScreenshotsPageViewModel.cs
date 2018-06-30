@@ -14,7 +14,6 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
@@ -25,24 +24,17 @@ using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using WinSteroid.App.Controls;
-using WinSteroid.App.Messages;
-using WinSteroid.App.Services;
 using WinSteroid.Common;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Messages;
 
 namespace WinSteroid.App.ViewModels.Home
 {
     public class ScreenshotsPageViewModel : BasePageViewModel
     {
-        private readonly DeviceService DeviceService;
-
-        public ScreenshotsPageViewModel(
-            IDialogService dialogService, 
-            INavigationService navigationService,
-            DeviceService deviceService) : base(dialogService, navigationService)
+        public ScreenshotsPageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-
             this.Initialize();
         }
 
@@ -152,7 +144,7 @@ namespace WinSteroid.App.ViewModels.Home
 
         private async void TakeScreenshot()
         {
-            var screenshotServiceReady = await this.DeviceService.RegisterToScreenshotContentService();
+            var screenshotServiceReady = await DeviceManager.RegisterToScreenshotContentService();
             if (!screenshotServiceReady)
             {
                 await this.DialogService.ShowError(
@@ -163,7 +155,7 @@ namespace WinSteroid.App.ViewModels.Home
 
             this.IsBusy = true;
 
-            await this.DeviceService.TakeScreenshotAsync();
+            await DeviceManager.TakeScreenshotAsync();
         }
 
         private RelayCommand _cancelScreenshotTaskCommand;
@@ -182,7 +174,7 @@ namespace WinSteroid.App.ViewModels.Home
 
         private async void CancelScreenshotTask()
         {
-            await this.DeviceService.UnregisterToScreenshotContentService();
+            await DeviceManager.UnregisterToScreenshotContentService();
 
             this.ScreenshotProgress = 0;
             this.IsBusy = false;

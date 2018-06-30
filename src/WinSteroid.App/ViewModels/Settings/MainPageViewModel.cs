@@ -22,29 +22,23 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using WinSteroid.App.Services;
 using WinSteroid.Common;
+using WinSteroid.Common.Background;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Common.Notifications;
 
 namespace WinSteroid.App.ViewModels.Settings
 {
     public class MainPageViewModel : BaseMainPageViewModel
     {
         private readonly ApplicationsService ApplicationsService;
-        private readonly DeviceService DeviceService;
-        private readonly BackgroundService BackgroundService;
-        private readonly NotificationsService NotificationsService;
 
         public MainPageViewModel(
             ApplicationsService applicationsService,
-            DeviceService deviceService, 
-            BackgroundService backgroundService,
-            NotificationsService notificationsService,
             IDialogService dialogService,
             INavigationService navigationService) : base(dialogService, navigationService)
         {
             this.ApplicationsService = applicationsService ?? throw new ArgumentNullException(nameof(applicationsService));
-            this.BackgroundService = backgroundService ?? throw new ArgumentNullException(nameof(backgroundService));
-            this.DeviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
-            this.NotificationsService = notificationsService ?? throw new ArgumentNullException(nameof(notificationsService));
             
             this.Initialize();
         }
@@ -59,8 +53,8 @@ namespace WinSteroid.App.ViewModels.Settings
             this.ApplicationName = Package.Current.DisplayName;
             this.CustomDate = DateTimeOffset.Now;
             this.CustomTime = DateTimeOffset.Now.TimeOfDay;
-            this.DeviceName = this.DeviceService.Current.Name;
-            this.EnableUserNotifications = this.BackgroundService.IsBackgroundTaskRegistered(BackgroundService.UserNotificationsTaskName);
+            this.DeviceName = DeviceManager.DeviceName;
+            this.EnableUserNotifications = BackgroundManager.IsBackgroundTaskRegistered(BackgroundManager.UserNotificationsTaskName);
 
             var lastSavedBatteryTaskFrequency = SettingsHelper.GetValue(Constants.LastSavedBatteryTaskFrequencySettingKey, (uint)15);
             this.BatteryCheckFrequency = this.AvailableBatteryCheckFrequencies.FirstOrDefault(bf => bf.Minutes == lastSavedBatteryTaskFrequency);
@@ -125,8 +119,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
                 if (!TilesHelper.BatteryTileExists()) return;
 
-                this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
-                this.BackgroundService.Unregister(BackgroundService.TimeBatteryLevelTaskName);
+                BackgroundManager.Unregister(BackgroundManager.TimeBatteryLevelTaskName);
 
                 SettingsHelper.SetValue(Constants.LastSavedBatteryTaskFrequencySettingKey, _batteryCheckFrequency.Minutes);
 
@@ -187,19 +180,19 @@ namespace WinSteroid.App.ViewModels.Settings
                 return;
             }
 
-            this.BackgroundService.Unregister(BackgroundService.UserNotificationsTaskName);
+            BackgroundManager.Unregister(BackgroundManager.UserNotificationsTaskName);
         }
 
         private async void RegisterUserNotificationTask()
         {
-            var accessResult = await this.NotificationsService.RequestAccessAsync();
+            var accessResult = await NotificationsManager.RequestAccessAsync();
             if (!accessResult)
             {
                 this.EnableUserNotifications = false;
                 return;
             }
 
-            var result = this.BackgroundService.RegisterUserNotificationTask();
+            var result = BackgroundManager.RegisterUserNotificationTask();
             if (result) return;
 
             this.EnableUserNotifications = false;
@@ -244,8 +237,8 @@ namespace WinSteroid.App.ViewModels.Settings
 
         private async void PinBatteryTile()
         {
-            var deviceId = this.DeviceService.Current.Id;
-            var deviceName = this.DeviceService.Current.Name;
+            var deviceId = DeviceManager.DeviceId;
+            var deviceName = DeviceManager.DeviceName;
             var result = await TilesHelper.PinBatteryTileAsync(deviceId, deviceName);
             if (!result)
             {
@@ -255,7 +248,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
             this.RegisterBatteryTask();
 
-            var batteryPercentage = await this.DeviceService.GetBatteryPercentageAsync();
+            var batteryPercentage = await DeviceManager.GetBatteryPercentageAsync();
             TilesHelper.UpdateBatteryTile(batteryPercentage);
         }
 
@@ -263,13 +256,9 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             this.ShowBatteryCheckWarning = this.BatteryCheckFrequency.Minutes < 15;
 
-            if (this.BatteryCheckFrequency.Minutes < 15)
+            if (this.BatteryCheckFrequency.Minutes >= 15)
             {
-                await this.BackgroundService.RegisterBatteryLevelTask();
-            }
-            else
-            {
-                await this.BackgroundService.RegisterTimeBatteryLevelTask(this.BatteryCheckFrequency.Minutes);
+                await BackgroundManager.RegisterTimeBatteryLevelTask(this.BatteryCheckFrequency.Minutes);
             }
         }
 
@@ -282,7 +271,7 @@ namespace WinSteroid.App.ViewModels.Settings
                 return;
             }
 
-            this.BackgroundService.Unregister(BackgroundService.BatteryLevelTaskName);
+            BackgroundManager.Unregister(BackgroundManager.TimeBatteryLevelTaskName);
         }
 
         private RelayCommand _applicationsCommand;
@@ -344,7 +333,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
         private async void SyncDate()
         {
-            var dateSynced = await this.DeviceService.SetTimeAsync(DateTime.Now);
+            var dateSynced = await DeviceManager.SetTimeAsync(DateTime.Now);
             this.TimeSetSuccessfully = dateSynced;
 
             if (dateSynced) return;
@@ -372,7 +361,7 @@ namespace WinSteroid.App.ViewModels.Settings
         {
             var fullDateTime = this.CustomDate.Date.Add(this.CustomTime);
 
-            var dateSynced = await this.DeviceService.SetTimeAsync(fullDateTime);
+            var dateSynced = await DeviceManager.SetTimeAsync(fullDateTime);
             this.TimeSetSuccessfully = dateSynced;
 
             if (dateSynced) return;
@@ -469,7 +458,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
             ViewModelLocator.Home.Reset();
             ViewModelLocator.HomeWelcome.Reset();
-            await this.DeviceService.DisconnectAsync();
+            await DeviceManager.DisconnectAsync();
             App.Reset();
         }
     }

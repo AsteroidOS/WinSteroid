@@ -18,6 +18,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using System;
+using WinSteroid.Common.Background;
 
 namespace WinSteroid.App.ViewModels
 {
@@ -47,15 +48,10 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register(InitializeNavigationService);
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<Services.ApplicationsService>(createInstanceImmediately: true);
-            SimpleIoc.Default.Register<Services.DeviceService>(createInstanceImmediately: true);
-            SimpleIoc.Default.Register<Services.BackgroundService>();
-            SimpleIoc.Default.Register<Services.NotificationsService>();
 
-            var backgroundService = SimpleIoc.Default.GetInstance<Services.BackgroundService>();
             if (!Common.Helpers.TilesHelper.BatteryTileExists())
             {
-                backgroundService.Unregister(Services.BackgroundService.BatteryLevelTaskName);
-                backgroundService.Unregister(Services.BackgroundService.TimeBatteryLevelTaskName);
+                BackgroundManager.Unregister(BackgroundManager.TimeBatteryLevelTaskName);
             }
         }
 
