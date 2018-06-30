@@ -136,7 +136,7 @@
     <value>Wallpapers</value>
   </data>
   <data name="HomeMainWatchFaceAppBarButton.Label" xml:space="preserve">
-    <value>WatchFaces</value>
+    <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomeConnectButton.Content" xml:space="preserve">
     <value>Connect to device</value>
@@ -184,7 +184,7 @@
     <value>Vibration</value>
   </data>
   <data name="SettingsMainBatteryCheckWarningTextBlock.Text" xml:space="preserve">
-    <value>Preview: due to UWP platform limitations, the real time background task that check current battery level stops after a reboot. You need to start WinSteroid on next boot to register it again.</value>
+    <value>Preview: due to UWP platform limitations, the real time background task that checks current battery level stops after a reboot. You need to start WinSteroid on next boot to register it again.</value>
   </data>
   <data name="SettingsMainBatteryTextBlock.Text" xml:space="preserve">
     <value>Battery</value>
@@ -265,7 +265,7 @@
     <value>Initializing</value>
   </data>
   <data name="HomeMainScreenshotServiceHandlersRegistrationFailedError" xml:space="preserve">
-    <value>I cannot be able to finish screenshot content service registration</value>
+    <value>I'm not able to finish registration to the screenshot content service</value>
   </data>
   <data name="HomeMainSettingsItemLabel" xml:space="preserve">
     <value>Settings</value>
@@ -277,7 +277,7 @@
     <value>Wallpapers</value>
   </data>
   <data name="HomeMainWatchFacesItemLabel" xml:space="preserve">
-    <value>WatchFaces</value>
+    <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
     <value>Pairing operation failed</value>
@@ -289,13 +289,13 @@
     <value>Data successfully imported</value>
   </data>
   <data name="SettingsApplicationsImportFoundConflictMessage" xml:space="preserve">
-    <value>I found some conflicts. Do you want to overwrite existing application preferences when import them?</value>
+    <value>I found some conflicts. Do you want to overwrite existing application preferences when importing them?</value>
   </data>
   <data name="SettingsApplicationsImportFoundConflictTitle" xml:space="preserve">
     <value>Found conflicts</value>
   </data>
   <data name="SettingsApplicationUnsavedChangesMessage" xml:space="preserve">
-    <value>I detected some unsaved changes. Are you sure to discard them and go back?</value>
+    <value>I detected some unsaved changes. Are you sure you want to discard them and go back?</value>
   </data>
   <data name="SettingsApplicationUnsavedChangesTitle" xml:space="preserve">
     <value>Unsaved changes</value>
@@ -319,13 +319,13 @@
     <value>Keep applications preferences</value>
   </data>
   <data name="SettingsMainResetApplicationMessage" xml:space="preserve">
-    <value>Are you sure do you want to disconnect your device and reset the application?</value>
+    <value>Are you sure you want to disconnect your device and reset the application?</value>
   </data>
   <data name="SettingsMainResetApplicationTitle" xml:space="preserve">
     <value>Reset application</value>
   </data>
   <data name="SettingsMainSetTimeErrorMessage" xml:space="preserve">
-    <value>I cannot be able to set time on your device</value>
+    <value>I'm not able to set time on your device</value>
   </data>
   <data name="SharedErrorTitle" xml:space="preserve">
     <value>Error</value>
@@ -373,7 +373,7 @@
     <value>Yes</value>
   </data>
   <data name="SettingsWallpapersTextBlock.Text" xml:space="preserve">
-    <value>Install new wallpaper/background image</value>
+    <value>Install a new wallpaper/background image</value>
   </data>
   <data name="SettingsWallpapersWallpaperInstalledMessage" xml:space="preserve">
     <value>Wallpaper successfully installed</value>
@@ -388,16 +388,16 @@
     <value>Install</value>
   </data>
   <data name="SettingsWatchFaceNavigationPageHeader.TitleText" xml:space="preserve">
-    <value>WatchFaces</value>
+    <value>Watchfaces</value>
   </data>
   <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
-    <value>Install new WatchFace</value>
+    <value>Install a new Watchface</value>
   </data>
   <data name="SettingsWatchFaceWatchFaceInstalledMessage" xml:space="preserve">
-    <value>WatchFace successfully installed</value>
+    <value>Watchface successfully installed</value>
   </data>
   <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
-    <value>The selected file seems corrupted or an invalid file.</value>
+    <value>The selected file seems corrupted or invalid.</value>
   </data>
   <data name="SettingsWallpapersUnsupportedImageMessage" xml:space="preserve">
     <value>The selected image doesn't seem to be squared. Do you want to crop it now?</value>
@@ -418,52 +418,52 @@
     <value>Connection failed</value>
   </data>
   <data name="DeviceServiceDisappearedDeviceError" xml:space="preserve">
-    <value>I cannot connect to the selected Bluetooth device, seems to be disappeared</value>
+    <value>I cannot connect to the selected Bluetooth device, it seems to have disappeared</value>
   </data>
   <data name="DeviceServiceGenericConnectionError" xml:space="preserve">
     <value>An error occured while connecting.</value>
   </data>
   <data name="DeviceServiceNoAsteroidDeviceError" xml:space="preserve">
-    <value>I cannot connect to the selected Bluetooth device, seems to not be an AsteroidOS device</value>
+    <value>I cannot connect to the selected Bluetooth device, it does not seem to be an AsteroidOS device</value>
   </data>
   <data name="DeviceServicePairingOperationDeniedOrFailed" xml:space="preserve">
     <value>Pairing operation denied or failed</value>
   </data>
   <data name="TutorialsUsbStep0Paragraph0Run.Text" xml:space="preserve">
-    <value>Before to proceed, be sure that your PC supports USB 2.0 or higher ports standard and your USB port and cable work correctly and in good state.</value>
+    <value>Before proceeding, be sure that your PC supports USB 2.0 or higher ports standard and your USB port and cable work correctly and are in a good state.</value>
   </data>
   <data name="TutorialsUsbStep0Paragraph1Run.Text" xml:space="preserve">
     <value>We are not responsible for any damage caused by a malfunctional cable or USB port that may cause damages or bricks your devices.</value>
   </data>
   <data name="TutorialsUsbStep1Paragraph0Run.Text" xml:space="preserve">
-    <value>Open Device Manager and find under Other devices a device with a yellow sign named RNDIS.</value>
+    <value>Open Device Manager and find under 'Other devices' a device with a yellow sign named RNDIS.</value>
   </data>
   <data name="TutorialsUsbStep1Paragraph1Run.Text" xml:space="preserve">
-    <value>Right click it and select Update driver.</value>
+    <value>Right click it and select 'Update driver'.</value>
   </data>
   <data name="TutorialsUsbStep1Paragraph2Run.Text" xml:space="preserve">
-    <value>Select in the new opened window Browse my computer for driver software, then choose Let me pick from a list of available drivers on my computer.</value>
+    <value>Select in the new opened window 'Browse my computer for driver software', then choose 'Let me pick from a list of available drivers on my computer'.</value>
   </data>
   <data name="TutorialsUsbStep2Paragraph0Run.Text" xml:space="preserve">
-    <value>From devices types list, search for Network adapters, then look for Microsoft as driver manufacturer.</value>
+    <value>From devices types list, search for 'Network adapters', then look for 'Microsoft' as driver manufacturer.</value>
   </data>
   <data name="TutorialsUsbStep2Paragraph1Run.Text" xml:space="preserve">
-    <value>Afterwards, search in the new drivers list the option Remote NDIS compatible device.</value>
+    <value>Afterwards, search in the new drivers list the option 'Remote NDIS compatible device'.</value>
   </data>
   <data name="TutorialsUsbStep2Paragraph2Run.Text" xml:space="preserve">
-    <value>When you'll press Next, a window pops up warning you that Windows cannot verify the device driver compatibility.</value>
+    <value>When you'll press 'Next', a window will pop up warning you that Windows cannot verify the device driver compatibility.</value>
   </data>
   <data name="TutorialsUsbStep2Paragraph3Run.Text" xml:space="preserve">
-    <value>Ignore it and press Yes.</value>
+    <value>Ignore it and press 'Yes'.</value>
   </data>
   <data name="TutorialsUsbStep3Paragraph0Run.Text" xml:space="preserve">
     <value>Excellent!</value>
   </data>
   <data name="TutorialsUsbStep3Paragraph1Run.Text" xml:space="preserve">
-    <value>Your AsteroidOS watch is now correctly plugged-in with your PC.</value>
+    <value>Your AsteroidOS watch is now correctly plugged-into your PC.</value>
   </data>
   <data name="TutorialsUsbStep3Paragraph2Run.Text" xml:space="preserve">
-    <value>You can now install new Watchfaces and/or wallpapers over USB connection.</value>
+    <value>You can now install new watchfaces and/or wallpapers over USB connection.</value>
   </data>
   <data name="HomeMainUpdateButtonTextBlock.Text" xml:space="preserve">
     <value>Update</value>
@@ -505,7 +505,7 @@
     <value>Delete all saved screenshots</value>
   </data>
   <data name="HomeScreenshotsDeleteScreenshotsHistoryMessage" xml:space="preserve">
-    <value>Are you sure to delete current screenshots history?</value>
+    <value>Are you sure you want to delete the current screenshots history?</value>
   </data>
   <data name="HomeScreenshotsDeleteScreenshotsHistoryTitle" xml:space="preserve">
     <value>Delete screenshots</value>
@@ -547,7 +547,7 @@
     <value>SCREENSHOTS SERVICE TEST</value>
   </data>
   <data name="ScreenshotsBenchmarkDialogGuideTextBlock.Text" xml:space="preserve">
-    <value>Before using Screenshots functionality, WinSteroid need to check if your devices are both compatible to take screenshots due to Bluetooth LE limitations. Click on "Start transfer test" to check it.</value>
+    <value>Before using Screenshots functionality, WinSteroid needs to check if your devices are both compatible to take screenshots due to Bluetooth LE limitations. Click on "Start transfer test" to check it.</value>
   </data>
   <data name="ScreenshotsBenchmarkDialogStartTestButton.Content" xml:space="preserve">
     <value>Start transfer test</value>
