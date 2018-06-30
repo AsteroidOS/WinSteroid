@@ -17,11 +17,9 @@ using System;
 using System.Text;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinSteroid.Common;
+using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
 
 namespace WinSteroidMediaService
@@ -68,21 +66,19 @@ namespace WinSteroidMediaService
                 return;
             }
 
-            var bluetoothDevice = await ConnectAsync(deviceId);
-            if (bluetoothDevice == null)
+            var errorMessage = await DeviceManager.ConnectAsync(deviceId);
+            if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 await args.SendResponseAsync(this.GetFailureValueSet(sender.PackageFamilyName, "connection failed"));
                 deferral.Complete();
                 return;
             }
-
-            var characteristic = await bluetoothDevice.GetGattCharacteristicAsync(characteristicUuid);
             
-            var result = await characteristic.WriteByteArrayToCharacteristicAsync(Encoding.UTF8.GetBytes(data));
+            var result = await DeviceManager.WriteByteArrayToCharacteristicAsync(characteristicUuid, Encoding.UTF8.GetBytes(data));
             
             await args.SendResponseAsync(this.GetSuccessValueSet(sender.PackageFamilyName));
 
-            this.Disconnect(bluetoothDevice);
+            await DeviceManager.DisconnectAsync();
 
             deferral.Complete();
         }
@@ -105,27 +101,7 @@ namespace WinSteroidMediaService
                 { "success", true }
             };
         }
-
-        IAsyncOperation<BluetoothLEDevice> ConnectAsync(string deviceId)
-        {
-            try
-            {
-                return BluetoothLEDevice.FromIdAsync(deviceId);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        void Disconnect(BluetoothLEDevice bluetoothLEDevice)
-        {
-            if (bluetoothLEDevice == null) return;
-
-            bluetoothLEDevice.Dispose();
-            bluetoothLEDevice = null;
-        }
-
+        
         bool IsValidRequestDataSet(ValueSet valueSet, out Guid characteristicUuid, out string data)
         {
             if (valueSet == null)

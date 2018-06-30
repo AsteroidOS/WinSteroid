@@ -395,5 +395,13 @@ namespace WinSteroid.Common.Bluetooth
 
             Messenger.Default.Send(new Messages.ScreenshotAcquiredMessage(fileName));
         }
+
+        public static async Task<bool> WriteByteArrayToCharacteristicAsync(Guid characteristicUuid, byte[] bytes)
+        {
+            var characteristic = await BluetoothDevice.GetGattCharacteristicAsync(characteristicUuid);
+            if (characteristic == null) return false;
+
+            return await characteristic.WriteByteArrayToCharacteristicAsync(bytes);
+        }
     }
 }

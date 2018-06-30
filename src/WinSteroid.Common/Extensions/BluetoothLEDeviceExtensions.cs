@@ -33,13 +33,22 @@ namespace Windows.Devices.Bluetooth
             var service = Asteroid.Services.FirstOrDefault(s => s.Characteristics.Any(c => c.Uuid == characteristicUuid));
             if (service == null) return null;
 
-            var serviceResult = await bluetoothLEDevice.GetGattServicesForUuidAsync(service.Uuid);
-            if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0) return null;
+            try
+            {
+                var serviceResult = await bluetoothLEDevice.GetGattServicesForUuidAsync(service.Uuid);
+                if (serviceResult.Status != GattCommunicationStatus.Success || serviceResult.Services.Count == 0) return null;
 
-            var characteristicResult = await serviceResult.Services[0].GetCharacteristicsForUuidAsync(characteristicUuid);
-            if (characteristicResult.Status != GattCommunicationStatus.Success || characteristicResult.Characteristics.Count == 0) return null;
+                var characteristicResult = await serviceResult.Services[0].GetCharacteristicsForUuidAsync(characteristicUuid);
+                if (characteristicResult.Status != GattCommunicationStatus.Success || characteristicResult.Characteristics.Count == 0) return null;
 
-            return characteristicResult.Characteristics[0];
+                return characteristicResult.Characteristics[0];
+            }
+            catch (Exception exception)
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackException(exception);
+
+                return null;
+            }
         }
     }
 }
