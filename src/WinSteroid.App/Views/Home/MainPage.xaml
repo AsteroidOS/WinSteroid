@@ -275,9 +275,9 @@
                     x:Name="MainCommandBar"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
-                <AppBarButton x:Name="WatchFaceButton" 
-                              x:Uid="HomeMainWatchFaceAppBarButton"
-                              Command="{x:Bind ViewModel.WatchFacesCommand, Mode=OneWay}">
+                <AppBarButton x:Name="WatchfaceButton" 
+                              x:Uid="HomeMainWatchfaceAppBarButton"
+                              Command="{x:Bind ViewModel.WatchfacesCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="" 
                                   FontFamily="{ThemeResource SymbolThemeFontFamily}" />

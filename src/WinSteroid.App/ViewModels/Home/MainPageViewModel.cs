@@ -72,7 +72,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainSettingsItemLabel"), Command = SettingsCommand });
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainScreenshotsItemLabel"), Command = ScreenshotsCommand });        
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWallpapersItemLabel"), Command = WallpapersCommand });
-            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWatchFacesItemLabel"), Command = WatchFacesCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainWatchfacesItemLabel"), Command = WatchfacesCommand });
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("HomeMainTutorialsItemLabel"), Command = TutorialsCommand });
         }
 
@@ -155,22 +155,22 @@ namespace WinSteroid.App.ViewModels.Home
         }
 
         private RelayCommand _watchFacesCommand;
-        public RelayCommand WatchFacesCommand
+        public RelayCommand WatchfacesCommand
         {
             get
             {
                 if (_watchFacesCommand == null)
                 {
-                    _watchFacesCommand = new RelayCommand(GoToWatchFaces);
+                    _watchFacesCommand = new RelayCommand(GoToWatchfaces);
                 }
 
                 return _watchFacesCommand;
             }
         }
 
-        private void GoToWatchFaces()
+        private void GoToWatchfaces()
         {
-            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TransfersWatchFace));
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.TransfersWatchface));
         }
 
         private RelayCommand _tutorialsCommand;

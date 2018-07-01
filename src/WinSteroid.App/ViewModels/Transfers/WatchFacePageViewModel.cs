@@ -26,9 +26,9 @@ using WinSteroid.Common.Helpers;
 
 namespace WinSteroid.App.ViewModels.Transfers
 {
-    public class WatchFacePageViewModel : BasePageViewModel
+    public class WatchfacePageViewModel : BasePageViewModel
     {
-        public WatchFacePageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
+        public WatchfacePageViewModel(IDialogService dialogService, INavigationService navigationService) : base(dialogService, navigationService)
         {
 
         }
@@ -154,7 +154,7 @@ namespace WinSteroid.App.ViewModels.Transfers
 
             if (successfulUpload)
             {
-                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsWatchFaceWatchFaceInstalledMessage"));
+                ToastsHelper.Show(ResourcesHelper.GetLocalizedString("SettingsWatchfaceWatchfaceInstalledMessage"));
             }
 
             //if (!successfulUpload)
@@ -165,7 +165,7 @@ namespace WinSteroid.App.ViewModels.Transfers
 
             //var restartSystem = await this.DialogService.ShowMessage(
             //    message: "AsteroidOS may cache the current watchface. Do you want to restart device to refresh it?",
-            //    title: "WatchFace uploaded",
+            //    title: "Watchface uploaded",
             //    buttonConfirmText: "Yes",
             //    buttonCancelText: "No",
             //    afterHideCallback: b => { });

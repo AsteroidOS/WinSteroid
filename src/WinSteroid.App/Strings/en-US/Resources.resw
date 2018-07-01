@@ -135,7 +135,7 @@
   <data name="HomeMainWallpapersFaceAppBarButton.Label" xml:space="preserve">
     <value>Wallpapers</value>
   </data>
-  <data name="HomeMainWatchFaceAppBarButton.Label" xml:space="preserve">
+  <data name="HomeMainWatchfaceAppBarButton.Label" xml:space="preserve">
     <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomeConnectButton.Content" xml:space="preserve">
@@ -276,7 +276,7 @@
   <data name="HomeMainWallpapersItemLabel" xml:space="preserve">
     <value>Wallpapers</value>
   </data>
-  <data name="HomeMainWatchFacesItemLabel" xml:space="preserve">
+  <data name="HomeMainWatchfacesItemLabel" xml:space="preserve">
     <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
@@ -378,22 +378,22 @@
   <data name="SettingsWallpapersWallpaperInstalledMessage" xml:space="preserve">
     <value>Wallpaper successfully installed</value>
   </data>
-  <data name="SettingsWatchFaceChooseButton.Content" xml:space="preserve">
+  <data name="SettingsWatchfaceChooseButton.Content" xml:space="preserve">
     <value>Choose</value>
   </data>
-  <data name="SettingsWatchFaceInstallationProgressRun.Text" xml:space="preserve">
+  <data name="SettingsWatchfaceInstallationProgressRun.Text" xml:space="preserve">
     <value>Installation progress</value>
   </data>
-  <data name="SettingsWatchFaceInstallButton.Content" xml:space="preserve">
+  <data name="SettingsWatchfaceInstallButton.Content" xml:space="preserve">
     <value>Install</value>
   </data>
-  <data name="SettingsWatchFaceNavigationPageHeader.TitleText" xml:space="preserve">
+  <data name="SettingsWatchfaceNavigationPageHeader.TitleText" xml:space="preserve">
     <value>Watchfaces</value>
   </data>
-  <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
+  <data name="SettingsWatchfaceTextBlock.Text" xml:space="preserve">
     <value>Install a new Watchface</value>
   </data>
-  <data name="SettingsWatchFaceWatchFaceInstalledMessage" xml:space="preserve">
+  <data name="SettingsWatchfaceWatchfaceInstalledMessage" xml:space="preserve">
     <value>Watchface successfully installed</value>
   </data>
   <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">

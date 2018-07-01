@@ -40,7 +40,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<Tutorials.MainPageViewModel>();
             SimpleIoc.Default.Register<Tutorials.UsbPageViewModel>();
 
-            SimpleIoc.Default.Register<Transfers.WatchFacePageViewModel>();
+            SimpleIoc.Default.Register<Transfers.WatchfacePageViewModel>();
             SimpleIoc.Default.Register<Transfers.WallpapersPageViewModel>();
 
             SimpleIoc.Default.Register<Controls.ScreenshotsBenchmarkDialogViewModel>();
@@ -68,7 +68,7 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(SettingsApplications), typeof(Views.Settings.ApplicationsPage));
             navigationService.Configure(nameof(SettingsApplication), typeof(Views.Settings.ApplicationPage));
 
-            navigationService.Configure(nameof(TransfersWatchFace), typeof(Views.Transfers.WatchFacePage));
+            navigationService.Configure(nameof(TransfersWatchface), typeof(Views.Transfers.WatchfacePage));
             navigationService.Configure(nameof(TransfersWallpapers), typeof(Views.Transfers.WallpapersPage));
 
             navigationService.Configure(nameof(Tutorials), typeof(Views.Tutorials.MainPage));
@@ -97,8 +97,8 @@ namespace WinSteroid.App.ViewModels
                     return SettingsApplications;
                 case nameof(TransfersWallpapers):
                     return TransfersWallpapers;
-                case nameof(TransfersWatchFace):
-                    return TransfersWatchFace;
+                case nameof(TransfersWatchface):
+                    return TransfersWatchface;
                 case nameof(Tutorials):
                     return Tutorials;
                 case nameof(TutorialsUsb):
@@ -143,9 +143,9 @@ namespace WinSteroid.App.ViewModels
             get { return ServiceLocator.Current.GetInstance<Settings.MainPageViewModel>(); }
         }
 
-        public static Transfers.WatchFacePageViewModel TransfersWatchFace
+        public static Transfers.WatchfacePageViewModel TransfersWatchface
         {
-            get { return ServiceLocator.Current.GetInstance<Transfers.WatchFacePageViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<Transfers.WatchfacePageViewModel>(); }
         }
 
         public static Transfers.WallpapersPageViewModel TransfersWallpapers

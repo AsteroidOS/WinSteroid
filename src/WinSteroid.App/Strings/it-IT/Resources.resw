@@ -135,8 +135,8 @@
   <data name="HomeMainWallpapersFaceAppBarButton.Label" xml:space="preserve">
     <value>Sfondi</value>
   </data>
-  <data name="HomeMainWatchFaceAppBarButton.Label" xml:space="preserve">
-    <value>WatchFaces</value>
+  <data name="HomeMainWatchfaceAppBarButton.Label" xml:space="preserve">
+    <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomeConnectButton.Content" xml:space="preserve">
     <value>Connettiti al dispositivo</value>
@@ -252,8 +252,8 @@
   <data name="HomeMainWallpapersItemLabel" xml:space="preserve">
     <value>Sfondi</value>
   </data>
-  <data name="HomeMainWatchFacesItemLabel" xml:space="preserve">
-    <value>WatchFaces</value>
+  <data name="HomeMainWatchfacesItemLabel" xml:space="preserve">
+    <value>Watchfaces</value>
   </data>
   <data name="HomeWelcomePairingOperationFailedError" xml:space="preserve">
     <value>Operazione di accoppiamento fallita</value>
@@ -375,20 +375,20 @@
   <data name="SettingsWallpapersTextBlock.Text" xml:space="preserve">
     <value>Installa un nuovo sfondo</value>
   </data>
-  <data name="SettingsWatchFaceChooseButton.Content" xml:space="preserve">
+  <data name="SettingsWatchfaceChooseButton.Content" xml:space="preserve">
     <value>Seleziona</value>
   </data>
-  <data name="SettingsWatchFaceInstallationProgressRun.Text" xml:space="preserve">
+  <data name="SettingsWatchfaceInstallationProgressRun.Text" xml:space="preserve">
     <value>Stato installazione</value>
   </data>
-  <data name="SettingsWatchFaceInstallButton.Content" xml:space="preserve">
+  <data name="SettingsWatchfaceInstallButton.Content" xml:space="preserve">
     <value>Installa</value>
   </data>
-  <data name="SettingsWatchFaceNavigationPageHeader.TitleText" xml:space="preserve">
-    <value>WatchFace</value>
+  <data name="SettingsWatchfaceNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Watchface</value>
   </data>
-  <data name="SettingsWatchFaceTextBlock.Text" xml:space="preserve">
-    <value>Installa una nuova WatchFace</value>
+  <data name="SettingsWatchfaceTextBlock.Text" xml:space="preserve">
+    <value>Installa una nuova Watchface</value>
   </data>
   <data name="SettingsWallpapersInvalidImageMessage" xml:space="preserve">
     <value>Il file selezionato sembra corrotto o invalido.</value>
@@ -457,7 +457,7 @@
     <value>Ora il tuo dispositivo con AsteroidOS è correttamente collegato al tuo PC.</value>
   </data>
   <data name="TutorialsUsbStep3Paragraph2Run.Text" xml:space="preserve">
-    <value>Potrai installare nuove WatchFace e/o sfondi tramite la connessione USB.</value>
+    <value>Potrai installare nuove Watchface e/o sfondi tramite la connessione USB.</value>
   </data>
   <data name="HomeMainUpdateButtonTextBlock.Text" xml:space="preserve">
     <value>Aggiorna</value>

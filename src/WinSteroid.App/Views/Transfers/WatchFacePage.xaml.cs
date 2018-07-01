@@ -18,14 +18,14 @@ using WinSteroid.App.ViewModels.Transfers;
 
 namespace WinSteroid.App.Views.Transfers
 {
-    public sealed partial class WatchFacePage : Page
+    public sealed partial class WatchfacePage : Page
     {
-        public WatchFacePageViewModel ViewModel
+        public WatchfacePageViewModel ViewModel
         {
-            get { return this.DataContext as WatchFacePageViewModel; }
+            get { return this.DataContext as WatchfacePageViewModel; }
         }
 
-        public WatchFacePage()
+        public WatchfacePage()
         {
             this.InitializeComponent();
         }
