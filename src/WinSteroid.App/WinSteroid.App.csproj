@@ -112,6 +112,9 @@
     <Compile Include="Controls\ScreenshotsBenchmarkDialog.xaml.cs">
       <DependentUpon>ScreenshotsBenchmarkDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SshRebootDialog.xaml.cs">
+      <DependentUpon>SshRebootDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BatteryLevelToColorConverter.cs" />
     <Compile Include="Converters\BatteryLevelToBrushConverter.cs" />
     <Compile Include="Converters\BatteryLevelToVisibilityConverter.cs" />
@@ -127,13 +130,14 @@
     <Compile Include="Converters\NumberToPercentageTextConverter.cs" />
     <Compile Include="Converters\StringToBooleanConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
+    <Compile Include="Converters\UsbModeEnumToStringConverter.cs" />
     <Compile Include="Converters\VibrationLevelToNumberConverter.cs" />
     <Compile Include="Converters\NumberToVibrationLevelStringConverter.cs" />
     <Compile Include="Extensions\IDialogServiceExtensions.cs" />
     <Compile Include="Services\ApplicationsService.cs" />
-    <Compile Include="Factory\SecureConnectionsFactory.cs" />
     <Compile Include="ViewModels\BaseMainPageViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Controls\ScpCredentialsDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\ScreenshotsBenchmarkDialogViewModel.cs" />
     <Compile Include="ViewModels\Home\ScreenshotsPageViewModel.cs" />
     <Compile Include="ViewModels\MenuOptionViewModel.cs" />
@@ -143,6 +147,7 @@
     <Compile Include="ViewModels\Home\MainPageViewModel.cs" />
     <Compile Include="ViewModels\Settings\MainPageViewModel.cs" />
     <Compile Include="ViewModels\Settings\AboutPageViewModel.cs" />
+    <Compile Include="ViewModels\Settings\ToolsPageViewModel.cs" />
     <Compile Include="ViewModels\Tutorials\MainPageViewModel.cs" />
     <Compile Include="ViewModels\Tutorials\UsbPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -167,6 +172,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Settings\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\ToolsPage.xaml.cs">
+      <DependentUpon>ToolsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tutorials\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -261,6 +269,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SshRebootDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\ConvertersDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -299,6 +311,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Settings\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\ToolsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

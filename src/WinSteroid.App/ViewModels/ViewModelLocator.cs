@@ -36,6 +36,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<Settings.ApplicationPageViewModel>();
             SimpleIoc.Default.Register<Settings.ApplicationsPageViewModel>();
             SimpleIoc.Default.Register<Settings.MainPageViewModel>();
+            SimpleIoc.Default.Register<Settings.ToolsPageViewModel>();
 
             SimpleIoc.Default.Register<Tutorials.MainPageViewModel>();
             SimpleIoc.Default.Register<Tutorials.UsbPageViewModel>();
@@ -43,6 +44,7 @@ namespace WinSteroid.App.ViewModels
             SimpleIoc.Default.Register<Transfers.WatchfacePageViewModel>();
             SimpleIoc.Default.Register<Transfers.WallpapersPageViewModel>();
 
+            SimpleIoc.Default.Register<Controls.ScpCredentialsDialogViewModel>();
             SimpleIoc.Default.Register<Controls.ScreenshotsBenchmarkDialogViewModel>();
 
             SimpleIoc.Default.Register(InitializeNavigationService);
@@ -67,6 +69,7 @@ namespace WinSteroid.App.ViewModels
             navigationService.Configure(nameof(Settings), typeof(Views.Settings.MainPage));
             navigationService.Configure(nameof(SettingsApplications), typeof(Views.Settings.ApplicationsPage));
             navigationService.Configure(nameof(SettingsApplication), typeof(Views.Settings.ApplicationPage));
+            navigationService.Configure(nameof(SettingsTools), typeof(Views.Settings.ToolsPage));
 
             navigationService.Configure(nameof(TransfersWatchface), typeof(Views.Transfers.WatchfacePage));
             navigationService.Configure(nameof(TransfersWallpapers), typeof(Views.Transfers.WallpapersPage));
@@ -95,6 +98,8 @@ namespace WinSteroid.App.ViewModels
                     return SettingsApplication;
                 case nameof(SettingsApplications):
                     return SettingsApplications;
+                case nameof(SettingsTools):
+                    return SettingsTools;
                 case nameof(TransfersWallpapers):
                     return TransfersWallpapers;
                 case nameof(TransfersWatchface):
@@ -143,6 +148,11 @@ namespace WinSteroid.App.ViewModels
             get { return ServiceLocator.Current.GetInstance<Settings.MainPageViewModel>(); }
         }
 
+        public static Settings.ToolsPageViewModel SettingsTools
+        {
+            get { return ServiceLocator.Current.GetInstance<Settings.ToolsPageViewModel>(); }
+        }
+
         public static Transfers.WatchfacePageViewModel TransfersWatchface
         {
             get { return ServiceLocator.Current.GetInstance<Transfers.WatchfacePageViewModel>(); }
@@ -161,6 +171,11 @@ namespace WinSteroid.App.ViewModels
         public static Tutorials.UsbPageViewModel TutorialsUsb
         {
             get { return ServiceLocator.Current.GetInstance<Tutorials.UsbPageViewModel>(); }
+        }
+
+        public static Controls.ScpCredentialsDialogViewModel ScpCredentials
+        {
+            get { return ServiceLocator.Current.GetInstance<Controls.ScpCredentialsDialogViewModel>(); }
         }
 
         public static Controls.ScreenshotsBenchmarkDialogViewModel ScreenshotsBenchmark

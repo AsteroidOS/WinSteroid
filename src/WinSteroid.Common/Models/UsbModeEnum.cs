@@ -13,29 +13,14 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels.Controls;
-
-namespace WinSteroid.App.Controls
+namespace WinSteroid.Common.Models
 {
-    public sealed partial class ScpCredentialsDialog : ContentDialog
+    public enum UsbModeEnum
     {
-        public ScpCredentialsDialogViewModel ViewModel
-        {
-            get { return this.DataContext as ScpCredentialsDialogViewModel; }
-        }
-
-        public ScpCredentialsDialog()
-        {
-            this.InitializeComponent();
-        }
-
-        private void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            var validForm = this.ViewModel.Validate();
-            
-            args.Cancel = !validForm;
-        }
+        None = -1,
+        ChargingOnly = 0,
+        ADB = 1,
+        Developer = 2,
+        MTP = 3
     }
 }

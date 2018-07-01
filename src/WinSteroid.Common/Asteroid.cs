@@ -185,5 +185,8 @@ namespace WinSteroid.Common
         }
 
         public const int CurrentMinimalBtsyncdPacketSize = 200;
+
+        public const string DefaultIPv4 = "192.168.2.15";
+        public const string DefaultRootUsername = "root";
     }
 }

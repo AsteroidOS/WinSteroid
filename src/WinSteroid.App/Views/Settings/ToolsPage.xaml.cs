@@ -13,29 +13,39 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels.Controls;
+using Windows.UI.Xaml.Navigation;
+using WinSteroid.App.ViewModels.Settings;
 
-namespace WinSteroid.App.Controls
+namespace WinSteroid.App.Views.Settings
 {
-    public sealed partial class ScpCredentialsDialog : ContentDialog
+    public sealed partial class ToolsPage : Page
     {
-        public ScpCredentialsDialogViewModel ViewModel
+        public ToolsPageViewModel ViewModel
         {
-            get { return this.DataContext as ScpCredentialsDialogViewModel; }
+            get { return this.DataContext as ToolsPageViewModel; }
         }
 
-        public ScpCredentialsDialog()
+        public ToolsPage()
         {
             this.InitializeComponent();
         }
 
-        private void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            var validForm = this.ViewModel.Validate();
-            
-            args.Cancel = !validForm;
+            this.ViewModel.Reset();
+
+            base.OnNavigatedFrom(e);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (!this.ViewModel.Initialized)
+            {
+                this.ViewModel.Refresh();
+            }
+
+            base.OnNavigatedTo(e);
         }
     }
 }

@@ -13,29 +13,28 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels.Controls;
+using Windows.UI.Xaml.Data;
+using WinSteroid.Common.Models;
 
-namespace WinSteroid.App.Controls
+namespace WinSteroid.App.Converters
 {
-    public sealed partial class ScpCredentialsDialog : ContentDialog
+    public class UsbModeEnumToStringConverter : DependencyObject, IValueConverter
     {
-        public ScpCredentialsDialogViewModel ViewModel
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            get { return this.DataContext as ScpCredentialsDialogViewModel; }
+            if (value is UsbModeEnum usbModeEnum)
+            {
+                return usbModeEnum.ToLocalizedString();
+            }
+
+            return value;
         }
 
-        public ScpCredentialsDialog()
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            this.InitializeComponent();
-        }
-
-        private void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            var validForm = this.ViewModel.Validate();
-            
-            args.Cancel = !validForm;
+            throw new NotImplementedException();
         }
     }
 }

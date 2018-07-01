@@ -15,12 +15,17 @@
 
 using Renci.SshNet;
 
-namespace WinSteroid.App.Factory
+namespace WinSteroid.Common.Factory
 {
     public static class SecureConnectionsFactory
-    {        
+    {
+        private static ScpClient DefaultScpClient;
+        private static SshClient DefaultSshClient;
+        
         public static ScpClient CreateScpClient(string ip, string username, string password)
         {
+            if (DefaultScpClient != null && DefaultScpClient.IsConnected) return DefaultScpClient;
+
             var authenticationsMethods = new AuthenticationMethod[]
             {
                 new NoneAuthenticationMethod(username)
@@ -28,18 +33,20 @@ namespace WinSteroid.App.Factory
 
             var connectionInfo = new ConnectionInfo(ip, 22, username, authenticationsMethods);
 
-            var client = new ScpClient(connectionInfo);
+            DefaultScpClient = new ScpClient(connectionInfo);
 
-            if (client.IsConnected) return client;
+            if (DefaultScpClient.IsConnected) return DefaultScpClient;
 
-            client.RemotePathTransformation = RemotePathTransformation.ShellQuote;
-            client.Connect();
+            DefaultScpClient.RemotePathTransformation = RemotePathTransformation.ShellQuote;
+            DefaultScpClient.Connect();
 
-            return client;
+            return DefaultScpClient;
         }
-
+        
         public static SshClient CreateSshClient(string ip, string username, string password)
         {
+            if (DefaultSshClient != null && DefaultSshClient.IsConnected) return DefaultSshClient;
+
             var authenticationsMethods = new AuthenticationMethod[]
             {
                 new NoneAuthenticationMethod(username)
@@ -47,13 +54,13 @@ namespace WinSteroid.App.Factory
 
             var connectionInfo = new ConnectionInfo(ip, username, authenticationsMethods);
 
-            var client = new SshClient(connectionInfo);
+            DefaultSshClient = new SshClient(connectionInfo);
 
-            if (client.IsConnected) return client;
-            
-            client.Connect();
+            if (DefaultSshClient.IsConnected) return DefaultSshClient;
 
-            return client;
+            DefaultSshClient.Connect();
+
+            return DefaultSshClient;
         }
     }
 }

@@ -561,4 +561,64 @@
   <data name="SettingsWallpapersUnsupportedImageErrorMessage" xml:space="preserve">
     <value>L'immagine selezionata non è quadrata.</value>
   </data>
+  <data name="UsbModeEnumADB" xml:space="preserve">
+    <value>Modalità ADB</value>
+  </data>
+  <data name="UsbModeEnumChargingOnly" xml:space="preserve">
+    <value>Solo carica</value>
+  </data>
+  <data name="UsbModeEnumDeveloper" xml:space="preserve">
+    <value>Modalità sviluppatore</value>
+  </data>
+  <data name="UsbModeEnumMTP" xml:space="preserve">
+    <value>Modalità MTP</value>
+  </data>
+  <data name="SshRebootDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="SshRebootDialog.Title" xml:space="preserve">
+    <value>RIAVVIA ASTEROIDOS</value>
+  </data>
+  <data name="SshRebootDialogBootloaderButton.Content" xml:space="preserve">
+    <value>Modalità Bootaloader</value>
+  </data>
+  <data name="SshRebootDialogClassicButton.Content" xml:space="preserve">
+    <value>Riavvia dispositivo</value>
+  </data>
+  <data name="SshRebootDialogRecoveryButton.Content" xml:space="preserve">
+    <value>Modalità Recovery</value>
+  </data>
+  <data name="SshRebootDialogTextBlock.Text" xml:space="preserve">
+    <value>Seleziona la modalità per riavviare il tuo dispositivo AsteroidOS. Nota: WinSteroid verrà chiuso</value>
+  </data>
+  <data name="SettingsToolsNavigationPageHeader.TitleText" xml:space="preserve">
+    <value>Utilità</value>
+  </data>
+  <data name="SettingsToolsRebootButton.Content" xml:space="preserve">
+    <value>Riavvia ora</value>
+  </data>
+  <data name="SettingsToolsRebootTextBlock.Text" xml:space="preserve">
+    <value>Riavvia AsteroidOS</value>
+  </data>
+  <data name="SettingsToolsUsbModeButton.Content" xml:space="preserve">
+    <value>Applica</value>
+  </data>
+  <data name="SettingsToolsUsbModeTextBlock.Text" xml:space="preserve">
+    <value>Modalità USB</value>
+  </data>
+  <data name="SettingsMainAboutAppBarButton.Label" xml:space="preserve">
+    <value>Informazioni</value>
+  </data>
+  <data name="SettingsMainToolsAppBarButton.Label" xml:space="preserve">
+    <value>Utilità</value>
+  </data>
+  <data name="SettingsMainToolsItemLabel" xml:space="preserve">
+    <value>Utilità</value>
+  </data>
+  <data name="SettingsToolsApplyUsbModeFailedError" xml:space="preserve">
+    <value>Non sono riuscito ad applicare le modifiche selezionate, controllare la connessione col dispositivo</value>
+  </data>
+  <data name="ScpCredentialsDialogDefaultButton.Content" xml:space="preserve">
+    <value>Prova connessione con credenziali di default</value>
+  </data>
 </root>

@@ -270,8 +270,7 @@
 
                             <Button x:Uid="SettingsMainIconsButton"
                                     Padding="12,4"
-                                    Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}"
-                                    IsEnabled="{x:Bind ViewModel.EnableUserNotifications, Mode=OneWay}" />
+                                    Command="{x:Bind ViewModel.ApplicationsCommand, Mode=OneWay}" />
 
                             <TextBlock x:Uid="SettingsMainTimeTextBlock"
                                        Style="{ThemeResource BaseTextBlockStyle}"
@@ -330,7 +329,13 @@
                     x:Name="MainCommandBar"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Label="About"
+                <AppBarButton x:Uid="SettingsMainToolsAppBarButton"
+                              Command="{x:Bind ViewModel.ToolsCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Uid="SettingsMainAboutAppBarButton"
                               Command="{x:Bind ViewModel.AboutCommand, Mode=OneWay}">
                     <AppBarButton.Icon>
                         <FontIcon Glyph="" />

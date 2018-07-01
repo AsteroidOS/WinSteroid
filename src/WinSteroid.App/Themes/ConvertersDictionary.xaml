@@ -51,5 +51,7 @@
 
     <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
+    <converters:UsbModeEnumToStringConverter x:Key="UsbModeEnumToStringConverter" />
+
     <converters:VibrationLevelToNumberConverter x:Key="VibrationLevelToNumberConverter" />
 </ResourceDictionary>

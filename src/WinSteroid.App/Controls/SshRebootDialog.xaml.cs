@@ -15,27 +15,42 @@
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using WinSteroid.App.ViewModels.Controls;
 
 namespace WinSteroid.App.Controls
 {
-    public sealed partial class ScpCredentialsDialog : ContentDialog
+    public sealed partial class SshRebootDialog : ContentDialog
     {
-        public ScpCredentialsDialogViewModel ViewModel
-        {
-            get { return this.DataContext as ScpCredentialsDialogViewModel; }
-        }
+        public RebootMode SelectedRebootMode { get; private set; }
 
-        public ScpCredentialsDialog()
+        public SshRebootDialog()
         {
             this.InitializeComponent();
         }
 
-        private void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        public enum RebootMode
         {
-            var validForm = this.ViewModel.Validate();
-            
-            args.Cancel = !validForm;
+            None = -1,
+            Classic = 0,
+            Bootloader = 1,
+            Recovery = 2
+        }
+
+        private void OnClassicModeClicked(object sender, RoutedEventArgs e)
+        {
+            this.SelectedRebootMode = RebootMode.Classic;
+            this.Hide();
+        }
+
+        private void OnBootloaderModeClicked(object sender, RoutedEventArgs e)
+        {
+            this.SelectedRebootMode = RebootMode.Bootloader;
+            this.Hide();
+        }
+
+        private void OnRecoveryModeClicked(object sender, RoutedEventArgs e)
+        {
+            this.SelectedRebootMode = RebootMode.Recovery;
+            this.Hide();
         }
     }
 }

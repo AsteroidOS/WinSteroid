@@ -1,0 +1,120 @@
+﻿<!-- 
+     Copyright (C) 2018 - Luca Montanari <thunderluca93@gmail.com>
+     
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Page
+    x:Class="WinSteroid.App.Views.Settings.ToolsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:WinSteroid.App.Controls"
+    xmlns:models="using:WinSteroid.Common.Models"
+    xmlns:windowsstatetriggers="using:WindowsStateTriggers"
+    mc:Ignorable="d"
+    DataContext="{Binding SettingsTools, Source={StaticResource Locator}}">
+
+    <Grid>
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Normal">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="UsbModeComboBox.HorizontalAlignment" Value="Left" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <windowsstatetriggers:AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="UsbModeComboBox.HorizontalAlignment" Value="Stretch" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <controls:AcrylicGrid Grid.Row="1" />
+
+        <Grid Grid.Row="1"
+              Background="{ThemeResource SoftAcrylicBackgroundThemeBrush}" />
+
+        <controls:NavigationPageHeader Grid.Row="0"
+                                       x:Uid="SettingsToolsNavigationPageHeader"
+                                       Background="{ThemeResource DefaultPaneBackground}"
+                                       ButtonGlyph=""
+                                       ButtonCommand="{x:Bind ViewModel.BackCommand, Mode=OneWay}" />
+        <StackPanel Grid.Row="1"
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    IsHitTestVisible="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToOppositeBooleanConverter}}">
+            <TextBlock x:Uid="SettingsToolsUsbModeTextBlock"
+                       Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+            <ComboBox x:Name="UsbModeComboBox" 
+                      Margin="0,24,0,8"
+                      ItemsSource="{x:Bind ViewModel.UsbModes, Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.SelectedUsbMode, Mode=TwoWay}"
+                      PlaceholderText="{x:Bind ViewModel.SelectedUsbMode.ToString(), Mode=OneWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:UsbMode">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{x:Bind TypeMode, Converter={StaticResource UsbModeEnumToStringConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Button x:Uid="SettingsToolsUsbModeButton"
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    Command="{x:Bind ViewModel.ApplyUsbModeCommand}" />
+
+            <TextBlock x:Uid="SettingsToolsRebootTextBlock"
+                       Style="{ThemeResource BaseTextBlockStyle}"
+                       Margin="{StaticResource DefaultStackPanelHeaderTextBlockMargin}" />
+
+            <Button x:Uid="SettingsToolsRebootButton"
+                    Padding="{StaticResource DefaultButtonPadding}"
+                    Command="{x:Bind ViewModel.RebootCommand}" />
+        </StackPanel>
+
+        <ProgressRing Grid.Row="1"
+                      Width="116"
+                      Height="116"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                      IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" 
+                      Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Page>

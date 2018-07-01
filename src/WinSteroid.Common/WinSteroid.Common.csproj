@@ -126,8 +126,10 @@
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\SystemNavigationManagerExtensions.cs" />
+    <Compile Include="Extensions\UsbModeEnumExtensions.cs" />
     <Compile Include="Extensions\UserNotificationExtensions.cs" />
     <Compile Include="Extensions\VibrationLevelExtensions.cs" />
+    <Compile Include="Factory\SecureConnectionsFactory.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\AsteroidHelper.cs" />
     <Compile Include="Helpers\BatteryHelper.cs" />
@@ -151,9 +153,14 @@
     <Compile Include="Models\MediaCommandType.cs" />
     <Compile Include="Models\MediaInfo.cs" />
     <Compile Include="Models\PairingResult.cs" />
+    <Compile Include="Models\UsbMode.cs" />
+    <Compile Include="Models\UsbModeEnum.cs" />
     <Compile Include="Models\VibrationLevel.cs" />
     <Compile Include="Notifications\NotificationsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SshCommands\SshClientRebootExtensions.cs" />
+    <Compile Include="SshCommands\SshClientUsbModeExtensions.cs" />
+    <Compile Include="SshCommands\UsbModeHelper.cs" />
     <EmbeddedResource Include="Properties\WinSteroid.Common.rd.xml" />
   </ItemGroup>
   <ItemGroup>

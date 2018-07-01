@@ -69,6 +69,7 @@ namespace WinSteroid.App.ViewModels.Settings
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainHomeItemLabel"), Command = HomeCommand });
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainAboutItemLabel"), Command = AboutCommand });
             this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainApplicationsItemLabel"), Command = ApplicationsCommand });
+            this.MenuOptions.Add(new MenuOptionViewModel { Glyph = "", Label = ResourcesHelper.GetLocalizedString("SettingsMainToolsItemLabel"), Command = ToolsCommand });
         }
 
         public override void Reset()
@@ -388,6 +389,25 @@ namespace WinSteroid.App.ViewModels.Settings
         private void GoToAbout()
         {
             this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsAbout));
+        }
+
+        private RelayCommand _toolsCommand;
+        public RelayCommand ToolsCommand
+        {
+            get
+            {
+                if (_toolsCommand == null)
+                {
+                    _toolsCommand = new RelayCommand(GoToTools);
+                }
+
+                return _toolsCommand;
+            }
+        }
+
+        private void GoToTools()
+        {
+            this.NavigationService.NavigateTo(nameof(ViewModelLocator.SettingsTools));
         }
 
         private RelayCommand _homeCommand;
