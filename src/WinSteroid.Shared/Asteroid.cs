@@ -15,17 +15,17 @@
 
 using System;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using WinSteroid.Common.Models;
+using WinSteroid.Shared.Models;
 
-namespace WinSteroid.Common
+namespace WinSteroid.Shared
 {
-    public static class Asteroid
+    internal static class Asteroid
     {
         //Advertisement UUIDs
-        public static Guid AdvertisementServiceUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
+        internal static Guid AdvertisementServiceUuid = Guid.Parse("00000000-0000-0000-0000-00a57e401d05");
 
         private static BLEService _batteryService;
-        public static BLEService BatteryService
+        internal static BLEService BatteryService
         {
             get
             {
@@ -44,15 +44,15 @@ namespace WinSteroid.Common
         }
 
         //Media UUIDs
-        public static Guid MediaServiceUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        public static Guid MediaTitleCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        public static Guid AlbumCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        public static Guid ArtistCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        public static Guid PlayingCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        public static Guid CommandCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaServiceUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaTitleCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid AlbumCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid ArtistCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid PlayingCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid CommandCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
 
         private static BLEService _mediaService;
-        public static BLEService MediaService
+        internal static BLEService MediaService
         {
             get
             {
@@ -75,12 +75,12 @@ namespace WinSteroid.Common
         }
 
         //Notifications UUIDs
-        public static Guid NotificationServiceUuid = Guid.Parse("00009071-0000-0000-0000-00A57E401D05");
-        public static Guid NotificationUpdateCharacteristicUuid = Guid.Parse("00009001-0000-0000-0000-00A57E401D05");
-        public static Guid NotificationFeedbackCharacteristicUuid = Guid.Parse("00009002-0000-0000-0000-00A57E401D05");
+        internal static Guid NotificationServiceUuid = Guid.Parse("00009071-0000-0000-0000-00A57E401D05");
+        internal static Guid NotificationUpdateCharacteristicUuid = Guid.Parse("00009001-0000-0000-0000-00A57E401D05");
+        internal static Guid NotificationFeedbackCharacteristicUuid = Guid.Parse("00009002-0000-0000-0000-00A57E401D05");
 
         private static BLEService _notificationService;
-        public static BLEService NotificationService
+        internal static BLEService NotificationService
         {
             get
             {
@@ -100,11 +100,11 @@ namespace WinSteroid.Common
         }
 
         //Time UUIDs
-        public static Guid TimeServiceUuid = Guid.Parse("00005071-0000-0000-0000-00A57E401D05");
-        public static Guid TimeSetCharacteristicUuid = Guid.Parse("00005001-0000-0000-0000-00A57E401D05");
+        internal static Guid TimeServiceUuid = Guid.Parse("00005071-0000-0000-0000-00A57E401D05");
+        internal static Guid TimeSetCharacteristicUuid = Guid.Parse("00005001-0000-0000-0000-00A57E401D05");
 
         private static BLEService _timeService;
-        public static BLEService TimeService
+        internal static BLEService TimeService
         {
             get
             {
@@ -123,14 +123,14 @@ namespace WinSteroid.Common
         }
 
         //Weather UUIDs
-        public static Guid WeatherServiceUuid = Guid.Parse("00008071-0000-0000-0000-00A57E401D05");
-        public static Guid WeatherCityCharacteristicUuid = Guid.Parse("00009001-0000-0000-0000-00A57E401D05");
-        public static Guid WeatherIDsCharacteristicUuid = Guid.Parse("00008002-0000-0000-0000-00A57E401D05");
-        public static Guid WeatherMinTemperaturesCharacteristicUuid = Guid.Parse("00008003-0000-0000-0000-00A57E401D05");
-        public static Guid WeatherMaxTemperaturesCharacteristicUuid = Guid.Parse("00008004-0000-0000-0000-00A57E401D05");
+        internal static Guid WeatherServiceUuid = Guid.Parse("00008071-0000-0000-0000-00A57E401D05");
+        internal static Guid WeatherCityCharacteristicUuid = Guid.Parse("00009001-0000-0000-0000-00A57E401D05");
+        internal static Guid WeatherIDsCharacteristicUuid = Guid.Parse("00008002-0000-0000-0000-00A57E401D05");
+        internal static Guid WeatherMinTemperaturesCharacteristicUuid = Guid.Parse("00008003-0000-0000-0000-00A57E401D05");
+        internal static Guid WeatherMaxTemperaturesCharacteristicUuid = Guid.Parse("00008004-0000-0000-0000-00A57E401D05");
 
         private static BLEService _weatherService;
-        public static BLEService WeatherService
+        internal static BLEService WeatherService
         {
             get
             {
@@ -152,12 +152,12 @@ namespace WinSteroid.Common
         }
 
         //Screenshots UUIDs
-        public static Guid ScreenshotsServiceUuid = Guid.Parse("00006071-0000-0000-0000-00A57E401D05");
-        public static Guid ScreenshotRequestCharacteristicUuid = Guid.Parse("00006001-0000-0000-0000-00A57E401D05");
-        public static Guid ScreenshotContentCharacteristicUuid = Guid.Parse("00006002-0000-0000-0000-00A57E401D05");
+        internal static Guid ScreenshotsServiceUuid = Guid.Parse("00006071-0000-0000-0000-00A57E401D05");
+        internal static Guid ScreenshotRequestCharacteristicUuid = Guid.Parse("00006001-0000-0000-0000-00A57E401D05");
+        internal static Guid ScreenshotContentCharacteristicUuid = Guid.Parse("00006002-0000-0000-0000-00A57E401D05");
 
         private static BLEService _screenshotsService;
-        public static BLEService ScreenshotsService
+        internal static BLEService ScreenshotsService
         {
             get
             {
@@ -176,7 +176,7 @@ namespace WinSteroid.Common
             }
         }
 
-        public static BLEService[] Services
+        internal static BLEService[] Services
         {
             get
             {
@@ -184,9 +184,9 @@ namespace WinSteroid.Common
             }
         }
 
-        public const int CurrentMinimalBtsyncdPacketSize = 200;
+        internal const int CurrentMinimalBtsyncdPacketSize = 200;
 
-        public const string DefaultIPv4 = "192.168.2.15";
-        public const string DefaultRootUsername = "root";
+        internal const string DefaultIPv4 = "192.168.2.15";
+        internal const string DefaultRootUsername = "root";
     }
 }

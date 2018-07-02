@@ -15,9 +15,9 @@
 
 using System;
 
-namespace WinSteroid.Common.Models
+namespace WinSteroid.Shared.Models
 {
-    public class BLECharacteristic
+    internal class BLECharacteristic
     {
         public BLECharacteristic(string name, Guid uuid)
         {

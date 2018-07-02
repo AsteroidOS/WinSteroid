@@ -16,8 +16,8 @@
 using GalaSoft.MvvmLight.Command;
 using System.Net;
 using System.Text;
-using WinSteroid.Common;
 using WinSteroid.Common.Helpers;
+using WinSteroid.Shared;
 
 namespace WinSteroid.App.ViewModels.Controls
 {

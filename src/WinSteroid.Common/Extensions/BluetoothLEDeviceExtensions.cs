@@ -17,7 +17,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using WinSteroid.Common;
+using WinSteroid.Shared;
 
 namespace Windows.Devices.Bluetooth
 {

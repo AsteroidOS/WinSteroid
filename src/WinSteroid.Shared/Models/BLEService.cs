@@ -17,9 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WinSteroid.Common.Models
+namespace WinSteroid.Shared.Models
 {
-    public class BLEService
+    internal class BLEService
     {
         public BLEService(string name, Guid uuid, IEnumerable<BLECharacteristic> characteristics)
         {

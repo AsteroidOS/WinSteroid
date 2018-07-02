@@ -19,10 +19,10 @@ using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
-using WinSteroid.Common;
 using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Messages;
+using WinSteroid.Shared;
 
 namespace WinSteroid.App.ViewModels.Controls
 {

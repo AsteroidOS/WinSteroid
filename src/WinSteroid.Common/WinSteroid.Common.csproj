@@ -107,7 +107,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Asteroid.cs" />
     <Compile Include="Background\BackgroundManager.cs" />
     <Compile Include="Bluetooth\DeviceManager.cs" />
     <Compile Include="Constants.cs" />
@@ -147,8 +146,6 @@
     <Compile Include="Messages\ScreenshotProgressMessage.cs" />
     <Compile Include="Models\ApplicationIcon.cs" />
     <Compile Include="Models\BatteryLevel.cs" />
-    <Compile Include="Models\BLECharacteristic.cs" />
-    <Compile Include="Models\BLEService.cs" />
     <Compile Include="Models\ApplicationPreference.cs" />
     <Compile Include="Models\MediaCommandType.cs" />
     <Compile Include="Models\MediaInfo.cs" />
@@ -197,6 +194,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <Import Project="..\WinSteroid.Shared\WinSteroid.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

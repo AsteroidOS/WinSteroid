@@ -32,6 +32,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Models;
+using WinSteroid.Shared;
 
 namespace WinSteroid.Common.Bluetooth
 {

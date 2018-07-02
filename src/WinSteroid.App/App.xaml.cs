@@ -28,11 +28,11 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using WinSteroid.App.Services;
 using WinSteroid.App.ViewModels;
-using WinSteroid.Common;
 using WinSteroid.Common.Background;
 using WinSteroid.Common.Bluetooth;
 using WinSteroid.Common.Helpers;
 using WinSteroid.Common.Notifications;
+using WinSteroid.Shared;
 
 namespace WinSteroid.App
 {
