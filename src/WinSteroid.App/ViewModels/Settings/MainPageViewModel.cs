@@ -478,7 +478,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
             ViewModelLocator.Home.Reset();
             ViewModelLocator.HomeWelcome.Reset();
-            await DeviceManager.DisconnectAsync();
+            await DeviceManager.DisconnectAsync(removeLastDeviceInfo: true);
             App.Reset();
         }
     }

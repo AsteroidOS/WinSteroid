@@ -185,7 +185,7 @@ namespace WinSteroid.App
             
             await applicationsService.UpsertFoundApplicationsAsync(userNotifications);
 
-            await DeviceManager.DisconnectAsync();
+            await DeviceManager.DisconnectAsync(removeLastDeviceInfo: false);
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)

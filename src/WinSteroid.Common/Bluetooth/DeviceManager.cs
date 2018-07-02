@@ -112,7 +112,7 @@ namespace WinSteroid.Common.Bluetooth
             Messenger.Default.Send(new Messages.DeviceConnectionStatusMessage(sender?.ConnectionStatus == BluetoothConnectionStatus.Connected));
         }
 
-        public static async Task DisconnectAsync()
+        public static async Task DisconnectAsync(bool removeLastDeviceInfo)
         {
             var batteryCharacteristic = await BluetoothDevice.GetGattCharacteristicAsync(GattCharacteristicUuids.BatteryLevel);
             if (batteryCharacteristic != null)
@@ -133,7 +133,10 @@ namespace WinSteroid.Common.Bluetooth
                 BluetoothDevice = null;
                 Current = null;
 
-                UpdateLastSavedDeviceInfo(string.Empty, string.Empty);
+                if (removeLastDeviceInfo)
+                {
+                    UpdateLastSavedDeviceInfo(string.Empty, string.Empty);
+                }
             }
         }
 

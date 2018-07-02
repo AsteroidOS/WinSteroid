@@ -78,7 +78,7 @@ namespace WinSteroidMediaService
             
             await args.SendResponseAsync(this.GetSuccessValueSet(sender.PackageFamilyName));
 
-            await DeviceManager.DisconnectAsync();
+            await DeviceManager.DisconnectAsync(removeLastDeviceInfo: false);
 
             deferral.Complete();
         }
