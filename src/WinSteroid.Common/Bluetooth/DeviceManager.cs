@@ -72,26 +72,30 @@ namespace WinSteroid.Common.Bluetooth
             return devicePicker.PickSingleDeviceAsync(rootFrame.GetPickerRect());
         }
 
-        public static Task<string> ConnectAsync()
+        public static Task<string> ConnectAsync(bool isBackgroundActivity)
         {
-            return ConnectAsync(SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty));
+            return ConnectAsync(SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty), isBackgroundActivity);
         }
 
-        public static async Task<string> ConnectAsync(string deviceId)
+        public static async Task<string> ConnectAsync(string deviceId, bool isBackgroundActivity)
         {
             try
             {
                 var bluetoothDevice = await BluetoothLEDevice.FromIdAsync(deviceId);
                 if (bluetoothDevice == null)
                 {
-                    return ResourcesHelper.GetLocalizedString("DeviceServiceDisappearedDeviceError");
+                    return isBackgroundActivity
+                        ? "DeviceServiceDisappearedDeviceError"
+                        : ResourcesHelper.GetLocalizedString("DeviceServiceDisappearedDeviceError");
                 }
 
                 var timeServicesResult = await bluetoothDevice.GetGattServicesForUuidAsync(Asteroid.TimeServiceUuid);
                 if (timeServicesResult.Status != GattCommunicationStatus.Success
                     || (timeServicesResult.Status == GattCommunicationStatus.Success && timeServicesResult.Services.Count < 1))
                 {
-                    return ResourcesHelper.GetLocalizedString("DeviceServiceNoAsteroidDeviceError");
+                    return isBackgroundActivity 
+                        ? "DeviceServiceNoAsteroidDeviceError" 
+                        : ResourcesHelper.GetLocalizedString("DeviceServiceNoAsteroidDeviceError");
                 }
 
                 BluetoothDevice = bluetoothDevice;
@@ -102,10 +106,16 @@ namespace WinSteroid.Common.Bluetooth
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackException(exception);
 
-                return ResourcesHelper.GetLocalizedString("DeviceServiceGenericConnectionError");
+                return isBackgroundActivity 
+                    ? "DeviceServiceGenericConnectionError" 
+                    : ResourcesHelper.GetLocalizedString("DeviceServiceGenericConnectionError");
             }
 
-            return BluetoothDevice != null && Current != null ? string.Empty : ResourcesHelper.GetLocalizedString("DeviceServiceConnectionFailedError");
+            return BluetoothDevice != null && Current != null 
+                ? string.Empty 
+                : isBackgroundActivity 
+                    ? "DeviceServiceConnectionFailedError"
+                    : ResourcesHelper.GetLocalizedString("DeviceServiceConnectionFailedError");
         }
 
         private static void OnBluetoothDeviceConnectionStatusChanged(BluetoothLEDevice sender, object args)

@@ -13,26 +13,15 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using Windows.ApplicationModel.Resources;
 
 namespace WinSteroid.Common.Helpers
 {
     public static class ResourcesHelper
     {
-        private static ResourceLoader _resourceLoader;
         private static ResourceLoader ResourceLoader
         {
-            get
-            {
-                if (_resourceLoader == null)
-                {
-                    var resourceLoader = ResourceLoader.GetForCurrentView();
-                    _resourceLoader = resourceLoader ?? throw new ArgumentNullException(nameof(resourceLoader));
-                }
-
-                return _resourceLoader;
-            }
+            get { return ResourceLoader.GetForCurrentView(); }
         }
 
         public static string GetLocalizedString(string resourceKey)

@@ -150,7 +150,7 @@ namespace WinSteroid.App
 
             var applicationsService = new ApplicationsService();
 
-            var errorMessage = await DeviceManager.ConnectAsync();
+            var errorMessage = await DeviceManager.ConnectAsync(isBackgroundActivity: true);
             if (!string.IsNullOrWhiteSpace(errorMessage)) return;
 
             var percentage = await DeviceManager.GetBatteryPercentageAsync();
@@ -168,7 +168,7 @@ namespace WinSteroid.App
         {
             var applicationsService = new ApplicationsService();
 
-            var errorMessage = await DeviceManager.ConnectAsync();
+            var errorMessage = await DeviceManager.ConnectAsync(isBackgroundActivity: true);
             if (!string.IsNullOrWhiteSpace(errorMessage)) return;
 
             var characteristic = await DeviceManager.GetGattCharacteristicAsync(Asteroid.NotificationUpdateCharacteristicUuid);
