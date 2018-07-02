@@ -46,9 +46,9 @@ namespace WinSteroid.Shared
         //Media UUIDs
         internal static Guid MediaServiceUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
         internal static Guid MediaTitleCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        internal static Guid AlbumCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        internal static Guid ArtistCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        internal static Guid PlayingCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaAlbumCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaArtistCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaPlayingCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
         internal static Guid CommandCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
 
         private static BLEService _mediaService;
@@ -61,9 +61,9 @@ namespace WinSteroid.Shared
                     var characteristics = new[]
                     {
                         new BLECharacteristic(nameof(MediaTitleCharacteristicUuid), MediaTitleCharacteristicUuid),
-                        new BLECharacteristic(nameof(AlbumCharacteristicUuid), AlbumCharacteristicUuid),
-                        new BLECharacteristic(nameof(ArtistCharacteristicUuid), ArtistCharacteristicUuid),
-                        new BLECharacteristic(nameof(PlayingCharacteristicUuid), PlayingCharacteristicUuid),
+                        new BLECharacteristic(nameof(MediaAlbumCharacteristicUuid), MediaAlbumCharacteristicUuid),
+                        new BLECharacteristic(nameof(MediaArtistCharacteristicUuid), MediaArtistCharacteristicUuid),
+                        new BLECharacteristic(nameof(MediaPlayingCharacteristicUuid), MediaPlayingCharacteristicUuid),
                         new BLECharacteristic(nameof(CommandCharacteristicUuid), CommandCharacteristicUuid)
                     };
 

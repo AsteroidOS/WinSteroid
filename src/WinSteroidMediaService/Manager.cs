@@ -53,7 +53,7 @@ namespace WinSteroidMediaService
             var requestData = args.Request.Message;
             if (!this.IsValidRequestDataSet(requestData, out Guid characteristicUuid, out string data))
             {
-                await args.SendResponseAsync(this.GetFailureValueSet(sender.PackageFamilyName, "invalid data"));
+                await args.SendResponseAsync(this.GetFailureValueSet("invalid data"));
                 deferral.Complete();
                 return;
             }
@@ -61,7 +61,7 @@ namespace WinSteroidMediaService
             var deviceId = SettingsHelper.GetValue(Constants.LastSavedDeviceIdSettingKey, string.Empty);
             if (string.IsNullOrWhiteSpace(deviceId))
             {
-                await args.SendResponseAsync(this.GetFailureValueSet(sender.PackageFamilyName, "device not found"));
+                await args.SendResponseAsync(this.GetFailureValueSet("device not found"));
                 deferral.Complete();
                 return;
             }
@@ -69,35 +69,33 @@ namespace WinSteroidMediaService
             var errorMessage = await DeviceManager.ConnectAsync(deviceId);
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
-                await args.SendResponseAsync(this.GetFailureValueSet(sender.PackageFamilyName, "connection failed"));
+                await args.SendResponseAsync(this.GetFailureValueSet("connection failed"));
                 deferral.Complete();
                 return;
             }
             
             var result = await DeviceManager.WriteByteArrayToCharacteristicAsync(characteristicUuid, Encoding.UTF8.GetBytes(data));
             
-            await args.SendResponseAsync(this.GetSuccessValueSet(sender.PackageFamilyName));
+            await args.SendResponseAsync(this.GetSuccessValueSet());
 
             await DeviceManager.DisconnectAsync(removeLastDeviceInfo: false);
 
             deferral.Complete();
         }
 
-        ValueSet GetFailureValueSet(string packageName, string failureMessage)
+        ValueSet GetFailureValueSet(string failureMessage)
         {
             return new ValueSet
             {
-                { "packageName", packageName },
                 { "success", false },
                 { "errorMessage", failureMessage }
             };
         }
 
-        ValueSet GetSuccessValueSet(string packageName)
+        ValueSet GetSuccessValueSet()
         {
             return new ValueSet
             {
-                { "packageName", packageName },
                 { "success", true }
             };
         }
