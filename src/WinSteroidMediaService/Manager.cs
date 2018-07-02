@@ -66,7 +66,7 @@ namespace WinSteroidMediaService
                 return;
             }
 
-            var errorMessage = await DeviceManager.ConnectAsync(deviceId);
+            var errorMessage = await DeviceManager.ConnectAsync(deviceId, isBackgroundActivity: true);
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 await args.SendResponseAsync(this.GetFailureValueSet("connection failed"));

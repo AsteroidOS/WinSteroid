@@ -138,7 +138,7 @@ namespace WinSteroid.App.ViewModels.Home
             this.BusyMessage = ResourcesHelper.GetLocalizedString("HomeWelcomePairingMessage");
             this.ConnectionFailed = false;
 
-            var errorMessage = await DeviceManager.ConnectAsync(deviceId);
+            var errorMessage = await DeviceManager.ConnectAsync(deviceId, isBackgroundActivity: false);
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 this.IsBusy = false;
