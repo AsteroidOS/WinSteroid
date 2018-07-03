@@ -14,9 +14,16 @@
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.AppService;
+using Windows.ApplicationModel.Background;
+using Windows.Devices.Bluetooth.Background;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Foundation.Collections;
+using Windows.Storage.Streams;
 using WinSteroid.Shared;
 using WinSteroid.Shared.Models;
 
@@ -25,6 +32,8 @@ namespace WinSteroid.Sdk.Client
     public class MediaClient
     {
         private AppServiceConnection AppServiceConnection;
+
+        private static readonly string InProcessMediaCommandBackgroundTaskName = Package.Current.DisplayName.Replace(' ', '_') + "_WinSteroidSdkMediaCommandTask";
 
         private async Task InitializeAsync()
         {
@@ -92,6 +101,59 @@ namespace WinSteroid.Sdk.Client
                 default:
                     throw new NotSupportedException($"Unsupported {nameof(MediaDataType)}: {mediaDataType}");
             }
+        }
+
+        public static MediaCommandType? GetMediaCommand(BackgroundActivatedEventArgs args, bool manageDeferral = false)
+        {
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
+
+            var deferral = args.TaskInstance.GetDeferral();
+
+            if (!(args.TaskInstance.TriggerDetails is GattCharacteristicNotificationTriggerDetails triggerDetails))
+            {
+                if (manageDeferral)
+                {
+                    deferral.Complete();
+                }
+
+                return null;
+            }
+
+            var bytes = new byte[triggerDetails.Value.Length];
+            DataReader.FromBuffer(triggerDetails.Value).ReadBytes(bytes);
+
+            return bytes[0].GetMediaCommandType();
+        }
+
+        public static async Task<bool> RegisterInProcessMediaCommandBackgroundTask(GattCharacteristic characteristic)
+        {
+            if (BackgroundTaskRegistration.AllTasks.Any(kvp => string.Equals(kvp.Value.Name, InProcessMediaCommandBackgroundTaskName))) return true;
+
+            if (characteristic.Uuid != Asteroid.MediaCommandCharacteristicUuid)
+            {
+                throw new InvalidOperationException($"Invalid GATT Characteristic. Expected {Asteroid.MediaCommandCharacteristicUuid}, received {characteristic.Uuid}");
+            }
+
+            var canExecuteBackgroundTasks = await CheckIfApplicationCanExecuteBackgroundTasks();
+            if (!canExecuteBackgroundTasks) return false;
+
+            var builder = new BackgroundTaskBuilder { Name = InProcessMediaCommandBackgroundTaskName };
+            builder.SetTrigger(new GattCharacteristicNotificationTrigger(characteristic));
+            var result = builder.Register();
+
+            return result != null;
+        }
+
+        private static async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+
+            return backgroundAccessStatus != BackgroundAccessStatus.DeniedByUser
+                && backgroundAccessStatus != BackgroundAccessStatus.DeniedBySystemPolicy
+                && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
         }
     }
 }

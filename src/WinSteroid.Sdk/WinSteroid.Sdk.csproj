@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Client\MediaClient.cs" />
+    <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\WinSteroid.Sdk.rd.xml" />
   </ItemGroup>

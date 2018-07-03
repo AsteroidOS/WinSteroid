@@ -49,7 +49,7 @@ namespace WinSteroid.Shared
         internal static Guid MediaAlbumCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
         internal static Guid MediaArtistCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
         internal static Guid MediaPlayingCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
-        internal static Guid CommandCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
+        internal static Guid MediaCommandCharacteristicUuid = Guid.Parse("00007071-0000-0000-0000-00A57E401D05");
 
         private static BLEService _mediaService;
         internal static BLEService MediaService
@@ -64,7 +64,7 @@ namespace WinSteroid.Shared
                         new BLECharacteristic(nameof(MediaAlbumCharacteristicUuid), MediaAlbumCharacteristicUuid),
                         new BLECharacteristic(nameof(MediaArtistCharacteristicUuid), MediaArtistCharacteristicUuid),
                         new BLECharacteristic(nameof(MediaPlayingCharacteristicUuid), MediaPlayingCharacteristicUuid),
-                        new BLECharacteristic(nameof(CommandCharacteristicUuid), CommandCharacteristicUuid)
+                        new BLECharacteristic(nameof(MediaCommandCharacteristicUuid), MediaCommandCharacteristicUuid)
                     };
 
                     _mediaService = new BLEService(nameof(MediaServiceUuid), MediaServiceUuid, characteristics);

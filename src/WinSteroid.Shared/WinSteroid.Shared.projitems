@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Asteroid.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MediaCommandType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BLECharacteristic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BLEService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MediaDataType.cs" />
