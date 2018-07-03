@@ -57,7 +57,7 @@ namespace WinSteroid.App.Services
 
         public ApplicationPreference GetApplicationPreferenceByAppId(string appId)
         {
-            return UserIcons.FirstOrDefault(ui => ui.AppId == appId);
+            return UserIcons?.FirstOrDefault(ui => ui.AppId == appId);
         }
 
         public ApplicationIcon GetDefaultApplicationIcon() => ApplicationIcon.Alert;

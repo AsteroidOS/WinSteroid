@@ -42,12 +42,21 @@ namespace Windows.UI.Notifications
                 throw new ArgumentNullException(nameof(userNotification));
             }
 
-            var toastBinding = userNotification.Notification.Visual.GetBinding(KnownNotificationBindings.ToastGeneric);
-            if (toastBinding == null) return string.Empty;
+            try
+            {
+                var toastBinding = userNotification.Notification.Visual.GetBinding(KnownNotificationBindings.ToastGeneric);
+                if (toastBinding == null) return string.Empty;
 
-            var textElements = toastBinding.GetTextElements();
+                var textElements = toastBinding.GetTextElements();
 
-            return textElements.FirstOrDefault()?.Text ?? userNotification.AppInfo.DisplayInfo.DisplayName;
+                return textElements.FirstOrDefault()?.Text ?? userNotification.AppInfo.DisplayInfo.DisplayName;
+            }
+            catch (Exception ex)
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackException(ex);
+
+                return userNotification.AppInfo.DisplayInfo.DisplayName;
+            }
         }
 
         public static Uri GetLaunchUri(this UserNotification userNotification)
