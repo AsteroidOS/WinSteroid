@@ -14,5 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\BLECharacteristic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BLEService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MediaDataType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherDataType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\WeatherID.cs" />
   </ItemGroup>
 </Project>

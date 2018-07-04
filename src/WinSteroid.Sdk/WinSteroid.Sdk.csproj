@@ -107,6 +107,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Client\MediaClient.cs" />
+    <Compile Include="Client\WeatherClient.cs" />
+    <Compile Include="Extensions\AppServiceConnectionExtensions.cs" />
     <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\WinSteroid.Sdk.rd.xml" />
@@ -114,6 +116,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.5</Version>
+    </PackageReference>
+    <PackageReference Include="NuGet.CommandLine">
+      <Version>4.6.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\WinSteroid.Shared\WinSteroid.Shared.projitems" Label="Shared" />

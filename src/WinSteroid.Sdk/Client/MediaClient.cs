@@ -31,26 +31,17 @@ namespace WinSteroid.Sdk.Client
 {
     public class MediaClient
     {
-        private AppServiceConnection AppServiceConnection;
+        #region Fields
 
-        private static readonly string InProcessMediaCommandBackgroundTaskName = Package.Current.DisplayName.Replace(' ', '_') + "_WinSteroidSdkMediaCommandTask";
+        AppServiceConnection AppServiceConnection;
 
-        private async Task InitializeAsync()
-        {
-            this.AppServiceConnection = new AppServiceConnection
-            {
-                AppServiceName = "org.winsteroid.media",
-                PackageFamilyName = "31050thunderluca.WinSteroid_0.3.0.0_x86__qe6bt2bhxjap2"
-            };
+        static readonly string InProcessMediaCommandBackgroundTaskName = Package.Current.DisplayName.Replace(' ', '_') + "_WinSteroidSdkMediaCommandTask";
 
-            var appServiceConnectionStatus = await this.AppServiceConnection.OpenAsync();
-            if (appServiceConnectionStatus != AppServiceConnectionStatus.Success)
-            {
-                throw new Exception("Operation failed");
-            }
-        }
+        #endregion
 
-        public async Task<bool> SendDataAsync(string data, MediaDataType dataType)
+        #region Public methods
+
+        public async Task<bool> SendMetaDataUpdateAsync(string data, MediaDataType dataType)
         {
             if (this.AppServiceConnection == null)
             {
@@ -63,44 +54,9 @@ namespace WinSteroid.Sdk.Client
                 { "data", data }
             };
 
-            var appServiceResponse = await this.AppServiceConnection.SendMessageAsync(message);
-            if (appServiceResponse.Status != AppServiceResponseStatus.Success)
-            {
-                throw new Exception("Operation failed");
-            }
+            var errorMessage = await this.AppServiceConnection.SendMessageWithResponseAsync(message);
 
-            var responseMessage = appServiceResponse.Message;
-            if (!responseMessage.ContainsKey("success"))
-            {
-                throw new Exception("Fatal error");
-            }
-
-            var success = (bool)responseMessage["success"];
-            if (!success)
-            {
-                var errorMessage = responseMessage.ContainsKey("errorMessage") ? responseMessage["errorMessage"] as string : "Unknown reason";
-
-                throw new Exception(errorMessage);
-            }
-
-            return true;
-        }
-
-        private static Guid GetCharacteristicUuidByMediaDataType(MediaDataType mediaDataType)
-        {
-            switch (mediaDataType)
-            {
-                case MediaDataType.Title:
-                    return Asteroid.MediaTitleCharacteristicUuid;
-                case MediaDataType.Album:
-                    return Asteroid.MediaAlbumCharacteristicUuid;
-                case MediaDataType.Artist:
-                    return Asteroid.MediaArtistCharacteristicUuid;
-                case MediaDataType.PlayerStatus:
-                    return Asteroid.MediaPlayingCharacteristicUuid;
-                default:
-                    throw new NotSupportedException($"Unsupported {nameof(MediaDataType)}: {mediaDataType}");
-            }
+            return string.IsNullOrWhiteSpace(errorMessage);
         }
 
         public static MediaCommandType? GetMediaCommand(BackgroundActivatedEventArgs args, bool manageDeferral = false)
@@ -147,7 +103,50 @@ namespace WinSteroid.Sdk.Client
             return result != null;
         }
 
-        private static async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
+        #endregion
+
+        #region Private methods
+
+        async Task InitializeAsync()
+        {
+            this.AppServiceConnection = new AppServiceConnection
+            {
+                AppServiceName = "org.winsteroid.media",
+                PackageFamilyName = "31050thunderluca.WinSteroid_0.3.0.0_x86__qe6bt2bhxjap2"
+            };
+            this.AppServiceConnection.ServiceClosed += OnAppServiceConnectionServiceClosed;
+
+            var appServiceConnectionStatus = await this.AppServiceConnection.OpenAsync();
+            if (appServiceConnectionStatus != AppServiceConnectionStatus.Success)
+            {
+                throw new Exception("Operation failed");
+            }
+        }
+
+        void OnAppServiceConnectionServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
+        {
+            this.AppServiceConnection.ServiceClosed -= OnAppServiceConnectionServiceClosed;
+            this.AppServiceConnection = null;
+        }
+
+        static Guid GetCharacteristicUuidByMediaDataType(MediaDataType mediaDataType)
+        {
+            switch (mediaDataType)
+            {
+                case MediaDataType.Title:
+                    return Asteroid.MediaTitleCharacteristicUuid;
+                case MediaDataType.Album:
+                    return Asteroid.MediaAlbumCharacteristicUuid;
+                case MediaDataType.Artist:
+                    return Asteroid.MediaArtistCharacteristicUuid;
+                case MediaDataType.PlayerStatus:
+                    return Asteroid.MediaPlayingCharacteristicUuid;
+                default:
+                    throw new NotSupportedException($"Unsupported {nameof(MediaDataType)}: {mediaDataType}");
+            }
+        }
+
+        static async Task<bool> CheckIfApplicationCanExecuteBackgroundTasks()
         {
             var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
 
@@ -155,5 +154,7 @@ namespace WinSteroid.Sdk.Client
                 && backgroundAccessStatus != BackgroundAccessStatus.DeniedBySystemPolicy
                 && backgroundAccessStatus != BackgroundAccessStatus.Unspecified;
         }
+
+        #endregion
     }
 }
