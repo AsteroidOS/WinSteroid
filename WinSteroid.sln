@@ -13,6 +13,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WinSteroid.Shared", "src\Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSteroid.Sdk", "src\WinSteroid.Sdk\WinSteroid.Sdk.csproj", "{ADF64F07-5571-4611-B37C-FA32A8FD77EF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8F5B0937-787B-4E84-8F5F-72E57AA1E881}"
+	ProjectSection(SolutionItems) = preProject
+		WinSteroid.Sdk.csproj.nuspec = WinSteroid.Sdk.csproj.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\WinSteroid.Shared\WinSteroid.Shared.projitems*{2b862b3a-5457-4c95-99bc-b7e8171a40e5}*SharedItemsImports = 13

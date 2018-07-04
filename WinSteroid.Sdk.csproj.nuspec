@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WinSteroid.Sdk.csproj</id>
+    <title>WinSteroid.Sdk</title>
+    <version>1.0.0</version>
+    <authors>Luca Montanari</authors>
+    <owners>Luca Montanari</owners>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
+    <projectUrl>https://github.com/AsteroidOS/WinSteroid</projectUrl>
+    <iconUrl></iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>WinSteroid.Sdk is a set of utilities to synchronize data with AsteroidOS devices by interfacing with WinSteroid</description>
+    <releaseNotes>First Release: supported Media and Weather data sync</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>WinSteroid Asteroid AsteroidOS</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
