@@ -8,7 +8,7 @@
     <owners>Luca Montanari</owners>
     <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.html</licenseUrl>
     <projectUrl>https://github.com/AsteroidOS/WinSteroid</projectUrl>
-    <iconUrl></iconUrl>
+    <iconUrl>https://github.com/AsteroidOS/WinSteroid/raw/master/Nuget-Icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>WinSteroid.Sdk is a set of utilities to synchronize data with AsteroidOS devices by interfacing with WinSteroid</description>
     <releaseNotes>First Release: supported Media and Weather data sync</releaseNotes>
