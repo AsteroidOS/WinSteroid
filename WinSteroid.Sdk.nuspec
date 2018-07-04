@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>WinSteroid.Sdk.csproj</id>
+    <id>WinSteroid.Sdk</id>
     <title>WinSteroid.Sdk</title>
     <version>1.0.0</version>
     <authors>Luca Montanari</authors>
@@ -17,4 +17,9 @@
     <dependencies>
     </dependencies>
   </metadata>
+  <files>
+    <file src="src\WinSteroid.Sdk\bin\Release\WinSteroid.Sdk.dll" target="lib\uap10.0"/>
+    <file src="src\WinSteroid.Sdk\bin\Release\WinSteroid.Sdk.pdb" target="lib\uap10.0"/>
+    <file src="src\WinSteroid.Sdk\bin\Release\WinSteroid.Sdk.pri" target="lib\uap10.0"/>
+  </files>
 </package>
