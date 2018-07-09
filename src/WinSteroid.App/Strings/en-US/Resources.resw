@@ -627,4 +627,10 @@
   <data name="ScpCredentialsDialogDefaultButton.Content" xml:space="preserve">
     <value>Try to connect with default credentials</value>
   </data>
+  <data name="SettingsAboutReportAppBarButton.Label" xml:space="preserve">
+    <value>Report an issue</value>
+  </data>
+  <data name="SettingsAboutWebsiteAppBarButton.Label" xml:space="preserve">
+    <value>Go to website</value>
+  </data>
 </root>

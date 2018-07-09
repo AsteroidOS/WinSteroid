@@ -104,9 +104,22 @@
         <CommandBar Grid.Row="2"
                     Background="{ThemeResource DefaultPaneBackground}">
             <CommandBar.PrimaryCommands>
-                <AppBarButton x:Uid="SettingsAboutReviewAppBarButton">
+                <AppBarButton x:Uid="SettingsAboutReportAppBarButton"
+                              Command="{x:Bind ViewModel.ReportIssueCommand}">
                     <AppBarButton.Icon>
-                        <SymbolIcon Symbol="OutlineStar" />
+                        <FontIcon Glyph="" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Uid="SettingsAboutWebsiteAppBarButton"
+                              Command="{x:Bind ViewModel.WebsiteCommand}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton x:Uid="SettingsAboutReviewAppBarButton"
+                              Command="{x:Bind ViewModel.ReviewCommand, Mode=OneWay}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="" />
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar.PrimaryCommands>

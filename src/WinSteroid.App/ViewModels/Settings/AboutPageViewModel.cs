@@ -93,6 +93,44 @@ namespace WinSteroid.App.ViewModels.Settings
             await Launcher.LaunchUriAsync(new Uri(string.Format("ms-windows-store:REVIEW?PFN={0}", Package.Current.Id.FamilyName)));
         }
 
+        private RelayCommand _websiteCommand;
+        public RelayCommand WebsiteCommand
+        {
+            get
+            {
+                if (_websiteCommand == null)
+                {
+                    _websiteCommand = new RelayCommand(GoToWebsite);
+                }
+
+                return _websiteCommand;
+            }
+        }
+
+        private async void GoToWebsite()
+        {
+            await Launcher.LaunchUriAsync(new Uri("https://github.com/asteroid/WinSteroid/"));
+        }
+
+        private RelayCommand _reportIssueCommand;
+        public RelayCommand ReportIssueCommand
+        {
+            get
+            {
+                if (_reportIssueCommand == null)
+                {
+                    _reportIssueCommand = new RelayCommand(ReportIssue);
+                }
+
+                return _reportIssueCommand;
+            }
+        }
+
+        private async void ReportIssue()
+        {
+            await Launcher.LaunchUriAsync(new Uri("https://github.com/asteroid/WinSteroid/issues/"));
+        }
+
         private List<SoftwareItem> LoadSoftwareItems(IList<string> lines)
         {
             if (lines.IsNullOrEmpty()) return new List<SoftwareItem>();
