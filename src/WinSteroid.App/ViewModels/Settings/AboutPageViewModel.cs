@@ -109,7 +109,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
         private async void GoToWebsite()
         {
-            await Launcher.LaunchUriAsync(new Uri("https://github.com/asteroid/WinSteroid/"));
+            await Launcher.LaunchUriAsync(new Uri("https://github.com/AsteroidOS/WinSteroid"));
         }
 
         private RelayCommand _reportIssueCommand;
@@ -128,7 +128,7 @@ namespace WinSteroid.App.ViewModels.Settings
 
         private async void ReportIssue()
         {
-            await Launcher.LaunchUriAsync(new Uri("https://github.com/asteroid/WinSteroid/issues/"));
+            await Launcher.LaunchUriAsync(new Uri("https://github.com/AsteroidOS/WinSteroid/issues"));
         }
 
         private List<SoftwareItem> LoadSoftwareItems(IList<string> lines)
